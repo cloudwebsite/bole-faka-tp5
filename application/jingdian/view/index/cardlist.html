@@ -1,0 +1,111 @@
+{include file="public/header" /}
+<link href="{:config('cdnpublic')}twitter-bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+    <link href="{:config('cdnpublic')}font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="{:config('cdnpublic')}animate.css/2.0/animate.min.css" rel="stylesheet">
+    <link href="{:config('cdnpublic')}iCheck/1.0.2/skins/square/green.css" rel="stylesheet">
+    <link href="{:config('cdnpublic')}chosen/1.1.0/chosen.min.css" rel="stylesheet">
+    <link href="{:config('cdnpublic')}switchery/0.8.2/switchery.css" rel="stylesheet">
+    <link href="/static/admin/css/style.min.css?v=4.1.0" rel="stylesheet">
+    <link href="{:config('cdnpublic')}sweetalert/1.0.1/sweetalert.min.css" rel="stylesheet">
+<body>
+	
+		{include file="public/top_jingdian" /}
+
+	 <div class="row" style="margin-top:20px" >
+	 	<div class="col-xs-1 col-sm-2 col-md-3 col-lg-3 center-block"></div>
+	 	
+      <div class="col-xs-10 col-sm-8 col-md-6 col-lg-6 center-block">
+         <div class="panel panel-success">
+                    <div class="panel-heading">
+                        <i class="fa fa-list-alt"></i> 订单编号 {:htmlspecialchars($order)}
+                        <a class="glyphicon glyphicon-home" style="color: rgb(255, 140, 60);padding:0;margin:0;float:right;" onclick="gohome();"> 返回首页</a>
+                    </div>
+                    <div class="panel-body" style="widht:100%;height:100%;word-wrap: break-word">
+                    	
+                    	<div style="margin-bottom:50px;">
+                    	<div class="btn-group btn-group-lg">	
+                    	<button onclick="download('{:htmlspecialchars($order)}')" type="button" class="btn btn-default glyphicon glyphicon-download-alt" >保存本地</button>
+                    	<button id="copy" type="button" data-clipboard-target="text" class="btn glyphicon glyphicon-print" >复制卡密</button>
+                    	<button onclick="fenxiang('{:htmlspecialchars($order)}')" type="button" class="btn btn-default glyphicon glyphicon-share" >查看卡密</button>
+                    	</div>
+                    	</div>
+                    	
+                       <span id="text">
+                       {$myfile|htmlspecialchars_decode}
+                       </span>
+                       
+                    </div>
+                </div>
+      </div>
+      <div class="col-xs-1 col-sm-2 col-md-6 col-lg-6 center-block"></div>
+      </div>
+      
+
+	
+{include file="public/footer" /}
+	
+
+
+	<script>
+		function download(order)
+		{
+			location.href="{:url('Index/dc')}"+"?order="+order;
+		}
+		
+		function fenxiang(order)
+		{
+			top.location.href="{:url('Index/fenxiang')}"+"?order="+order.toString();
+		}
+		
+		function gohome()
+		{
+			location.href="{:config('is_https')}://"+window.location.host;
+		}
+		
+		
+		$(document).ready(function(){
+/* 定义所有class为copy标签，点击后可复制被点击对象的文本 */
+ if(window.clipboardData){
+               //for IE
+        var copyBtn = document.getElementById("copy");
+        copyBtn.onclick = function(){ 
+            var kami=$("#zhengwen").html();
+           
+		kami=kami.replace(/<br>/ig,'\r\n');
+        kami=kami.replace(/(^\s*)|(\s*$)/g, "");
+            window.clipboardData.setData('text',kami); 
+            alert("复制成功" );
+        } 
+    }else{
+        var client = new ZeroClipboard(document.getElementById("copy"));
+
+		var kami=$("#zhengwen").html();
+		kami=kami.replace(/<br>/ig,'\r\n');
+        kami=kami.replace(/(^\s*)|(\s*$)/g, "");
+		client.on( 'ready', function(event) {
+        // console.log( 'movie is loaded' );
+
+        client.on( 'copy', function(event) {
+          event.clipboardData.setData('text/plain', kami);
+        } );
+
+        client.on( 'aftercopy', function(event) {
+          var $copysuc = $("<div class='copy-tips'><div class='copy-tips-wrap'>☺ 卡密复制成功</div></div>");
+   					$("body").find(".copy-tips").remove().end().append($copysuc);
+   					$(".copy-tips").fadeOut(3000);
+        } );
+      } );
+
+      client.on( 'error', function(event) {
+        // console.log( 'ZeroClipboard error of type "' + event.name + '": ' + event.message );
+        ZeroClipboard.destroy();
+      });
+	
+    
+    }  
+});
+ 
+
+	</script>
+</body>
+</html>

@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+<head> 
+<meta charset="utf-8" /> 
+<title>{:config('web_site_title')}</title>
+<meta name="keywords" content="{:config('web_site_keyword')}" />
+<meta charset="UTF-8" name="description" content="{:config('web_site_description')}" />
+<script type="text/javascript" src="https:{:config('cdnpublic')}jquery/1.8.3/jquery.min.js"></script>
+<link href="__YOUYUNBAO__/css/css7.css" rel="stylesheet" type="text/css" /> 
+<link href="__YOUYUNBAO__/css/zzsc.css" rel="stylesheet" type="text/css" />
+<link href="__YOUYUNBAO__/css/buttons.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="http://apps.bdimg.com/libs/validform/5.3.2/validform.js"></script>
+<script type="text/javascript" src="https:{:config('cdnpublic')}layer/2.3/layer.js"></script>
+
+<style type="text/css">
+.info.denglu {
+	line-height: 55px;
+}
+#head .top .logo_img {
+	float: left;
+	height: 80px;
+	width: 400px;
+	margin-top: 10px;
+}
+</style>
+</head> 
+
+<body> 
+
+    <div id="head">
+
+   	  <div class="top">
+        <div class="logo_img"><a href="/"><img src="/uploads/images/{:config('WEB_logo')}" width="400" height="80"></a></div>
+		{if condition="config('web_reg_type') neq 0"}
+				{if condition="session('useraccount.account') eq null"}
+              <div class="info denglu">
+			   			   <a class="button button-3d button-primary button-small" href="{:url('@jingdian/User/index')}">登陆</a>
+						   <a class="button button-3d button-caution button-small" href="{:url('@jingdian/User/reg')}"><i class="fa fa-tag"></i>注册</a>&nbsp;&nbsp;			
+			   </div>
+				{else/}
+					<div class="info">
+					<span class="welcome">尊敬的：<span class="lv"><b>{:session('useraccount.account')} </b></span>欢迎您！&nbsp;<span></span><br>
+					<a href="{:url('@jingdian/User/usCenter')}" class="button button-primary button-rounded button-small">会员中心</a>  
+					<a href="{:url('@jingdian/User/loginOut')}" class="button button-giant button-rounded button-small" onclick="return confirm('确定要退出吗？')">安全退出</a>
+					</span></div>
+				{/if}
+				{/if}				
+		
+      </div>
+
+      <div class="dh">
+
+        <ul id="nav"> 
+			<li>
+				<a class="a2" href="/">首页</a>
+			</li>
+			{volist name="navigation" id="v"}
+			<li>
+				<a href="{$v['text']}" {if condition="$v['opentype'] eq 1"}target="_blank"{/if}>{$v['name']}</a>
+			</li>
+			{/volist}	
+            
+			{if condition="session('useraccount.account') eq null"}
+				<li>
+					<a href="{:url('Index/selectorder')}">订单查询</a>
+				</li>
+				{else/}
+				<li>
+					<a href="{:url('user/usorder')}">订单查询</a>
+				</li>
+				{/if}
+
+        </ul> 
+
+        </div>
+
+  
+    </div>
+	
+
+<br/>
+<div class="topliucheng">
+{foreach name="GongGao" item="v"} 
+{:htmlspecialchars_decode($v['content'])}
+{/foreach}
+</div>
+<div id="bd">
+
+
+<div id="bar">
+<div class="bar_top">商家信息</div>
+<div class="from_wz_41">
+<div class="kefu"><a target="blank" href="http://wpa.qq.com/msgrd?v=3&amp;uin={:config('WEB_QQ')}&amp;Site=添加客服QQ购买续费不迷路&amp;Menu=yes">QQ:{:config('WEB_QQ')}</a> </div>
+</div>
+<div class="kefu">
+电话：{:config('WEB_MOBILE')}
+</div>
+<div class="bar_top">手机扫码购买</div><div class="erweima">
+   <img src="{:url('@jingdian/Qr')}?size=168&text=http://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}" width="168" height="168"> </div>
+</div>
+<div id="bar_r">
+<div id="body_xiao">
+<table style="width:100%" border="0" cellpadding="10" cellspacing="0">
+				
+				<tbody><tr>
+  				    <th class="indexlistlb">商品名称</th>		
+					 <th class="indexlistlb">零售价</th>
+					 <th class="indexlistlb">库存</th>
+					 <th class="indexlistlb">操作</th>
+				</tr>
+				
+				
+				
+				
+			{volist name="GoodsListAll" id="vo"}
+			{if condition="count($vo['hehe']) neq 0"}									
+			<tr ><th {if condition="$vo['color'] neq ''"}style="background:{$vo['color']}" {/if}  colspan="5" align="center" class="greencoler"><div align="center"><font size="3">{:htmlspecialchars_decode($vo['loucengname'])} </font></div></th></tr>
+			{volist name="vo['hehe']" id="v"}
+<tr {if condition="$v['color'] neq ''"}style="background:{$v['color']}" {/if} >
+<td><div align="left"> 
+  {if condition="$v['type'] eq 0"}                                   
+<a class="button button-action button-circle button-small" title="自动发货商品，购买后自动发货" onclick="titlemsg('自动发货商品，购买后自动发货')">自动</a>                         	
+{else/}                                     
+<a class="button button-highlight button-circle button-small" title="手动发货商品，购买后客服手动发货给你" onclick="titlemsg('手动发货商品，购买后客服手动发货给你')">手动</a>
+{/if}
+
+
+	<font size="3" title="{:htmlspecialchars_decode($v['mname'])}"> {:msubstr(htmlspecialchars_decode($v['mname']),0,33)}</font></div>
+</td>
+<td><font color="#FF5400" size="2" title="我的单价">{if condition="$v.mprice lt 1"}{:number_format($v.mprice/100,4)}{else/}{:number_format($v.mprice/100,2)}{/if}元</font><br> <font color="#BBBBBB" size="1" title="销量">销量{$v['sellercount']}</font></td>
+											<td> 
+<font style="color:#0b9726;font-size: 15px;">{$v.count}</font>						 
+</td>							
+<td>
+<a class="button button-primary button-rounded button-small" onclick="location.href='{:url('jingdian/Index/goodsdetail',['mpid'=>$v['id']])}'">购买</a>
+</td>
+</tr>
+
+                                     {/volist}
+                                  
+                                  {/if}  
+                                  {/volist}
+				  </table>
+
+</div>
+</div></div>
+
+
+    <div id="footer">
+    		<a href="https://beian.miit.gov.cn/">{:config('web_site_icp')}</a> {:config('web_site_copy')} {:config('web_site_cnzz')}</div></p><br/>
+    		
+</div>
+{include file="public/order_disclaimer_boot" /}
+<script type="text/javascript">
+	// 首页公告由 order_disclaimer_boot 自动弹出
+
+				
+ function titlemsg(b){
+	 layer.msg(b, function(){
+    });
+ }
+function htmlmsg(a,b){
+layer.open({
+  title:a,
+  type: 1,
+  skin: 'layui-layer-rim', //加上边框
+  area: ['410px', '170px'], //宽高
+  content: '<div style="font-size: 12px;color: #f17100;margin:5px;border:5px;padding:5px;"> '+ b +' </div>'
+});
+}
+</script>
+  <div style=" position: fixed;left: 10px;bottom: 100px;z-index: 100; width: 110px;">{:config('web_music')}</div>
+</body> 
+</html>

@@ -1,0 +1,296 @@
+ {include file="public/user/userheader" /}
+     <link href="__USCENTER__/css/basic.css" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" href="__USCENTER__/css/iconfont.css">
+    <script language="javascript" src="{:config('cdnpublic')}jquery/1.8.3/jquery.min.js"></script>
+    <script language="javascript" src="__USCENTER__/js/qiandao.js"></script>
+    <script src="__USCENTER__/js/wangeditor.min.js"></script>
+    <script src="__USCENTER__/js/plupload.full.min.js"></script>
+    <script src="{:config('cdnpublic')}layer/3.1.1/layer.js"></script>
+    <script language="javascript" src="https://www.layuicdn.com/layui-v2.5.4/layui.js"></script>
+    <script language="javascript" src="__USCENTER__/js/common.js"></script>
+    <script language="javascript" src="__USCENTER__/js/index.js"></script>
+    <script src="__USCENTER__/js/person_content.js"></script>
+    <link rel="stylesheet" href="__USCENTER__/css/index.css">
+    <link rel="stylesheet" href="__USCENTER__/css/person_content.css">
+    <link rel="stylesheet" href="__USCENTER__/css/publish_need.css">
+    <link rel="stylesheet" href="__USCENTER__/css/common.css" /></head>
+    <link href="__USCENTER__/css/style.min.css?v=4.1.0" rel="stylesheet">
+ <body>
+    <!--头部-->
+    {include file="public/user/usertop" /}
+    <!--头部-->
+    <!--个人中心-->
+    <div class="main">
+      <div class="clearfix person_conetent">
+        <!--左侧菜单-->
+        {include file="public/user/userleft" /}
+        
+        <!--右侧展示-->
+        <div class="person_content_r right">
+          
+          <!--我的订单-->
+          <div class="order_admin_box">
+                <div class="order_admin_top">
+                    <div class="clearfix publish_need_tit">
+                        <h2 class="left">我的订单</h2>
+                        <p class="right">总共 <span class="color_b">{$count}</span> 笔订单</p>
+                    </div>
+
+                    <!--order_search-->
+                    <form action="{:url('jingdian/user/usorder')}">
+                        <div class="order_search clearfix">
+                            
+                            <div class="left order_search_item">
+                              	 订单号 <input type="text" class="input_sm" value="{$mcard}" name="mcard" id="mcard" placeholder="请输入订单号">
+                            </div>
+                            <div class="left order_search_item">
+                               <div class="left"> 交易状态</div>
+                                <div class="left">
+                                    <select name="mstatus" id="mstatus" class="select_sm dropdown">
+                                        <option value="999"{if condition="$mstatus eq 999"}selected{/if}>全部交易</option>
+                                        <option value="888" {if condition="$mstatus eq 888"}selected{/if}>正在交易</option>
+                                        <option value="1" {if condition="$mstatus eq 1"}selected{/if}>已提取</option>                                                                             
+                                        <option value="4" {if condition="$mstatus eq 4"}selected{/if}>卖家撤回</option>
+                                        <option value="5" {if condition="$mstatus eq 5"}selected{/if}>交易完成</option>
+                                        <option value="2" {if condition="$mstatus eq 2"}selected{/if}>未付款</option>
+                                    </select>
+                                </div>
+                               <div class="left"> <button class="search_btn">搜索</button></div>
+                            </div>
+                        </div>
+
+                    </form>
+
+                </div>
+
+                <div class="order_admin_content" id="list-content">
+                	  <!-- 加载动画 -->
+					<div class="spiner-example">
+					    <div class="sk-spinner sk-spinner-three-bounce">
+					        <div class="sk-bounce1"></div>
+					        <div class="sk-bounce2"></div>
+					        <div class="sk-bounce3"></div>
+					    </div>
+					</div>
+
+                    
+
+                    
+
+                </div>
+                
+    
+    
+                <div style="background-color: #fff;padding: 25px;">
+                	<div id="AjaxPage" style=" text-align: right;">
+                		
+                	</div>
+                   
+                    <div style="text-align: right;">
+                        	共{$count}条数据 <span id="allpage"></span>
+                    </div>
+                </div>
+                
+
+            </div>
+        </div>
+      </div>
+    </div>
+     <script id="list-template" type="text/html">
+     {{# for(var i=0;i<d.length;i++){  }}
+     	<ul class="need_admin_list" id="order_admin_list">
+            <!--商家已发货-->
+            <li class="need_admin_list_item">
+				<div class="clearfix _list_item_top color_h">
+					<div class="left _time">{{d[i].create_time}}</div>
+					<div class="_order_num left">订单号 <span>{{d[i].mcard}}</span></div>
+					<div class="_other_user_info left">		
+						<div class="left contact_type clearfix">
+							<a href="https://wpa.qq.com/msgrd?v=3&amp;uin={:config('WEB_QQ')}&amp;site=qq&amp;menu=yes" target="_blank" class="contact_type_item qq js_qq_btn"></a>
+							<a href="javascript:;" data_v="{:config('WEB_MOBILE')}"  class="contact_type_item phone js_phone_btn"><i class="iconfont icon-dianhua"></i></a>
+						</div>
+					</div>
+					
+				</div>
+                <div class="_list_item_content clearfix">
+					<div class="left _list_name">
+						<a class="" href="{:url('jingdian/Index/goodsdetail')}?mpid={{d[i].mflid}}">
+							<div class="order_pic">
+								<img src="{{d[i].imgurl}}" onerror="this.src='/static/admin/images/head_default.gif'">
+							</div>
+							<div class="_list_name_text">
+								<p class="_list_name_text_tit">{{d[i].name}}</p>
+								<div class="send_type">
+									发货形式：
+									{{# if(d[i].type==0){ }}
+									<span class="color_b">自动发货</span> 
+									{{# }else{ }}
+									<span class="color_b">手动发货</span> 
+									{{# } }}
+								</div>
+							</div>
+						</a>
+					</div>
+					<div class="left order_sale w170">
+						<span>￥{{d[i].mamount}}</span>				
+					</div>
+					<div class="left _list_status w190">
+										{{# if(d[i].type==0){ }}	
+											{{# if(d[i].mstatus==1){ }}											
+											<span class="_status_text  color_b">已提取</span>	                                    		                                         
+	                                        {{# }else if(d[i].mstatus==0 && d[i].mflid!=0){ }}
+	                                        <span class="_status_text  color_b">未提取</span>	      
+	                                        {{# }else if(d[i].mstatus==0 && d[i].mflid==0){ }}
+	                                        <span class="_status_text  color_b">未使用</span>	                                           
+	                                        {{# }else if(d[i].mstatus==2){ }}
+	                                        <span class="_status_text  color_b">未付款</span>	                                                                              
+	                                        {{# } }}  
+                                         {{# }else if(d[i].type!=0){}}
+			                                 		
+			                                 {{# if(d[i].mstatus==1){ }}
+			                                		<span class="_status_text  color_b">待发货</span>
+			                                		
+			                                        {{# }else if(d[i].mstatus==0 && d[i].mflid!=0){ }}
+			                                        
+			                                        <span class="_status_text  color_b">待发货</span>
+			                                        {{# }else if(d[i].mstatus==2){ }}
+			                                       
+			                                        <span class="_status_text  color_b">未付款</span>
+			                                        {{# }else if(d[i].mstatus==3){ }}
+			                                       
+			                                        <span class="_status_text  color_b">进行中</span>
+			                                        {{# }else if(d[i].mstatus==4){ }}
+			                                       
+			                                        <span class="_status_text  color_b">已撤回</span>
+			                                        {{# }else if(d[i].mstatus==5){ }}			                                 
+			                                        <span class="_status_text  color_b">已发货</span>
+			                                        {{# } }}    
+			                             {{# } }}   
+						
+						<span class="_status_text">
+											{{# if(d[i].maddtype==0){ }}
+											 积分兑换
+											{{# }else if(d[i].maddtype==1){ }}
+											管理员
+											{{# }else if(d[i].maddtype==2){ }}
+											支付宝扫码
+											{{# }else if(d[i].maddtype==3){ }}
+											微信扫码
+											{{# }else if(d[i].maddtype==4){ }}
+											聚合支付
+											{{# }else if(d[i].maddtype==5){ }}
+											余额支付
+											{{# }else if(d[i].maddtype==6){ }}
+											QQ钱包
+											{{# }else if(d[i].maddtype==7){ }}
+											财付通
+											{{# }else if(d[i].maddtype==8){ }}
+											USDT
+											 {{# }else{ }}	
+											 未知数	
+											 {{# } }}
+
+						</span>
+					</div>
+					<div class="left _list_handle_btn w130">
+										{{# if(d[i].type==0){ }}	
+											{{# if(d[i].mstatus==1){ }}											
+											<a onclick="downloadtxt('{{d[i].mcard}}');" class="handle_btn cur" style="margin-bottom: 10px;">导出卡密</a>
+											<a onclick="fenxiang('{{d[i].mcard}}');" target="_blank" class="handle_btn cur">查看卡密</a>
+	                                        {{# }else if(d[i].mstatus==0 && d[i].mflid!=0){ }} 
+	                                        <a onclick="tiqu('{{d[i].mcard}}','{{d[i].mflid}}');" target="_blank" class="handle_btn cur">提取卡密</a>
+	                                        {{# }else if(d[i].mstatus==0 && d[i].mflid==0){ }}
+	                                                                                   
+	                                        {{# }else if(d[i].mstatus==2){ }}
+	                                                                                                                      
+	                                        {{# } }}  
+                                         {{# }else if(d[i].type!=0){}}
+			                                 		
+			                                 {{# if(d[i].mstatus==1){ }}
+			                                		<a onclick="getOrderDetailByOrder('{{d[i].mcard}}')" target="_blank" class="handle_btn cur" style="background-color: #fb760f;border: 1px solid #e6ca29">查看详情</a>
+			                                		
+			                                        {{# }else if(d[i].mstatus==0 && d[i].mflid!=0){ }}
+			                                        <a onclick="tiqu('{{d[i].mcard}}','{{d[i].mflid}}');" target="_blank" class="handle_btn cur" style="background-color: #fb760f;border: 1px solid #e6ca29">确定购买</a>
+			                                        
+			                                        {{# }else if(d[i].mstatus==2){ }}
+			                                        <a onclick="getOrderDetailByOrder('{{d[i].mcard}}')" target="_blank" class="handle_btn cur" style="background-color: #fb760f;border: 1px solid #e6ca29">查看详情</a>
+			                                       
+			                                       
+			                                        {{# }else if(d[i].mstatus==3){ }}
+			                                       <a onclick="getOrderDetailByOrder('{{d[i].mcard}}')" target="_blank" class="handle_btn cur" style="background-color: #fb760f;border: 1px solid #e6ca29">查看详情</a>
+			                                        
+			                                        {{# }else if(d[i].mstatus==4){ }}
+			                                       <a onclick="getOrderDetailByOrder('{{d[i].mcard}}')" target="_blank" class="handle_btn cur" style="background-color: #fb760f;border: 1px solid #e6ca29">查看详情</a>
+			                                        
+			                                        {{# }else if(d[i].mstatus==5){ }}			                                 
+			                                        <a onclick="getOrderDetailByOrder('{{d[i].mcard}}')" target="_blank" class="handle_btn cur" style="background-color: #fb760f;border: 1px solid #e6ca29">查看详情</a>
+			                                        {{# } }}    
+			                             {{# } }}   
+						
+					</div>
+				</div>
+            </li><!--商家已发货-->            
+        </ul>
+    {{# } }}
+    </script>                
+  
+
+    <!--非商家提示去认证-->
+    {include file="public/imgpc/footer" /}
+    <script src="{:config('cdnpublic')}layer/3.1.1/layer.js"></script>	
+	<script src="/static/admin/js/laypage/laypage.js"></script>
+	<script src="/static/admin/js/laytpl/laytpl.js"></script>
+    <script>
+    	Ajaxpage();
+	    function Ajaxpage(curr){
+	        var mcard=$('#mcard').val();
+	        var mstatus=$('#mstatus').val();
+	        $.getJSON('{:url("jingdian/user/usorder")}', {page: curr || 1,mcard:mcard,mstatus:mstatus}, function(data){
+	            $(".spiner-example").css('display','none'); //数据加载完关闭动画 
+	            if(data==''){
+	                $("#list-content").html('<div class="no_order"><i class="no_order_icon"></i><p>暂无订单<a href="/" target="_blank" class="go_shop">去逛逛</a></p></div>');
+	            }else{
+	                var tpl = document.getElementById('list-template').innerHTML;
+	                laytpl(tpl).render(data, function(html){
+	                    document.getElementById('list-content').innerHTML = html;
+	                });
+	                laypage({
+	                    cont: $('#AjaxPage'),//容器。值支持id名、原生dom对象，jquery对象,
+	                    pages:'{$allpage}',//总页数
+	                    skip: true,//是否开启跳页
+	                    
+	                    skin: '#1AB5B7',//分页组件颜色
+	                    curr: curr || 1,
+	                    groups: 3,//连续显示分页数
+	                    jump: function(obj, first){
+	                        if(!first){
+	                            Ajaxpage(obj.curr)
+	                        }
+	                        $('#allpage').html('第'+ obj.curr +'页，共'+ obj.pages +'页');
+	                    }
+	                });
+	            }
+	        });
+	    }
+    	_person_con.shouMenu('.person_menu_title', '.person_menu_lsit');
+    	
+    		function downloadtxt(order){
+				location.href="{:url('Index/dc')}"+"?order="+order;
+			}
+				
+			function fenxiang(order){
+				top.location.href="{:url('Index/fenxiang')}"+"?order="+order.toString();
+			}
+			function tiqu(order,mpid){
+				location.href = "{:url('@jingdian/Getmail/index')}"+"?mpid="+mpid+"&number="+order;
+			}
+			
+			function getOrderDetailByOrder(order)
+			{
+				location.href="{:url('Order/getOrderDetailByOrder')}"+"?number="+order;
+			}
+    
+    </script>
+ </body>
+
+</html>

@@ -1,0 +1,159 @@
+ {include file="public/user/userheader" /}
+     <link href="__USCENTER__/css/basic.css" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" href="__USCENTER__/css/iconfont.css">
+    <script language="javascript" src="{:config('cdnpublic')}jquery/1.8.3/jquery.min.js"></script>
+    <script language="javascript" src="__USCENTER__/js/qiandao.js"></script>
+    <script src="__USCENTER__/js/wangeditor.min.js"></script>
+    <script src="__USCENTER__/js/plupload.full.min.js"></script>
+    <script src="{:config('cdnpublic')}layer/3.1.1/layer.js"></script>
+    <script language="javascript" src="https://www.layuicdn.com/layui-v2.5.4/layui.js"></script>
+    <script language="javascript" src="__USCENTER__/js/common.js"></script>
+    <script language="javascript" src="__USCENTER__/js/index.js"></script>
+    <script src="__USCENTER__/js/person_content.js"></script>
+    <link rel="stylesheet" href="__USCENTER__/css/index.css">
+    <link rel="stylesheet" href="__USCENTER__/css/person_content.css">
+    <link rel="stylesheet" href="__USCENTER__/css/publish_need.css">
+    <link rel="stylesheet" href="__USCENTER__/css/common.css" /></head>
+    <link href="__USCENTER__/css/style.min.css?v=4.1.0" rel="stylesheet">
+ <body>
+    <!--头部-->
+    {include file="public/user/usertop" /}
+    <!--头部-->
+    <!--个人中心-->
+    <div class="main">
+      <div class="clearfix person_conetent">
+        <!--左侧菜单-->
+        {include file="public/user/userleft" /}
+        
+        <!--右侧展示-->
+        <div class="person_content_r right">
+
+            <!--财务明细-->
+            <div class="need_admin">
+                <div class="clearfix publish_need_tit">
+                    <h2 class="left">财务明细</h2>
+                </div>
+
+                <div class="financial_show">
+                    <div class="financial_detail clearfix">
+                        <div class="financial_detail_item left">
+                            <span class="financial_detail_tit"><i class="iconfont icon-wodeshouru"></i>收入（元）</span>
+                            <span class="financial_detail_num">+{$shouru}</span>
+                        </div>
+                        <div class="financial_detail_item left">
+                            <span class="financial_detail_tit"><i class="iconfont icon-chongzhi"></i>支出（元）</span>
+                            <span class="financial_detail_num">-{$zhichu}</span>
+                        </div>
+                        <div class="financial_detail_item left">
+                            <span class="financial_detail_tit"><i class="iconfont icon-zhu"></i>余额（元）</span>
+                            <span class="financial_detail_num">{:number_format($money,2)}</span>
+                        </div>
+                       
+                    </div>
+                </div>
+
+                <div class="financial_list">
+
+                    <div class="financial_list_tit clearfix">
+                       
+                        <div class="right">
+                            
+                        </div>
+                    </div>
+                    <div id="list-content">
+                    	 <!-- 加载动画 -->
+						<div class="spiner-example">
+						    <div class="sk-spinner sk-spinner-three-bounce">
+						        <div class="sk-bounce1"></div>
+						        <div class="sk-bounce2"></div>
+						        <div class="sk-bounce3"></div>
+						    </div>
+						</div>
+                    </div>
+                    <div style="background-color: #fff;padding: 25px;">
+	                	<div id="AjaxPage" style=" text-align: right;">
+	                		
+	                	</div>
+	                   
+	                    <div style="text-align: right;">
+	                        	共{$count}条数据 <span id="allpage"></span>
+	                    </div>
+	                </div>
+
+                    
+
+                   
+
+                </div>
+
+
+            </div>
+
+        </div>
+      </div>
+    </div>
+     <script id="list-template" type="text/html">
+     <ul class="financial_list_con" id="financial_list">
+     {{# for(var i=0;i<d.length;i++){  }}
+     	<li class="financial_list_con_item clearfix">
+     		<div class="left financial_list_time">{{d[i].create_time}}</div>
+     		{{# if(d[i].type==0){ }}
+     		<div class="left financial_list_num">+{{d[i].money}}</div>
+     		{{# }else{}}
+     		<div class="left financial_list_num" style="color: red;">-{{d[i].money}}</div>
+     		{{# } }}
+     		{{# if(d[i].type==0){ }}
+     		<div class="left financial_list_status"><span class="color_b">收入</span></div>
+     		{{# }else{}}
+     		<div class="left financial_list_status"><span class="color_b" style="color: red !important;">支出</span></div>
+     		{{# } }} 
+     		
+     		<div class="left financial_list_text"><p>{{d[i].make}}</p></div>
+     	</li>  
+    {{# } }}
+    </ul>
+    </script>                
+  
+
+    <!--非商家提示去认证-->
+    {include file="public/imgpc/footer" /}
+    <script src="{:config('cdnpublic')}layer/3.1.1/layer.js"></script>	
+	<script src="/static/admin/js/laypage/laypage.js"></script>
+	<script src="/static/admin/js/laytpl/laytpl.js"></script>
+    <script>
+    	Ajaxpage();
+	    function Ajaxpage(curr){
+	        var key=$('#key').val();
+	        $.getJSON('{:url("jingdian/user/uspaylog")}', {page: curr || 1,key:key}, function(data){
+	            $(".spiner-example").css('display','none'); //数据加载完关闭动画 
+	            if(data==''){
+	                $("#list-content").html('<div class="no_order"><i class="no_order_icon"></i><p>暂无订单<a href="/" target="_blank" class="go_shop">去逛逛</a></p></div>');
+	            }else{
+	                var tpl = document.getElementById('list-template').innerHTML;
+	                laytpl(tpl).render(data, function(html){
+	                    document.getElementById('list-content').innerHTML = html;
+	                });
+	                laypage({
+	                    cont: $('#AjaxPage'),//容器。值支持id名、原生dom对象，jquery对象,
+	                    pages:'{$allpage}',//总页数
+	                    skip: true,//是否开启跳页
+	                    
+	                    skin: '#1AB5B7',//分页组件颜色
+	                    curr: curr || 1,
+	                    groups: 3,//连续显示分页数
+	                    jump: function(obj, first){
+	                        if(!first){
+	                            Ajaxpage(obj.curr)
+	                        }
+	                        $('#allpage').html('第'+ obj.curr +'页，共'+ obj.pages +'页');
+	                    }
+	                });
+	            }
+	        });
+	    }
+    	_person_con.shouMenu('.person_menu_title', '.person_menu_lsit');
+    
+    </script>
+ </body>
+
+</html>

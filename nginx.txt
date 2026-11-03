@@ -1,0 +1,31 @@
+# 敏感目录禁止执行 PHP（原有）
+location ~ /(application|data|extend|install|rule|runtime|sldate|thinkphp|static|upload|uploadintegral|uploads|vendor)/.*.(php|php5|phtml|json)$ {
+		rewrite ^/(.*)$ /waf.php?wafhtml=1 last;
+}
+
+# 禁止浏览器直接访问数据库连接配置文件（程序内部仍可引入）
+location = /conn.php {
+	return 404;
+}
+
+# 禁止外网访问运行时缓存与日志目录
+location ^~ /runtime/ {
+	return 404;
+}
+
+# 已下线的 /api/ 路径统一拦截（不区分大小写；不影响 /jingdian/ 等业务接口）
+# 须放在 location / 之前
+location ~* ^/api(/|$) {
+	rewrite ^/(.*)$ /waf.php?wafhtml=1 last;
+}
+
+# 兼容 ThinkPHP 入口改写：/index.php?s=/api/... 或 /index.php/api/...（不区分大小写）
+if ($request_uri ~* "(^|/index\.php)(/|\?s=)/?api(/|$|\?)") {
+	rewrite ^/(.*)$ /waf.php?wafhtml=1 last;
+}
+
+location / {
+	if (!-e $request_filename){
+		rewrite  ^(.*)$  /index.php?s=$1  last;   break;
+	}
+}

@@ -1,0 +1,156 @@
+
+<!doctype html>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta content="width=device-width,initial-scale=1.0" name="viewport" />
+        <title>支付宝收银台</title>
+        <script src="https://gw.alipayobjects.com/as/g/h5-lib/alipayjsapi/3.1.1/alipayjsapi.min.js"></script>
+        <!-- 主文件 -->
+        <link href="https://gw.alipayobjects.com/as/g/antui/antui/10.1.32/dpl/antui.css" rel="stylesheet" />
+        <!-- 组件 -->
+        <link href="https://gw.alipayobjects.com/as/g/antui/antui/10.1.32/??dpl/widget/message.css,dpl/icon/message.css,dpl/widget/search.css" rel="stylesheet" />
+        <link href="https://gw.alipayobjects.com/as/g/antui/antui/10.1.32/dpl/widget/notice.css" rel="stylesheet" />
+        <link href="https://gw.alipayobjects.com/as/g/antui/antui/10.1.32/dpl/widget/tips.css" rel="stylesheet" />
+        <link href="https://gw.alipayobjects.com/as/g/antui/antui/10.1.32/dpl/widget/dialog.css" rel="stylesheet" />
+        <!-- js -->
+        <script src="https://gw.alipayobjects.com/as/g/antui/antui/10.1.32/antui.js"></script>
+    <script src="https:{:config('cdnpublic')}jquery/3.3.1/jquery.min.js"></script>
+    </head>
+    <style>
+        .am-notice .am-notice-content {
+            -webkit-flex: 1;
+            overflow: hidden;
+            margin-left: 15px;
+            margin-right: 5px;
+            padding-left: 25px;
+        }
+    </style>
+
+    <body>
+        <div class="am-notice" id="alert" role="alert">
+            <div class="am-notice-content">由于客户端版本问题，部分设备可能无法跳转支付</div>
+            <div class="am-notice-operation">
+                <a class="am-notice-close" onclick="closeAlert()" role="button"></a>
+            </div>
+        </div>
+        <div class="am-message result">
+            <i class="am-icon result wait" id="icon-wait"></i>
+            <i class="am-icon result warn" id="icon-fail" style="display: none"></i>
+            <div class="am-message-main" id="waiting">等待跳转支付...</div>
+            <div class="am-message-sub">若无法自动跳转支付请点击下方立即支付按钮</div>
+        </div>
+        <div class="am-button-wrap">
+            <button class="am-button blue" onclick="showAction()">立即支付</button>
+            <button class="am-button white" onclick="returnApp()">取消支付</button>
+        </div>
+        <div class="am-tips am-tips-block am-tips-favorite" id="tip">
+            <div class="am-tips-wrap">
+                <div class="am-tips-close" onclick="closeTip()">关闭</div>
+                <div class="am-tips-content am-ft-ellipsis">
+                    若无法跳转请点击“立即支付”
+                </div>
+                <div class="am-tips-action" onclick="closeTip()" role="button">
+                    知道了
+                </div>
+            </div>
+        </div>
+    <script>
+        var money = "{$Order['reallyPrice']}";
+        var num = "{$Order['payId']}";
+        var userId = "{$Order['payUrl']}";
+        
+
+        function returnApp() {
+            AlipayJSBridge.call("exitApp")
+        }
+
+        function closeAlert() {
+            document.getElementById("alert").style.display = "none";
+        }
+
+        function closeTip() {
+            document.getElementById("tip").style.display = "none";
+        }
+
+
+        function ready(a) {
+            window.AlipayJSBridge ? a && a() : document.addEventListener("AlipayJSBridgeReady", a, !1)
+        }
+
+        function showAction() {
+            check();
+            var a = {
+                actionType: "toAccount",
+                amount: money,
+                userId: userId,
+                memo: num
+            }
+			
+            AlipayJSBridge.call("startApp", {
+                appId: "09999988",
+                param: a
+            }, function (a) {
+                if (a.errorCode == 4) {
+                    document.getElementById("icon-wait").style.display = "none";
+                    document.getElementById("icon-fail").style.display = "block";
+                    document.getElementById("waiting").innerText = "自动跳转支付失败";
+                    alert("跳转支付失败，请点击立即支付")
+                }
+            });
+        }
+
+        ready(function() {    
+            AlipayJSBridge.call('setTitle', {
+                title: '支付宝收银台'
+            });
+
+           var a = {
+                actionType: "toAccount",
+                amount: money,
+                userId: userId,
+                memo: num
+            }
+                  
+                check();
+          
+            AlipayJSBridge.call("startApp", {
+                appId: "09999988",
+                param: a
+            }, function (a) {
+                if (a.errorCode == 4) {
+                    document.getElementById("icon-wait").style.display = "none";
+                    document.getElementById("icon-fail").style.display = "block";
+                    document.getElementById("waiting").innerText = "自动跳转支付失败";
+                    alert("跳转支付失败，请点击立即支付")
+                }
+            });
+        });
+      
+      function check() {
+          var date = new Date();
+          var timer = date.getTime().toString();
+          $.ajax({
+            url:"{:url('pay/index/checkdingdan')}?mcard="+num+"&t=" + timer,
+            type: "GET",
+            dataType: "text",
+            success: function(res) {
+              if(res == 1) { //订单状态为1表示支付成功   
+                returnApp();
+              }
+              if(res == 3) { //订单状态为1表示支付成功	  
+                returnApp();
+              }
+            },
+            error: function() {
+
+            }
+          });
+        
+      setTimeout("check()",1000);
+      }
+
+    </script>
+
+</body></html>

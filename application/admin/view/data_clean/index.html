@@ -1,0 +1,178 @@
+{include file="public/header" /}
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="ibox float-e-margins">
+        <div class="ibox-title">
+            <h5>数据清理</h5>
+            <div class="ibox-tools">
+                <span class="label label-warning">只删截止时间之前的数据；近 N 天一律保留</span>
+            </div>
+        </div>
+        <div class="ibox-content">
+            <div class="alert alert-info" style="margin-bottom:15px;">
+                <strong>范围说明：</strong>仅清理「创建/修改时间 &lt; 截止时间」的记录与过期卡密 txt；
+                截止时间 = 当前时刻 − 保留天数。<span id="cutoff-hint" style="margin-left:6px;"></span>
+            </div>
+            <div class="form-horizontal">
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">保留天数</label>
+                    <div class="col-sm-2">
+                        <input type="number" class="form-control" id="days" value="{$default_days}" min="7" max="3650" />
+                    </div>
+                    <div class="col-sm-6" style="padding-top:8px;color:#888;">
+                        近 N 天内数据不删（默认 90；允许 7～3650）
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">每批上限</label>
+                    <div class="col-sm-2">
+                        <input type="number" class="form-control" id="limit" value="{$default_limit}" min="1" max="50000" />
+                    </div>
+                    <div class="col-sm-4" style="padding-top:8px;">
+                        <label class="checkbox-inline">
+                            <input type="checkbox" id="loop" value="1" /> 大表循环清完（单次最多 50 轮）
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">快捷组</label>
+                    <div class="col-sm-10">
+                        <label class="checkbox-inline"><input type="checkbox" class="grp" data-group="g_log" /> 日志</label>
+                        <label class="checkbox-inline"><input type="checkbox" class="grp" data-group="g_pay" /> 支付/充值</label>
+                        <label class="checkbox-inline"><input type="checkbox" class="grp" data-group="g_order_safe" /> 订单未付</label>
+                        <label class="checkbox-inline"><input type="checkbox" class="grp" data-group="g_order_danger" /> <span class="text-danger">危险全单</span></label>
+                        <label class="checkbox-inline"><input type="checkbox" class="grp" data-group="g_kami" /> 已用卡密库</label>
+                        <label class="checkbox-inline"><input type="checkbox" class="grp" data-group="g_kami_txt" /> 订单卡密 txt</label>
+                        <label class="checkbox-inline"><input type="checkbox" class="grp" data-group="g_login_compat" /> 对齐原登录清理</label>
+                    </div>
+                </div>
+                <div class="hr-line-dashed"></div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">清理项</label>
+                    <div class="col-sm-10" id="items">
+                        <label class="checkbox-inline item-row"><input type="checkbox" class="item" name="keys[]" value="pay_order" /> 支付中间单 pay_order <span class="cnt text-muted" data-k="pay_order"></span></label><br/>
+                        <label class="checkbox-inline item-row"><input type="checkbox" class="item" name="keys[]" value="log" /> 后台行为日志 <span class="cnt text-muted" data-k="log"></span></label><br/>
+                        <label class="checkbox-inline item-row"><input type="checkbox" class="item" name="keys[]" value="addmaillog" /> 卡密入库日志 <span class="cnt text-muted" data-k="addmaillog"></span></label><br/>
+                        <label class="checkbox-inline item-row"><input type="checkbox" class="item" name="keys[]" value="member_integral_log" /> 积分明细 <span class="cnt text-muted" data-k="member_integral_log"></span></label><br/>
+                        <label class="checkbox-inline item-row"><input type="checkbox" class="item" name="keys[]" value="member_login_log" /> 会员登录日志 <span class="cnt text-muted" data-k="member_login_log"></span></label><br/>
+                        <label class="checkbox-inline item-row"><input type="checkbox" class="item" name="keys[]" value="member_payorder" /> 会员充值单 <span class="cnt text-muted" data-k="member_payorder"></span></label><br/>
+                        <label class="checkbox-inline item-row"><input type="checkbox" class="item" name="keys[]" value="member_money_log" /> 财务明细 <span class="cnt text-muted" data-k="member_money_log"></span></label><br/>
+                        <label class="checkbox-inline item-row"><input type="checkbox" class="item" name="keys[]" value="info_unpaid" /> 订单-仅未付款 <span class="cnt text-muted" data-k="info_unpaid"></span></label><br/>
+                        <label class="checkbox-inline item-row"><input type="checkbox" class="item danger-item" name="keys[]" value="info_all" /> <span class="text-danger">订单-全部(危险)</span> <span class="cnt text-muted" data-k="info_all"></span></label><br/>
+                        <label class="checkbox-inline item-row"><input type="checkbox" class="item" name="keys[]" value="mail_used" /> 已用卡密 mail <span class="cnt text-muted" data-k="mail_used"></span></label><br/>
+                        <label class="checkbox-inline item-row"><input type="checkbox" class="item" name="keys[]" value="order_kami_txt" /> 订单卡密 txt（仅 public/upload/*.txt） <span class="cnt text-muted" data-k="order_kami_txt"></span></label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <button type="button" class="btn btn-primary" id="btn-preview"><i class="fa fa-search"></i> 预览影响</button>
+                        <button type="button" class="btn btn-danger" id="btn-run"><i class="fa fa-trash-o"></i> 执行清理</button>
+                        <span id="preview-summary" style="margin-left:12px;color:#666;"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{include file="public/footer" /}
+<script type="text/javascript">
+var GROUP_KEYS = {
+    g_log: ['log','addmaillog','member_login_log','member_integral_log','member_money_log'],
+    g_pay: ['pay_order','member_payorder'],
+    g_order_safe: ['info_unpaid'],
+    g_order_danger: ['info_all'],
+    g_kami: ['mail_used'],
+    g_kami_txt: ['order_kami_txt'],
+    g_login_compat: ['pay_order','log','addmaillog','member_integral_log','member_login_log','member_payorder','member_money_log','info_unpaid','mail_used','order_kami_txt']
+};
+
+$('.grp').on('change', function(){
+    var g = $(this).data('group');
+    var on = $(this).prop('checked');
+    var keys = GROUP_KEYS[g] || [];
+    if (g === 'g_order_danger' && on) {
+        layer.alert('「危险全单」会按时间删除含已付款订单，请谨慎。', {icon: 0});
+    }
+    $.each(keys, function(_, k){
+        $('.item[value="'+k+'"]').prop('checked', on);
+    });
+});
+
+function selectedKeys(){
+    var keys = [];
+    $('.item:checked').each(function(){ keys.push($(this).val()); });
+    return keys;
+}
+
+function pad2(n){ return n < 10 ? '0'+n : ''+n; }
+function formatLocal(d){
+    return d.getFullYear()+'-'+pad2(d.getMonth()+1)+'-'+pad2(d.getDate())
+        +' '+pad2(d.getHours())+':'+pad2(d.getMinutes())+':'+pad2(d.getSeconds());
+}
+function refreshCutoffHint(){
+    var days = parseInt($('#days').val(), 10) || 90;
+    if (days < 7) days = 7;
+    if (days > 3650) days = 3650;
+    var cutoff = new Date(Date.now() - days * 86400000);
+    $('#cutoff-hint').html('当前截止约 <b>'+formatLocal(cutoff)+'</b>，只清此时间<strong>之前</strong>的数据。');
+}
+$('#days').on('input change', refreshCutoffHint);
+refreshCutoffHint();
+
+$('#btn-preview').on('click', function(){
+    var keys = selectedKeys();
+    if (!keys.length) {
+        layer.msg('请至少勾选一项', {icon:2});
+        return;
+    }
+    $.post('{:url("DataClean/preview")}', {
+        days: $('#days').val(),
+        keys: keys
+    }, function(res){
+        if (res.code != 1) {
+            layer.msg(res.msg || '预览失败', {icon:2});
+            return;
+        }
+        $('.cnt').text('');
+        $.each(res.data || [], function(_, row){
+            $('.cnt[data-k="'+row.key+'"]').text('（预计 '+row.count+'）');
+        });
+        $('#preview-summary').text('截止 '+res.cutoff+' 前，合计约 '+res.total+' 条/个');
+    }, 'json');
+});
+
+$('#btn-run').on('click', function(){
+    var keys = selectedKeys();
+    if (!keys.length) {
+        layer.msg('请至少勾选一项', {icon:2});
+        return;
+    }
+    var hasDanger = keys.indexOf('info_all') >= 0;
+    var days = parseInt($('#days').val(), 10) || 90;
+    if (days < 7) days = 7;
+    var cutoff = formatLocal(new Date(Date.now() - days * 86400000));
+    var tip = '只删除「'+cutoff+'」之前的数据；近 '+days+' 天内全部保留。已勾选 '+keys.length+' 项，确认执行？';
+    if (hasDanger) {
+        tip = '【危险】包含「订单-全部」，将删除该截止时间前的已付款订单！\n' + tip;
+    }
+    layer.confirm(tip, {icon: 3, title: '二次确认'}, function(index){
+        layer.close(index);
+        $.post('{:url("DataClean/run")}', {
+            days: $('#days').val(),
+            limit: $('#limit').val(),
+            loop: $('#loop').prop('checked') ? 1 : 0,
+            confirm_danger: hasDanger ? 1 : 0,
+            keys: keys
+        }, function(res){
+            if (res.code == 1) {
+                layer.msg(res.msg, {icon:1, time:2500});
+                $('#btn-preview').click();
+            } else {
+                layer.msg(res.msg || '执行失败', {icon:2});
+            }
+        }, 'json');
+    });
+});
+</script>
+</body>
+</html>

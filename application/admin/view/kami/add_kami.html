@@ -1,0 +1,185 @@
+{include file="public/header" /}
+<style type="text/css">
+input[type=file] { display: none; }
+#fileList .item { margin: 4px 0; padding: 4px 8px; background: #f9f9f9; border-radius: 2px; }
+#fileList .state-ok { color: #1ab394; }
+#fileList .state-err { color: #ed5565; }
+</style>
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>补货 — {$shopdetail.mnamebie}</h5>
+                </div>
+                <div class="ibox-content">
+                    <p class="text-muted" style="margin-bottom:15px;">
+                        {if condition="isset($shopdetail['decrypt']) && $shopdetail['decrypt'] eq 1"}
+                        <span class="label label-warning">加密库存</span>
+                        {else/}
+                        <span class="label label-default">明文库存</span>
+                        {/if}
+                        一行一条卡密；图片发货请用下方「上传发货图片」。
+                    </p>
+
+                    <div class="form-group">
+                        <button class="btn btn-outline btn-primary" type="button" id="imgPicker">上传发货图片</button>
+                        <label class="btn btn-outline btn-success" style="margin-left:8px;margin-bottom:0;">
+                            选择 txt 文件
+                            <input type="file" id="txtPicker" accept=".txt,text/plain"/>
+                        </label>
+                        <span class="help-block m-b-none" style="display:inline;margin-left:10px;">
+                            每张成功上传的图片写入一行（路径作为卡密，与现网发货一致）
+                        </span>
+                        <div id="fileList" class="uploader-list" style="margin-top:10px;"></div>
+                    </div>
+
+                    <form method="post" action="{:url('Kami/save_kami')}" id="addkamiform">
+                        {:token()}
+                        <input type="hidden" name="mpid" value="{$shopdetail.id}">
+                        <input type="hidden" name="addqudao" value="{$uid}">
+                        <div class="form-group">
+                            <label class="control-label">卡密内容</label>
+                            <textarea id="values" class="form-control" name="values" rows="18" placeholder="一行一个&#10;也可粘贴文本，或通过上方上传图片 / 选择 txt"></textarea>
+                            <span class="help-block m-b-none">有效行数：<strong id="lineCount">0</strong>（大批量可能较慢，请耐心等待）</span>
+                        </div>
+                        <div class="form-group">
+                            <button class="btn btn-success" type="submit">提交补货</button>
+                            <a class="btn btn-white" href="{$back_stock_url}">返回该商品卡密</a>
+                            <a class="btn btn-white" href="{$back_goods_url}">返回商品卡密列表</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{include file="public/footer" /}
+<script type="text/javascript" src="/static/admin/webupload/webuploader.min.js"></script>
+<script>
+function countLines(){
+    var t = ($('#values').val() || '').replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+    var n = 0;
+    t.split('\n').forEach(function(line){
+        if($.trim(line) !== ''){ n++; }
+    });
+    $('#lineCount').text(n);
+    return n;
+}
+$('#values').on('input change', countLines);
+
+function appendKamiLine(line){
+    line = $.trim(line);
+    if(!line){ return; }
+    var cur = $('#values').val() || '';
+    if(cur && !/\n$/.test(cur)){ cur += '\r\n'; }
+    $('#values').val(cur + line + '\r\n');
+    countLines();
+}
+
+function isImagePath(raw){
+    if(!raw || typeof raw !== 'string'){ return false; }
+    raw = $.trim(raw);
+    if(/上传|失败|错误|不允许|超过|非法/.test(raw)){ return false; }
+    return /\.(jpg|jpeg|png|gif)$/i.test(raw);
+}
+
+$('#txtPicker').on('change', function(){
+    var f = this.files && this.files[0];
+    if(!f){ return; }
+    var reader = new FileReader();
+    reader.onload = function(e){
+        var text = e.target.result || '';
+        text = text.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+        var lines = text.split('\n');
+        for(var i=0;i<lines.length;i++){
+            appendKamiLine(lines[i]);
+        }
+        layer.msg('已读入 txt', {icon:1, time:1200});
+    };
+    reader.readAsText(f);
+    this.value = '';
+});
+
+var $list = $('#fileList');
+var uploader = WebUploader.create({
+    auto: true,
+    swf: '/static/admin/webupload/Uploader.swf',
+    server: "{:url('Upload/upload')}",
+    duplicate: true,
+    pick: '#imgPicker',
+    compress: false,
+    resize: false,
+    accept: {
+        title: 'Images',
+        extensions: 'gif,jpg,jpeg,png',
+        mimeTypes: 'image/jpg,image/jpeg,image/png,image/gif'
+    }
+});
+
+uploader.on('fileQueued', function(file){
+    $list.append(
+        '<div id="' + file.id + '" class="item">' +
+        '<span class="info">' + file.name + '</span> — ' +
+        '<span class="state">等待上传...</span></div>'
+    );
+});
+
+uploader.on('uploadProgress', function(file){
+    $('#' + file.id).find('.state').text('上传中...');
+});
+
+uploader.on('uploadSuccess', function(file, response){
+    var raw = '';
+    if(typeof response === 'string'){
+        raw = response;
+    }else if(response && response._raw != null){
+        raw = String(response._raw);
+    }else if(response != null){
+        raw = String(response);
+    }
+    raw = $.trim(raw);
+    if(isImagePath(raw)){
+        // 与现网发货一致：存 getSaveName（如 20261028/xxx.jpg），展示时再拼 /uploads/images/
+        appendKamiLine(raw.replace(/\\/g, '/'));
+        $('#' + file.id).find('.state').addClass('state-ok').text('已写入卡密');
+    }else{
+        $('#' + file.id).find('.state').addClass('state-err').text('失败：' + (raw || '未知错误'));
+        layer.msg(raw || '上传失败，未写入卡密', {icon:2});
+    }
+});
+
+uploader.on('uploadError', function(file){
+    $('#' + file.id).find('.state').addClass('state-err').text('上传出错');
+    layer.msg('上传出错，未写入卡密', {icon:2});
+});
+
+$(function(){
+    countLines();
+    var loadindex;
+    $('#addkamiform').ajaxForm({
+        beforeSubmit: function(){
+            if(countLines() < 1){
+                layer.msg('卡密不能为空', {icon:2});
+                return false;
+            }
+            loadindex = layer.load(1);
+            return true;
+        },
+        success: function(data){
+            layer.close(loadindex);
+            if(data.code == 1){
+                layer.msg(data.msg, {icon:1, time:1800}, function(){
+                    if(data.url){ location.href = data.url; }
+                });
+            }else{
+                layer.msg(data.msg || '补货失败', {icon:2});
+            }
+        },
+        dataType: 'json'
+    });
+});
+</script>
+</body>
+</html>

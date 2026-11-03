@@ -1,0 +1,835 @@
+{include file="public/header" /}
+{if condition="$param['isMobilePc'] eq 1"}
+{if condition="config('m_status') eq 0"}
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+{/if}
+{/if}
+<body onload="Init();">
+
+	{if condition="config('web_daohang') eq 1"}
+	<div class="left_nav">
+
+		<dl>
+			<dt>
+     商品分类
+    </dt>
+			<dd id="quanbu">
+				<a href="/" class="nav_left" style="text-decoration:none; color:#333;"><span>全部宝贝</span></a>
+			</dd>
+			{volist name="GoodsListAll" id="vo"} {if condition="count($vo['hehe']) neq 0"}
+			<dd class="fenlei">
+				<a style="text-decoration:none; color:#333;" href="javascript:" class="nav_left" id="{$vo['id']}">{$vo['name']}<span style="display:block;float:right;margin-right:20px;">[{:count($vo['hehe'])}]</span></a>
+
+				<div class="nav_right">
+					{volist name="vo['hehe']" id="f"}
+					<a style="text-decoration:none; color:#333;" href="javascript:void(0)" name="xianshi" id="{$f['id']}"><span>{:strip_tags(htmlspecialchars_decode($f['mname']))}</span></a>
+					{/volist}
+
+				</div>
+			</dd>
+			{/if} {/volist}
+
+		</dl>
+
+	</div>
+
+	{/if}
+	<!-- 代码end -->
+
+	{include file="public/top_jingdian" /}
+
+	<div id="container" style="padding-top:1px">
+
+		<div id="notice" style='margin-top: 20px;'>
+			{foreach name="GongGao" item="v"}
+			<div id="notice-title" {if condition="config('pc_jingdian_gg_color') neq ''"}style="background: {:config('pc_jingdian_gg_color')};"{/if}>
+				公告信息
+
+			</div>
+			<div id="ggnei">
+				{:htmlspecialchars_decode($v['content'])}
+			</div>
+			{/foreach}
+
+		</div>
+
+		<div id="marq" class="bar">
+			<marquee behavior="" direction="" scrollamount="4">
+				{$GongGao[0]['title']}
+
+			</marquee>
+		</div>
+		
+		<div style="width: 960px;margin:0 auto;">
+			<div class="search_box" style="margin-top: 0px;width:48%;float:left;margin-bottom: 5px;">
+				<form name="search" action="{:url('Index/hengGoodByName')}" method="get">
+				<i class="iconfont icon-sousuo"></i>
+			
+				<input type="text" value="" name="key" placeholder="请输入商品名称关键词" class="order_input">
+				<button style="background:rgba(224, 41, 110, 0.9)">商品搜索</button>
+				</form>
+			</div>
+			
+			<div class="search_box" style="margin-top: 0px;width:48%;float:right;margin-bottom: 5px;">
+				<i class="iconfont icon-sousuo"></i>
+				<input type="text" value="" placeholder="请输入订单号或者联系方式" class="order_input" id="orderid_input">
+				<button onclick="orderid_or_contact()">订单查询</button>
+			</div>
+		</div>
+		
+
+		<br />
+		<div class="bar" id="main">
+
+			{if condition="config('web_louceng') eq 1"}
+
+			<!--  楼层导航开始 -->
+
+			{volist name="GoodsListAll" id="vo"} {if condition="count($vo['hehe']) neq 0"} {if condition="$vo['color'] eq ''"}
+			<div class="down" id="{$vo['id']}">{$vo['loucengname']}</div>
+			{else/}
+			<div class="down" id="{$vo['id']}" style="background:{$vo['color']}">{$vo['loucengname']}</div>
+			{/if} {if condition="config('web_lishi') eq 0"} {if condition="$i eq 1"}
+			
+				{if condition="config('pc_jingdian_css') eq 0"}
+				<div class="item-shop item-lsth" id="lsth2">
+				{/if}
+				{if condition="config('pc_jingdian_css') eq 1"}
+				<div class="item-shop item-lsth" id="lsth2" style="width: 48.33%;">
+				
+				{/if}
+				{if condition="config('pc_jingdian_css') eq 2"}
+				<div class="item-shop item-lsth" id="lsth2" style="width: 98.4%;">
+				
+				{/if}
+				<div class="item-title">
+					历史提货信息
+				</div>
+				<div>
+					<marquee scrollamount="2" direction="up" height="210">
+						<p>强烈建议：首次先少提些测试，适合再提</p>
+						<p>提货时看清商品种类和价格，提错不能更换</p>
+						{foreach name="LiShi" item="v"}
+						<p>交易号：{:substr($v['mcard'],0,8).'********'.substr($v['mcard'],-1,1).';金额:'.number_format($v['mamount'],2)}</p>
+						{/foreach}
+					</marquee>
+				</div>
+			</div>
+			{/if} {/if} {volist name="vo['hehe']" id="v"} {if condition="$v['zkongge'] eq 1"}
+			
+				{if condition="config('pc_jingdian_css') eq 0"}
+				<div class="item-kongge"> </div>
+				{/if}
+				{if condition="config('pc_jingdian_css') eq 1"}
+				<div class="item-kongge" style="width: 48.33%;"> </div>
+				
+				
+				{/if}
+				{if condition="config('pc_jingdian_css') eq 2"}
+				<div class="item-kongge" style="width: 98.4%;"> </div>
+				
+				
+				{/if}
+			
+			
+			{/if}
+
+			<form method="post" action="{:url('Index/zywlpay')}" id="formid">
+				{if condition="config('pc_jingdian_css') eq 0"}
+				<div class="item-shop" id="{$v.id}" name="{$v.mlm}">
+				{/if}
+				{if condition="config('pc_jingdian_css') eq 1"}
+				<div class="item-shop" id="{$v.id}" name="{$v.mlm}" style="width: 48.33%;">
+				{/if}
+				{if condition="config('pc_jingdian_css') eq 2"}
+				<div class="item-shop" id="{$v.id}" name="{$v.mlm}" style="width: 98.4%;">
+				{/if}
+				
+					<div id="xqnotice" style="display:none;margin: 15px;padding: 0px;overflow: hidden;" >{:htmlspecialchars_decode($v['xqnotice'])}</div>
+					{if condition="$v['color'] eq ''"}
+					<div class="item-title">
+						{:htmlspecialchars_decode($v['mname'])}
+					</div>
+					{else/}
+					<div class="item-title" style="background:{$v['color']}">
+						{:htmlspecialchars_decode($v['mname'])}
+					</div>
+					{/if}
+
+					<div class="item-bz">
+						<!--<p><font color="#0000E3">{:htmlspecialchars_decode($v['mprice_bz'])}</font></p>-->
+						<p><label id="tip" style="padding:5px; margin-bottom: 0px;" class="alert alert-info">{:htmlspecialchars_decode($v['mprice_bz'])}</label></p>
+						{if condition="$v['type'] eq 0"}
+						<p>实时库存：<span class="red">{$v.count}</span></p>
+						{else/}
+						<p>发货类型：<span class="red">手动发货</span></p>
+						{/if}
+					
+					</div>
+					<div>
+						<p style="font-size: 16px;">交易号：<input class="_input" type="text" name="number" value="请输入商户单号或交易号" onfocus="if (value =='请输入商户单号或交易号'){value =''}" onblur="if (value ==''){value='请输入商户单号或交易号'}" style="color:#999999" /></p>
+						<input type="hidden" name="mpid" value="{$v.id}" />
+						<input type="hidden" name="countnum" id="countnum" value="{$v.count}" />
+						<input type="hidden" name="mmin" id="mmin" value="{$v.mmin}" />
+						<input type="hidden" name="mmax" id="mmax" value="{$v.mmax}" />
+						<input type="hidden" name="sendbeishu" id="sendbeishu" value="{$v.sendbeishu}" />
+						<input type="hidden" name="mname" id="mname" value="{:strip_tags(htmlspecialchars_decode($v['mname']))}" />
+						<input type="hidden" name="mprice" id="mprice" value="{$v.mprice}" />
+						<input type="button" class="but" value="提取" style="width:45%;padding:0;margin-left:3%;float:left;border-radius: 10px;" />
+						<input type="submit" class="but2" value="在线购买" style="width:45%;padding:0;margin-right:3%;float:right;border-radius: 10px;" />
+
+					</div>
+
+					<div class="item-title-top" onclick="spxq({$v.id});">
+						<p id="jdts">{:htmlspecialchars_decode($v['mnotice'])}</p>
+						<p id="spxq" style="display: none;">
+							<a href="javascript:void(0);"  style="font-size:20px;">点击我查看商品详情</a>
+						</p>
+					</div>
+				</div>
+			</form>
+
+			{if condition="$v['ykongge'] eq 1"}
+				{if condition="config('pc_jingdian_css') eq 0"}
+				<div class="item-kongge"> </div>
+				{/if}
+				{if condition="config('pc_jingdian_css') eq 1"}
+				<div class="item-kongge" style="width: 48.33%;"> </div>
+				
+				
+				{/if}
+				{if condition="config('pc_jingdian_css') eq 2"}
+				<div class="item-kongge" style="width: 98.4%;"> </div>
+				
+				
+				{/if}
+			{/if} {/volist} {/if} {/volist} {if condition="config('web_lishi') eq 1"}
+
+			
+				{if condition="config('pc_jingdian_css') eq 0"}
+				<div class="item-shop item-lsth" id="lsth2">
+				{/if}
+				{if condition="config('pc_jingdian_css') eq 1"}
+				<div class="item-shop item-lsth" id="lsth2" style="width: 48.33%;">
+				
+				{/if}
+				{if condition="config('pc_jingdian_css') eq 2"}
+				<div class="item-shop item-lsth" id="lsth2" style="width: 98.4%;">
+				
+				{/if}
+				
+				<div class="item-title">
+					历史提货信息
+				</div>
+				<div>
+					<marquee scrollamount="2" direction="up" height="210">
+						<p>强烈建议：首次先少提些测试，适合再提</p>
+						<p>提货时看清商品种类和价格，提错不能更换</p>
+						{foreach name="LiShi" item="v"}
+						<p>交易号：{:substr($v['mcard'],0,8).'********'.substr($v['mcard'],-1,1).';金额:'.number_format($v['mamount'],2)}</p>
+						{/foreach}
+					</marquee>
+				</div>
+			</div>
+
+			{/if}
+
+			<!--    楼层导航结束-->
+
+			{else/}
+
+			<!-- 普通开始-->
+
+			{if condition="config('web_lishi') eq 0"}
+
+				{if condition="config('pc_jingdian_css') eq 0"}
+				<div class="item-shop item-lsth" id="lsth2">
+				{/if}
+				{if condition="config('pc_jingdian_css') eq 1"}
+				<div class="item-shop item-lsth" id="lsth2" style="width: 48.33%;">
+				
+				{/if}
+				{if condition="config('pc_jingdian_css') eq 2"}
+				<div class="item-shop item-lsth" id="lsth2" style="width: 98.4%;">
+				
+				{/if}
+				<div class="item-title">
+					历史提货信息
+				</div>
+				<div>
+					<marquee scrollamount="2" direction="up" height="210">
+						<p>强烈建议：首次先少提些测试，适合再提</p>
+						<p>提货时看清商品种类和价格，提错不能更换</p>
+						{foreach name="LiShi" item="v"}
+						<p>交易号：{:substr($v['mcard'],0,8).'********'.substr($v['mcard'],-1,1).';金额:'.number_format($v['mamount'],2)}</p>
+						{/foreach}
+					</marquee>
+				</div>
+			</div>
+
+			{/if} {foreach name="GoodsList" item="v"} {if condition="$v['zkongge'] eq 1"}
+			
+				{if condition="config('pc_jingdian_css') eq 0"}
+				<div class="item-kongge"> </div>
+				{/if}
+				{if condition="config('pc_jingdian_css') eq 1"}
+				<div class="item-kongge" style="width: 48.33%;"> </div>
+				
+				
+				{/if}
+				{if condition="config('pc_jingdian_css') eq 2"}
+				<div class="item-kongge" style="width: 98.4%;"> </div>
+				
+				
+				{/if}
+			{/if}
+
+			<form method="post" action="{:url('Index/zywlpay')}" id="formid">
+				{if condition="config('pc_jingdian_css') eq 0"}
+				<div class="item-shop" id="{$v.id}" name="{$v.mlm}">
+				{/if}
+				{if condition="config('pc_jingdian_css') eq 1"}
+				<div class="item-shop" id="{$v.id}" name="{$v.mlm}" style="width: 48.33%;">
+				{/if}
+				{if condition="config('pc_jingdian_css') eq 2"}
+				<div class="item-shop" id="{$v.id}" name="{$v.mlm}" style="width: 98.4%;">
+				{/if}
+					<div id="xqnotice" style="display:none;margin: 15px;padding: 0px;overflow: hidden; ">{:htmlspecialchars_decode($v['xqnotice'])}</div>
+
+					{if condition="$v['color'] eq ''"}
+					<div class="item-title">
+						{:htmlspecialchars_decode($v['mname'])}
+					</div>
+					{else/}
+					<div class="item-title" style="background:{$v['color']}">
+						{:htmlspecialchars_decode($v['mname'])}
+					</div>
+					{/if}
+
+					<div class="item-bz">
+						
+						<p><label id="tip" style="padding:5px; margin-bottom: 0px;" class="alert alert-info">{:htmlspecialchars_decode($v['mprice_bz'])}</label></p>
+
+						
+						{if condition="$v['type'] eq 0"}
+						<p>实时库存：<span class="red">{$v.count}</span></p>
+						{else/}
+						<p>发货类型：<span class="red">手动发货</span></p>
+						{/if}
+					</div>
+					<div>
+						<p style="font-size: 16px;">交易号：<input class="_input" type="text" name="number" value="请输入商户单号或交易号" onfocus="if (value =='请输入商户单号或交易号'){value =''}" onblur="if (value ==''){value='请输入商户单号或交易号'}" style="color:#999999" /></p>
+						<input type="hidden" name="mpid" value="{$v.id}" />
+						<input type="hidden" name="countnum" id="countnum" value="{$v.count}" />
+						<input type="hidden" name="mmin" id="mmin" value="{$v.mmin}" />
+						<input type="hidden" name="mmax" id="mmax" value="{$v.mmax}" />
+						<input type="hidden" name="sendbeishu" id="sendbeishu" value="{$v.sendbeishu}" />
+						<input type="hidden" name="mname" id="mname" value="{:strip_tags(htmlspecialchars_decode($v['mname']))}" />
+						<input type="hidden" name="mprice" id="mprice" value="{$v.mprice}" />
+						<input type="button" class="but" value="提取" style="width:45%;padding:0;margin-left:3%;float:left;border-radius: 10px;" />
+						<input type="submit" class="but2" value="在线购买" style="width:45%;padding:0;margin-right:3%;float:right;border-radius: 10px;" />
+
+					</div>
+
+					<div class="item-title-top" onclick="spxq({$v.id});">
+						<p id="jdts">{:htmlspecialchars_decode($v['mnotice'])}</p>
+						<p id="spxq" style="display: none;">
+							<a href="javascript:void(0);" style="font-size:20px;">点击我查看商品详情</a>
+						</p>
+					</div>
+				</div>
+			</form>
+
+			{if condition="$v['ykongge'] eq 1"}
+				{if condition="config('pc_jingdian_css') eq 0"}
+				<div class="item-kongge"> </div>
+				{/if}
+				{if condition="config('pc_jingdian_css') eq 1"}
+				<div class="item-kongge" style="width: 48.33%;"> </div>
+				
+				
+				{/if}
+				{if condition="config('pc_jingdian_css') eq 2"}
+				<div class="item-kongge" style="width: 98.4%;"> </div>
+				
+				
+				{/if}
+			{/if} {/foreach} {if condition="config('web_lishi') eq 1"}
+
+				{if condition="config('pc_jingdian_css') eq 0"}
+				<div class="item-shop item-lsth" id="lsth2">
+				{/if}
+				{if condition="config('pc_jingdian_css') eq 1"}
+				<div class="item-shop item-lsth" id="lsth2" style="width: 48.33%;">
+				
+				{/if}
+				{if condition="config('pc_jingdian_css') eq 2"}
+				<div class="item-shop item-lsth" id="lsth2" style="width: 98.4%;">
+				
+				{/if}
+
+			
+				<div class="item-title">
+					历史提货信息
+				</div>
+				<div>
+					<marquee scrollamount="2" direction="up" height="210">
+						<p>强烈建议：首次先少提些测试，适合再提</p>
+						<p>提货时看清商品种类和价格，提错不能更换</p>
+						{foreach name="LiShi" item="v"}
+						<p>交易号：{:substr($v['mcard'],0,8).'********'.substr($v['mcard'],-1,1).';金额:'.number_format($v['mamount'],2)}</p>
+						{/foreach}
+					</marquee>
+				</div>
+			</div>
+
+			{/if}
+
+			<!--  普通结束  -->
+			{/if}
+
+			<div class="clr"></div>
+			<div class="qusition">
+				<strong style="margin-left:7px">常见问题说明</strong> {foreach name="ChangJian" item="v"}
+				<dl>
+					<dt>
+       {:htmlspecialchars_decode($v['title'])}
+      </dt>
+					<dd>
+						{:htmlspecialchars_decode($v['content'])}
+					</dd>
+				</dl>
+
+				{/foreach}
+
+				<dl>
+					<dt>
+       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;免 责 声 明
+      </dt>
+					<dd>
+						{foreach name="MianZei" item="v"} {:htmlspecialchars_decode($v['content'])} {/foreach}
+
+					</dd>
+				</dl>
+			</div>
+
+		</div>
+
+	{include file="public/footer" /}
+		{include file="public/order_disclaimer_boot" /}
+		<script type="text/javascript">
+			layui.use('element', function() {
+				var element = layui.element;
+
+				//一些事件监听
+				element.on('tab(demo)', function(data) {
+					console.log(data);
+				});
+			});
+
+			function Init() {
+			    
+			    
+			    
+				// 首页公告由 order_disclaimer_boot 自动弹出（勿在此用 PHP cookie()）
+				var m = {$param['isMobilePc']};
+				var mstatus = {:config('m_status')};
+				var weiyong={$param['count']};
+				//判断是否是手机
+				if(m == 1) {
+					if(mstatus == 0) {
+						layer.open({
+							type: 1,
+							title: false //不显示标题栏
+								,
+							closeBtn: false,
+							area: '300px;',
+							shade: 0.8,
+							id: 'LAY_layuipro' //设定一个id，防止重复弹出
+								,
+							resize: false,
+							btn: ['切换到手机', '不切换模板'],
+							btnAlign: 'c',
+							moveType: 1 //拖拽模式，0或者1
+								,
+							content: '<div style="padding: 50px; line-height: 22px; background-color: #393D49; color: #fff; font-weight: 300;">是否切换到手机模版？</div>',
+							success: function(layero) {
+								var btn = layero.find('.layui-layer-btn');
+								btn.find('.layui-layer-btn0').attr({
+									href: "{:config('is_https')}://" + window.location.host + '/mobile'
+								});
+								btn.find('.layui-layer-btn1').attr({
+									href: "{:config('is_https')}://" + window.location.host +"{url('Index/index')}"+"?device=pc"
+								});
+							}
+						});
+						return false;
+
+					} else if(mstatus == 1) {
+						window.location.href = "{:config('is_https')}://" + window.location.host + '/mobile';
+						return false;
+					}
+
+				}
+				//检查是否有未用订单
+				if(weiyong>0){
+					//window.location.href = "{:url('Index/selectorder')}";
+           
+          
+           layer.msg('您有未提取订单，请点击右上角订单查询', {
+            icon: 7,
+            anim:6,
+          }, function(){
+              layer.msg('您有未提取订单，请点击右上角订单查询', {
+                icon: 7,
+                offset: 'lb',
+                anim:6,
+                time: 200000000 
+              }, function(){
+               
+              }); 
+          }); 
+          
+          
+				}
+				
+			}
+
+			function orderid_or_contact() {
+				var input_val = $('#orderid_input').val();
+				window.location.href = '{:url("Index/selectorder")}' + '?key=' + input_val;
+
+			}
+
+			function tiqu1() {
+				var countnum = document.getElementById("countnum").value;
+				if(countnum == '0') {
+					alert("暂无库存");
+					return false;
+				} else {
+					document.form1.action = "{:url('Index/isif')}";
+					document.form1.submit();
+				}
+
+			}
+
+			//检查订单号
+			function check_order(number, mpid) {
+				location.href = './edit_member/id/' + id + '.html';
+			}
+
+			function spxq(mpid) {
+				var index = layer.open({
+					type: 2,
+					title: '商品详情',
+					skin: 'layui-layer-lan',
+					shadeClose: true,
+					shade: 0.7,
+					// closeBtn: 0,
+					maxmin: true, //开启最大化最小化按钮
+					area: ['40%', '85%'],
+					content: "{:url('Index/shopxq')}" + "?mpid=" + mpid
+				});
+				//layer.full(index);	    
+
+			}
+
+			$(function() {
+				$('.but2').click(function() {
+					var countnum = $(this).parents('div').children().eq(0).next().next().val();
+					var mmin = $(this).parents('div').children().eq(0).next().next().next().val();
+					var mmax = $(this).parents('div').children().eq(0).next().next().next().next().val();
+					var shoptitle = $(this).parents('div').children().eq(0).next().next().next().next().next().val();
+					var mprice = $(this).parents('div').children().eq(0).next().next().next().next().next().next().val();
+					var dingdan = $(this).parents('div').children().eq(0).find("input").val();
+					var mpid = $(this).parents('div').children().eq(0).next().val();
+
+					if(countnum == '0') {
+						layer.alert("暂无库存，请联系客服", {
+							skin: 'layui-layer-lan',
+							closeBtn: 0,
+							anim: 0 //动画类型
+						});
+						return false;
+					}
+
+					return true;
+
+				});
+
+				$('.but').click(function() {
+
+					var countnum = $(this).parents('div').children().eq(0).next().next().val();
+					var dingdan = $(this).parents('div').children().eq(0).find("input").val();
+					var mpid = $(this).parents('div').children().eq(0).next().val();
+
+					if(countnum == '0') {
+						layer.alert("暂无库存，请联系客服", {
+							skin: 'layui-layer-lan',
+							closeBtn: 0,
+							anim: 0 //动画类型
+						});
+						return false;
+					}
+					if(dingdan.length < 8) {
+						layer.alert("订单号格式不正确", {
+							skin: 'layui-layer-lan',
+							closeBtn: 0,
+							anim: 0 //动画类型
+						});
+						return false;
+					}
+					if(dingdan == '请输入商户单号或交易号' || dingdan == '') {
+						layer.alert("请输入商户单号或交易号", {
+							skin: 'layui-layer-lan',
+							closeBtn: 0,
+							anim: 0 //动画类型
+						});
+
+						return false;
+					}
+					layer.ready(function() {
+						var indexload = layer.load();
+						$.getJSON("{:url('Order/getOrder')}", {
+							'number': dingdan,
+							'mpid': mpid
+						}, function(res) {
+							
+							if(res.code == 1) {
+								window.location.href = '{:url("Goods/getShopnumByOrder")}' + '?number=' + dingdan + '&mpid=' + mpid;
+							} else if(res.code == -2) {
+								window.location.href = '{:url("Index/selectorder")}' + '?key=' + dingdan;
+							} else if(res.code == -3) {						
+								window.location.href = "{:url('@jingdian/Getmail/index')}"+"?mpid="+res.data.mflid+"&number="+dingdan;
+							}else if(res.code == -4) {						
+								window.location.href = "{:url('@jingdian/Index/fenxiang')}?order="+dingdan;
+							} else {
+								layer.alert(res.msg, {
+									skin: 'layui-layer-lan',
+									closeBtn: 0,
+									anim: 0 //动画类型
+								});
+
+							}
+
+						});
+						layer.close(indexload);
+
+					});
+					
+				});
+
+				$('.item-shop').hover(function() {
+					
+					var val = $(this).children("#xqnotice").html();
+					
+					if(val.replace(/\s+/g,"")!=="") {
+					    var jsts = $(this).children(".item-title-top").children("#jdts");
+						var spxq = $(this).children(".item-title-top").children("#spxq");
+						if(jsts) {
+							jsts.hide();
+							spxq.show();
+						}
+						// layer.closeAll();
+						window.index = layer.open({
+							type: 1,
+							title: "购买提示",
+							closeBtn: 0, //不显示关闭按钮
+							skin: 'layui-layer-lan',
+							shade: false,
+							area: ['20%', 'auto'],
+							offset: 'rb', //右下角弹出
+							anim: 2,
+							content: '<div style="padding: 15px 30px;margin: 15px;padding: 0px;overflow: hidden; ">' + val + '</div>' //iframe的url，no代表不显示滚动条
+
+						});
+					}
+				});
+
+				$('.item-shop').mouseleave(function() {
+					var jsts = $(this).children(".item-title-top").children("#jdts");
+					var spxq = $(this).children(".item-title-top").children("#spxq");
+					if(jsts) {
+						jsts.show();
+						spxq.hide();
+					}
+          layer.closeAll('page');
+					
+				});
+
+			});
+
+			$(function() {
+				$(".left_nav dd").hover(function() {
+					$(".nav_right", this).show();
+				});
+				$(".left_nav dd").mouseleave(function() {
+					$(".nav_right", this).hide();
+				});
+
+				$("#quanbu").click(function() {
+					$("div.item-kongge").each(function() {
+						$(this).show();
+					});
+					$("div.item-shop").each(function() {
+						var divclass = $(this).attr("class");
+
+						if(divclass == 'item-shop') {
+							var divid = $(this).attr("id");
+
+							$(this).show();
+
+						}
+
+					});
+				});
+
+				$("[name=xianshi]").click(function() {
+					var id = $(this).attr("id");
+
+					$("div.item-kongge").each(function() {
+						$(this).hide();
+					});
+					$("div.item-shop").each(function() {
+						var divclass = $(this).attr("class");
+
+						if(divclass == 'item-shop') {
+							var divid = $(this).attr("id");
+
+							if(divid == id) {
+
+								$(this).show();
+
+								//获取要定位元素距离浏览器顶部的距离
+								var navH = $(this).offset().top;
+
+								$('html, body').animate({
+									scrollTop: $(this).offset().top - 250
+								}, 100);
+
+							} else {
+								$(this).hide();
+							}
+
+						}
+
+					});
+
+				});
+
+				$(".fenlei .nav_left").click(function() {
+					var id = $(this).attr("id");
+					var Banimate = false;
+					$("div.item-kongge").each(function() {
+						$(this).hide();
+					});
+					$("div.item-shop").each(function() {
+						var divclass = $(this).attr("class");
+
+						if(divclass == 'item-shop') {
+							var divid = $(this).attr("name");
+
+							if(divid == id) {
+
+								$(this).show();
+
+								//获取要定位元素距离浏览器顶部的距离
+								if(Banimate == false) {
+									Banimate = true;
+									var navH = $(this).offset().top;
+									$('html, body').animate({
+										scrollTop: $(this).offset().top - 250
+									}, 100);
+								}
+
+							} else {
+								$(this).hide();
+							}
+
+						}
+
+					});
+
+				});
+
+				$(".down").click(function() {
+					var id = $(this).attr("id");
+					var Banimate = false;
+					$("div.item-kongge").each(function() {
+						$(this).hide();
+					});
+					$("div.item-shop").each(function() {
+						var divclass = $(this).attr("class");
+
+						if(divclass == 'item-shop') {
+							var divid = $(this).attr("name");
+
+							if(divid == id) {
+
+								$(this).show();
+
+								//获取要定位元素距离浏览器顶部的距离
+								if(Banimate == false) {
+									Banimate = true;
+									var navH = $(this).offset().top;
+									$('html, body').animate({
+										scrollTop: $(this).offset().top - 250
+									}, 100);
+								}
+
+							} else {
+								$(this).hide();
+							}
+
+						}
+
+					});
+
+				});
+
+			});
+
+			$(document).ready(function() {
+				if(window.clipboardData) {
+					//for IE
+					var copyBtn = document.getElementById("copy");
+					copyBtn.onclick = function() {
+						var text = $("#copy").attr("data-clipboard-text");
+						window.clipboardData.setData('text', text);
+						alert("复制成功");
+					}
+				} else {
+					var client = new ZeroClipboard(document.getElementById("copy"));
+					client.on("ready", function(readyEvent) {
+						client.on("aftercopy", function(event) {
+							var $copysuc = $("<div class='copy-tips'><div class='copy-tips-wrap'>☺ 支付宝复制成功</div></div>");
+							$("body").find(".copy-tips").remove().end().append($copysuc);
+							$(".copy-tips").fadeOut(3000);
+						});
+					});
+				}
+			});
+			var windowheight=$(window).height();
+      var selfheight=$('.left_nav').outerHeight(true);
+      var settop=(windowheight-selfheight)/2;
+      if($(window).scrollTop()>100 || settop>100){
+      $(".left_nav").css("top", settop+'px');
+      }else{
+      $(".left_nav").css("top", settop+100-$(window).scrollTop()+'px');
+      }
+
+      $(window).scroll(function() {
+              var windowheight=$(window).height();
+              var selfheight=$('.left_nav').outerHeight(true);
+              var settop=(windowheight-selfheight)/2;
+              if($(window).scrollTop()>100 || settop>100){
+              $(".left_nav").css("top", settop+'px');
+              }else{
+              $(".left_nav").css("top", settop+100-$(window).scrollTop()+'px');
+              }
+              
+      });
+		</script>		
+  <div style=" position: fixed;left: 10px;bottom: 100px;z-index: 100; width: 110px;">{:config('web_music')}</div>
+</body>
+</html>

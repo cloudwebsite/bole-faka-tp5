@@ -1,0 +1,559 @@
+{include file="public/header" /}
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated fadeInRight">
+    
+    	<div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>积分商城商品列表</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="form_basic.html#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                	<!--搜索框开始-->           
+		            <div class="row">
+		                <div class="col-sm-12">   
+		                <div  class="col-sm-2" style="width: 100px">
+		                    <div class="input-group" >  
+		                        <a href="{:url('add_member')}"><button class="btn btn-outline btn-primary" type="button">添加商品</button></a> 
+		                    </div>
+		                </div>                                    
+		                    <form name="admin_list_sea" class="form-search" method="get" action="{:url('index')}">
+		                        {:token()}
+		                    	<input type="hidden" id="status" name="status" value="{$status}">
+		                    	<input type="hidden" id="type" name="type" value="{$type}">
+		                        <div class="col-sm-1">
+		                            <div class="input-group">
+		                                  <select class="form-control m-b chosen-select" name="mlm" id='mlm'>
+		                                      <option value="999" {if condition="$mlm eq 999"}selected{/if}>全部分组</option>		                                      
+		                                      {volist name="search_user" id="v"}
+		                                          <option value="{$key}" {if condition="$mlm eq $key"}selected{/if}>{$v}</option>
+		                                      {/volist}
+		                                  </select>
+		                               
+		                            </div>
+		                        </div>
+		                        <div class="col-sm-3">
+		                            <div class="input-group">
+		                                <input type="text" id="key" class="form-control" name="key" value="{$val}" placeholder="输入需查询的商品名称/提示信息" />   
+		                                <span class="input-group-btn"> 
+		                                    <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i> 搜索</button> 
+		                                </span>
+		                            </div>
+		                        </div>
+		                    </form>
+		                    
+		                </div>
+		            </div>
+		            <!--搜索框结束-->
+		             <div class="hr-line-dashed"></div>
+                    <div class="panel blank-panel">
+                        <div class="panel-heading">                     
+                            <div class="panel-options">
+                                <ul class="nav nav-tabs">
+                                    <li id="tab1" class="active"><a data-toggle="tab" onclick="getstatuscount(999,999);" aria-expanded="true"><span class="badge badge-success">{$dataCount['all']}</span>全部宝贝</a></li>
+                                    <li id="tab2" class=""><a data-toggle="tab" onclick="getstatuscount(0,999);" aria-expanded="false"><span class="badge badge-warning">{$dataCount['allsale']}</span>仓库中的宝贝</a></li>
+                                    <li id="tab3" class=""><a data-toggle="tab" onclick="getstatuscount(999,0);" aria-expanded="false"><span class="badge badge-success">{$dataCount['allzidong']}</span>自动发货宝贝</a></li>
+                                    <li id="tab4" class=""><a data-toggle="tab" onclick="getstatuscount(1,0);" aria-expanded="false"><span class="badge badge-info">{$dataCount['zidongsell']}</span>自动发货出售中宝贝</a></li>
+                                    <li id="tab5" class=""><a data-toggle="tab" onclick="getstatuscount(0,0);" aria-expanded="false"><span class="badge badge-warning">{$dataCount['zidongsale']}</span>自动发货仓库中宝贝</a></li>
+                                	<li id="tab6" class=""><a data-toggle="tab" onclick="getstatuscount(999,1);" aria-expanded="false"><span class="badge badge-success">{$dataCount['allshoudong']}</span>手动发货宝贝</a></li>
+                                	<li id="tab7" class=""><a data-toggle="tab" onclick="getstatuscount(1,1);" aria-expanded="false"><span class="badge badge-info">{$dataCount['shoudongsell']}</span>手动发货出售中宝贝</a></li>
+                                	<li id="tab8" class=""><a data-toggle="tab" onclick="getstatuscount(0,1);" aria-expanded="false"><span class="badge badge-warning">{$dataCount['shoudongsale']}</span>手动发货仓库中宝贝</a></li>
+                                	
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="panel-body">
+                            <div class="tab-content">
+                               
+                                <div id="tab-1" class="tab-pane active">
+                                   <div class="example-wrap">
+						                <div class="example">
+						                    <form id="ruleorder" name="ruleorder" method="post" action="{:url('rulemember')}" >
+						                        {:token()}
+						                    <table class="table table-bordered table-hover">
+						                         
+						                        <thead>
+						                        	<tr>
+						                                    
+						                                    <td colspan="13" align="left">
+						                                    	<button type="button" onclick="del_shopfromchecked();" id="btnorder" class="btn btn-danger"><i class="fa fa-trash-o"></i>删除</button>
+						                                    	<button type="button"  onclick="shelf_shopfromchecked();" id="btnorder" class="btn btn-primary"><i class="fa fa-level-up"></i>上架</button>
+						                                    	<button type="button"  onclick="sale_shopfromchecked();" id="btnorder" class="btn btn-warning"><i class="fa fa-level-down"></i>下架</button>
+						                                    	
+						                                    	<button type="submit"  id="btnorder" class="btn btn-info"><i class="fa fa-save"></i>更新商品</button>
+						                                    </td>
+						                        	</tr>
+						                            <tr class="long-tr">
+						                            	<th width="4%"><input type="checkbox" name="all" id="all" onclick="checkAll()" />全选</th>
+						                                
+						                                <th width="6%">商品类型</th>
+						                                <th>名称</th>                               
+						                                <th width="6%">兑换积分</th>
+						                                <th width="5%">排序</th>
+						                                <th width="8%">分类</th>
+						                                <th width="8%">添加/更新时间</th>
+						                        
+						                                <th width="4%">状态</th>
+						                                
+					
+						                                <th width="6%">操作</th>
+						                            </tr>
+						                        </thead>
+                      
+						                        <tbody id="list-content"></tbody>
+						                       
+						                    </table>
+						                    </form>
+						                    <div id="AjaxPage" style=" text-align: right;"></div>
+						                   
+						                    <div style="text-align: right;">
+						                        共{$count}条数据，<span id="allpage"></span>
+						                    </div>
+						                </div>
+						            </div>
+                                </div>
+                                <div id="tab-2" class="tab-pane">
+                                   2
+                                </div>
+                                <div id="tab-3" class="tab-pane">
+                                   3
+                                </div>
+                                <div id="tab-4" class="tab-pane">
+                                   4
+                                </div>
+                               
+                                
+                                
+                            </div>
+                        </div>
+                    </div>         
+                </div>
+            </div>
+        </div>
+    </div>
+    	
+    <!-- Panel Other -->
+    
+</div>
+<!-- End Panel Other -->
+<script id="list-template" type="text/html">
+
+						                        	 {{# for(var i=0;i<d.length;i++){  }}
+						                            <tr class="long-td">
+						                                <td><input type="checkbox" name="checkname[]" value="{{d[i].id}}" />{{d[i].id}}</td>
+						                                
+						                                <td>                             
+						                                    {{# if(d[i].type==0){ }}
+						                                       
+						                                            <div id="type{{d[i].id}}"><span class="label label-success">自动发货</span></div>
+						                                        
+						                                    {{# }else{ }}
+						                                       
+						                                            <div id="type{{d[i].id}}"><span class="label label-primary">手动发货</span></div>
+						                                       
+						                                    {{# } }}
+						                                    
+						                                    
+						                                </td>
+						                                <td style="text-align:left;padding-left:">
+						                                	<img src="{{d[i].imgurl}}"  style="width:80px;height:80px;margin-right: 20px;" onerror="this.src='/static/admin/images/head_default.gif'"/> 
+						                                	<a href="./edit_member/id/{{d[i].id}}.html">{{removeHTMLTag(htmlspecialchars_decode(d[i].mname))}}</a>
+						                                	
+						                                </td>
+						                                {{# if(d[i].mprice<1){ }}
+						                                <td>
+						                                	
+						                                	<div > 
+						                                        <input name="mprice[{{d[i].id}}]" value="{{toDecimal(d[i].mprice/100)}}"  style="text-align:center;" class="form-control">
+						                                    </div>
+						                                </td>
+						                                {{# }else{ }}
+						                                <td>
+						                                	<div >
+						                                        <input name="mprice[{{d[i].id}}]" value="{{toDecimal(d[i].mprice/100)}}" style="text-align:center;" class="form-control">
+						                                    </div>
+						                                </td>
+						                                {{# } }}
+						                               
+						                               
+						                                
+						                                <td>
+						                                			<div >
+						                                                <input name="sort[{{d[i].id}}]" value="{{d[i].sort}}" width="50%" style="text-align:center;" class="form-control">
+						                                            </div>
+						                                </td>                                  
+						                                <td>
+						                                	<select class="form-control" name="group[{{d[i].id}}]">
+						                                	
+						                                 
+						                                    {if !empty($group)}
+						                                        
+						                                            {{# var group={:json_encode($group,JSON_UNESCAPED_UNICODE)};}}
+						                                            {{# for (var h=0;h<group.length;h++){}}
+																		{{# if(d[i].name==group[h].name){ }}
+																			 <option value="{{group[h].id}}" selected>{{d[i].name}}</option>	
+																		{{# }else{  }}
+																			 <option value="{{group[h].id}}">{{group[h].name}}</option>		
+																		{{# } }}
+							                                             
+																	{{# } }}
+																		                                            
+						                                           
+						                                             
+						                                       
+						                                    {/if}
+						                                    </select>
+						                                </td>
+						                                <td><span class="label label-default">{{d[i].create_time}}</span><br><br>{{d[i].update_time}}</td> 
+						                                
+						                                                                                              
+						                                <td>                             
+						                                    {{# if(d[i].status==1){ }}
+						                                        <a class="red" href="javascript:;" onclick="member_status({{d[i].id}});">
+						                                            <div id="zt{{d[i].id}}"><span class="label label-info">开启</span></div>
+						                                        </a>
+						                                    {{# }else{ }}
+						                                        <a class="red" href="javascript:;" onclick="member_status({{d[i].id}});">
+						                                            <div id="zt{{d[i].id}}"><span class="label label-danger">禁用</span></div>
+						                                        </a>
+						                                    {{# } }}
+						                                    
+						                                    
+						                                </td>
+						                                
+						                                
+						                                
+						                                
+						                                <td>                                  
+						                                    <a href="javascript:;" onclick="edit_member({{d[i].id}})" class="btn btn-primary btn-outline btn-xs">
+						                                        <i class="fa fa-paste"></i>编辑商品</a>
+						                                    <a href="javascript:;" onclick="del_member({{d[i].id}})" class="btn btn-danger btn-outline btn-xs">
+						                                        <i class="fa fa-trash-o"></i>删除商品</a>   
+						                                          
+						                                </td>
+						                            </tr>
+						                            {{# } }}
+						                        	</script>
+
+<!-- 加载动画 -->
+<div class="spiner-example">
+    <div class="sk-spinner sk-spinner-three-bounce">
+        <div class="sk-bounce1"></div>
+        <div class="sk-bounce2"></div>
+        <div class="sk-bounce3"></div>
+    </div>
+</div>
+
+{include file="public/footer" /}
+
+<script type="text/javascript">
+
+    Init();
+    
+    function Init(){
+    	var status=$('#status').val();
+    	var type=$('#type').val();
+    	if(status==999 && type==999){
+    		$('#tab1').siblings().removeClass("active");//siblings是循环遍历
+    		$('#tab1').addClass("active");	
+        }else if(type=='' && status==''){
+        	$('#tab1').siblings().removeClass("active");//siblings是循环遍历
+    		$('#tab1').addClass("active");
+        }else if(type==999 && status==0){
+        	$('#tab2').siblings().removeClass("active");//siblings是循环遍历
+    		$('#tab2').addClass("active");
+        }else if(type==0 && status==999){
+        	$('#tab3').siblings().removeClass("active");//siblings是循环遍历
+    		$('#tab3').addClass("active");
+        }else if(type==0 && status==1){
+        	$('#tab4').siblings().removeClass("active");//siblings是循环遍历
+    		$('#tab4').addClass("active");
+        }else if(type==0 && status==0){
+        	$('#tab5').siblings().removeClass("active");//siblings是循环遍历
+    		$('#tab5').addClass("active");
+        }else if(type==1 && status==999){
+        	$('#tab6').siblings().removeClass("active");//siblings是循环遍历
+    		$('#tab6').addClass("active");
+        }else if(type==1 && status==1){
+        	$('#tab7').siblings().removeClass("active");//siblings是循环遍历
+    		$('#tab7').addClass("active");
+        }else if(type==1 && status==0){
+        	$('#tab8').siblings().removeClass("active");//siblings是循环遍历
+    		$('#tab8').addClass("active");
+        }
+        
+    }
+    
+  
+    Ajaxpage();
+    function Ajaxpage(curr){
+    	
+        var key=$('#key').val();
+        var status=$('#status').val();
+        var type=$('#type').val();
+        var mlm=$('#mlm').val();
+        $.getJSON('{:url("integralmall/index")}', {page: curr || 1,key:key,status:status,type:type,mlm:mlm}, function(data){
+            $(".spiner-example").css('display','none'); //数据加载完关闭动画 
+            if(data==''){
+                $("#list-content").html('<td colspan="20" style="padding-top:10px;padding-bottom:10px;font-size:16px;text-align:center">暂无数据</td>');
+            }else{
+                var tpl = document.getElementById('list-template').innerHTML;
+                laytpl(tpl).render(data, function(html){
+                    document.getElementById('list-content').innerHTML = html;
+                });
+                laypage({
+                    cont: $('#AjaxPage'),//容器。值支持id名、原生dom对象，jquery对象,
+                    pages:'{$allpage}',//总页数
+                    skip: true,//是否开启跳页
+                    
+                    skin: '#1AB5B7',//分页组件颜色
+                    curr: curr || 1,
+                    groups: 3,//连续显示分页数
+                    jump: function(obj, first){
+                        if(!first){
+                            Ajaxpage(obj.curr)
+                        }
+                        $('#allpage').html('第'+ obj.curr +'页，共'+ obj.pages +'页');
+                    }
+                });
+            }
+        });
+    }
+
+//编辑会员
+function edit_member(id){
+    location.href = './edit_member/id/'+id+'.html';
+}
+//添加分组价格
+function add_groupprice(id){
+    location.href = '{:url("Member/add_groupprice")}'+'?id='+id;
+}
+//添加私密价格
+function add_memberprice(id){
+    location.href = '{:url("Member/add_memberprice")}'+'?id='+id;;
+}
+function removeHTMLTag(str) {
+            str = str.replace(/<(style|script|iframe)[^>]*?>[\s\S]+?<\/\1\s*>/gi,'').replace(/<[^>]+?>/g,'').replace(/\s+/g,' ').replace(/ /g,' ').replace(/>/g,' '); //去除HTML tag
+            str = str.replace(/[ | ]*\n/g,'\n'); //去除行尾空白
+            //str = str.replace(/\n[\s| | ]*\r/g,'\n'); //去除多余空行
+            str=str.replace(/&nbsp;/ig,'');//去掉&nbsp;
+            //str=str.replace(/\s/g,''); //将空格去掉
+            return str;
+}
+function htmlspecialchars(str) {        
+              var s = "";  
+              if (str.length == 0) return "";  
+              for   (var i=0; i<str.length; i++)  
+              {  
+                  switch (str.substr(i,1))  
+                  {  
+                      case "<": s += "&lt;"; break;  
+                      case ">": s += "&gt;"; break;  
+                      case "&": s += "&amp;"; break;  
+                      case " ":  
+                          if(str.substr(i + 1, 1) == " "){  
+                              s += " &nbsp;";  
+                              i++;  
+                          } else s += " ";  
+                          break;  
+                      case "\"": s += "&quot;"; break;  
+                      case "\n": s += "<br>"; break;  
+                      default: s += str.substr(i,1); break;  
+                  }  
+              }  
+              return s;  
+          }
+  function htmlspecialchars_decode(str){           
+              str = str.replace(/&amp;/g, '&'); 
+              str = str.replace(/&lt;/g, '<');
+              str = str.replace(/&gt;/g, '>');
+              str = str.replace(/&quot;/g, "''");  
+              str = str.replace(/&#039;/g, "'");  
+              return str;  
+    }
+//删除会员
+function del_member(id){
+    lunhui.confirm(id,'{:url("del_member")}');
+}
+
+//商品状态
+function member_status(id){
+    lunhui.status(id,'{:url("member_status")}');
+}
+//推荐状态
+function member_tuijian(id){
+    lunhui.tuijian(id,'{:url("member_tuijian")}');
+}
+//爆款促销
+function member_hot(id){
+    lunhui.hot(id,'{:url("member_hot")}');
+}
+function checkAll() {  
+        var all=document.getElementById('all');//获取到点击全选的那个复选框的id  
+        var one=document.getElementsByName('checkname[]');//获取到复选框的名称  
+        if(all.checked==true){
+            for(var i=0;i<one.length;i++){  
+                one[i].checked=true;
+                
+            }  
+  
+        }else{  
+            for(var j=0;j<one.length;j++){  
+                one[j].checked=false;  
+            }  
+        }  
+}
+//删除选中
+function del_shopfromchecked(){
+	layer.confirm('确认删除选中的商品吗?', {icon: 3, title:'提示'}, function(index){
+	        var one=document.getElementsByName('checkname[]');//获取到复选框的名称  
+	            for(var i=0;i<one.length;i++){  
+	               if(one[i].checked==true){
+	               	
+		               	$.getJSON('{:url("del_member")}', {'id' : one[i].value}, function(res){
+		               		if(res.code == 1){
+		               			layer.msg("删除成功",{icon:1,time:1000,shade: 0.1});
+				            }else{
+				            	layer.msg("删除失败[商品下面存在卡密]",{icon:2,time:1000,shade: 0.1});
+				            }
+				      
+				        });
+	               	
+	               }
+	               
+	            } 
+	            //layer.msg('操作成功',{icon:1,time:1000,shade: 0.1});
+	            //Ajaxpage();
+	            //layer.close(index);       
+	    })
+}
+
+//下架选中
+function sale_shopfromchecked(){
+	layer.confirm('确认下架选中的商品吗?', {icon: 3, title:'提示'}, function(index){
+	        var one=document.getElementsByName('checkname[]');//获取到复选框的名称  
+	            for(var i=0;i<one.length;i++){  
+	               if(one[i].checked==true){
+	               	
+		               	$.getJSON('{:url("member_status_sale")}', {'id' : one[i].value}, function(res){
+		               		if(res.code == 1){
+				               
+				                
+				            }else{
+				               
+				            }
+				      
+				        });
+	               	
+	               }
+	               
+	            } 
+	            layer.msg('下架成功',{icon:1,time:1000,shade: 0.1});
+	            Ajaxpage();
+	            layer.close(index);       
+	    })
+}
+
+//上架选中
+function shelf_shopfromchecked(){
+	layer.confirm('确认上架选中的商品吗?', {icon: 3, title:'提示'}, function(index){
+	        var one=document.getElementsByName('checkname[]');//获取到复选框的名称  
+	            for(var i=0;i<one.length;i++){  
+	               if(one[i].checked==true){
+	               	
+		               	$.getJSON('{:url("member_status_shelf")}', {'id' : one[i].value}, function(res){
+		               		if(res.code == 1){
+				               
+				                
+				            }else{
+				               
+				            }
+				      
+				        });
+	               	
+	               }
+	               
+	            } 
+	            layer.msg('上架成功',{icon:1,time:1000,shade: 0.1});
+	            Ajaxpage();
+	            layer.close(index);       
+	    })
+}
+
+function getstatuscount(status,type){
+       $('#status').val(status);
+       $('#type').val(type);
+      // Ajaxpage();
+       
+       $("[name=admin_list_sea]").submit();
+}
+//更新排序
+    $(function(){
+        $('#ruleorder').ajaxForm({
+        	beforeSubmit: checkForm,
+            success: complete, 
+            dataType: 'json'
+        });
+        function checkForm(){
+        	layer.load(0, {shade: [0.5,'#fff']});
+        }
+
+        function complete(data){
+        	layer.closeAll('loading');
+            if(data.code==1){
+                layer.msg(data.msg, {icon: 1,time:1500,shade: 0.1}, function(index){
+                    window.location.href="{:url('integralmall/index')}";
+                });
+            }else{
+                layer.msg(data.msg, {icon: 2,time:1500,shade: 0.1}, function(index){
+                    layer.close(index);
+                    window.location.href=data.url;
+                });
+            }
+        }
+    });
+function toDecimal(x){
+  		var f = parseFloat(x);
+		if(isNaN(f)) {
+			return false;
+		}
+		var f;
+		if(getFloor(x)<2){
+			f = Math.round(x * 100) / 100;
+		}else if(getFloor(x)>2){
+			f = Math.round(x * 10000) / 10000;
+		}	
+		var s = f.toString();
+		var rs = s.indexOf('.');
+		if(rs < 0) {
+			rs = s.length;
+			s += '.';
+		}
+		while(s.length <= rs + 2) {
+			s += '0';
+		}
+		return s;
+  	}
+  	
+	function getFloor(x){
+		var y = String(x).indexOf('.') + 1;
+		var count = String(x).length - y;
+		if(y <= 0) {
+			count=0;
+		}
+		return count;										
+	}    
+</script>
+</body>
+</html>

@@ -1,0 +1,362 @@
+{include file="public/header" /}
+<link rel="stylesheet" type="text/css" href="{:config('cdnpublic')}layui/2.4.5/css/layui.min.css">
+
+<div class="layui-row layui-col-space10 panel_box">
+    <div class="panel layui-col-xs12 layui-col-sm6 layui-col-md4 layui-col-lg2">
+        <a href="javascript:;">
+            <div class="panel_icon layui-bg-green">
+                <i class="layui-icon layui-icon-form"></i>
+            </div>
+            <div class="panel_word">
+                <span id="todayOrder">0</span>
+                <cite>今日总订单</cite>
+            </div>
+        </a>
+    </div>
+    <div class="panel layui-col-xs12 layui-col-sm6 layui-col-md4 layui-col-lg2">
+        <a href="javascript:;">
+            <div class="panel_icon layui-bg-black">
+                <i class="layui-icon layui-icon-ok"></i>
+            </div>
+            <div class="panel_word">
+                <span id="todaySuccessOrder">0</span>
+                <cite>今日成功订单</cite>
+            </div>
+        </a>
+    </div>
+    <div class="panel layui-col-xs12 layui-col-sm6 layui-col-md4 layui-col-lg2">
+        <a href="javascript:;">
+            <div class="panel_icon layui-bg-red">
+                <i class="layui-icon layui-icon-close"></i>
+            </div>
+            <div class="panel_word">
+                <span id="todayCloseOrder">0</span>
+                <cite>今日失败订单</cite>
+            </div>
+        </a>
+    </div>
+    <div class="panel layui-col-xs12 layui-col-sm6 layui-col-md4 layui-col-lg2">
+        <a href="javascript:;">
+            <div class="panel_icon layui-bg-orange">
+                <i class="layui-icon layui-icon-rmb"></i>
+            </div>
+            <div class="panel_word userAll">
+                <span id="todayMoney">0</span>
+                <cite>今日收入</cite>
+
+            </div>
+        </a>
+    </div>
+    <div class="panel layui-col-xs12 layui-col-sm6 layui-col-md4 layui-col-lg2">
+        <a href="javascript:;">
+            <div class="panel_icon layui-bg-cyan">
+                <i class="layui-icon layui-icon-rmb"></i>
+            </div>
+            <div class="panel_word outIcons">
+                <span id="countMoney">0</span>
+                <cite>总收入</cite>
+            </div>
+        </a>
+    </div>
+    <div class="panel layui-col-xs12 layui-col-sm6 layui-col-md4 layui-col-lg2">
+        <a href="javascript:;">
+            <div class="panel_icon layui-bg-blue">
+                <i class="layui-icon layui-icon-form"></i>
+            </div>
+            <div class="panel_word">
+                <span id="countOrder">0</span>
+                <cite>总成功订单</cite>
+            </div>
+        </a>
+    </div>
+</div>
+
+<style>
+    .panel_box{ margin-bottom:5px;}
+    .panel{ text-align:center; height:90px;}
+    .panel_box a{display:block; border-radius:5px; overflow:hidden; height:80px; background-color:#f2f2f2 !important; }
+    .panel_icon{ width:40%; display: inline-block; line-height:80px; float:left; position:relative; height:100%;}
+    .panel_icon i{ font-size:40px !important; color:#fff; display: inline-block;}
+    .panel_word{ width:60%; display: inline-block; float:right; margin:13px 0 14px; }
+    .panel_word span{ font-size:25px; display:block; height:34px; }
+    .panel em{ font-style:normal;}
+    .history_box{ min-height:500px; height:500px; overflow-y:scroll; padding:10px !important;}
+    .history_box .layui-timeline .layui-timeline-item:last-child{ padding-bottom:0;}
+    @media screen and (max-width:1200px) {
+        .history_box { height: auto !important; overflow-y: inherit; }
+    }
+</style>
+
+
+<!------订单列表------->
+
+
+<div class="layui-form layui-form-pane" action="">
+<div class="layui-form-item">
+    <div class="layui-inline">
+        <label class="layui-form-label">订单状态</label>
+        <div class="layui-input-inline">
+            <select id="state" lay-verify="required" lay-filter="state">
+                <option value="">不限制</option>
+                <option value="-1">过期</option>
+                <option value="0">待支付</option>
+                <option value="1">完成</option>
+                <option value="2">通知失败</option>
+
+            </select>
+        </div>
+    </div>
+
+
+</div>
+</div>
+
+<script type="text/html" id="toolbarDemo">
+    <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-sm layui-btn-danger" lay-event="delGq">删除所有过期订单</button>
+        <button class="layui-btn layui-btn-sm layui-btn-danger" lay-event="delLast">删除七天前订单</button>
+
+    </div>
+</script>
+<table id="demo" lay-filter="test"></table>
+
+{include file="public/footer" /}
+<script src="//www.layuicdn.com/layui-v2.4.5/layui.js?v=201811010202"></script>
+
+<script>
+    $.post("getMain",function (data) {
+        $("#todayOrder").html(data.data.todayOrder);
+        $("#todaySuccessOrder").html(data.data.todaySuccessOrder);
+        $("#countOrder").html(data.data.countOrder);
+        $("#todayCloseOrder").html(data.data.todayCloseOrder);
+        $("#countMoney").html('￥'+data.data.countMoney);
+        $("#todayMoney").html('￥'+data.data.todayMoney);
+
+    });
+</script>
+
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-xs" lay-event="bd">补单</a>
+    <a class="layui-btn layui-btn-xs" lay-event="info">详情</a>
+    <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="del">删除</a>
+
+</script>
+
+
+<script>
+    function formatDate(now) {
+        if (now=="0"){
+            return "无";
+        }
+
+        now = new Date(now*1000);
+        return now.getFullYear()
+            + "-" + (now.getMonth()>8?(now.getMonth()+1):"0"+(now.getMonth()+1))
+            + "-" + (now.getDate()>9?now.getDate():"0"+now.getDate())
+            + " " + (now.getHours()>9?now.getHours():"0"+now.getHours())
+            + ":" + (now.getMinutes()>9?now.getMinutes():"0"+now.getMinutes())
+            + ":" + (now.getSeconds()>9?now.getSeconds():"0"+now.getSeconds());
+
+    }
+    var myTable,table,form;
+    layui.use(['form','table','laydate'], function(){
+        table = layui.table;
+        form = layui.form;
+
+        //第一个实例
+        myTable = table.render({
+            elem: '#demo'
+            ,height: 'full-160'
+            ,url: 'getOrders'
+            ,toolbar: '#toolbarDemo'
+            ,where: {
+                state:$("#state").val(),
+                type:$("#type").val()
+            }
+            ,cols: [[ //表头
+                {field: 'create_date', title: '创建时间',minWidth:160,templet: function(d){
+                        return formatDate(d.create_date);
+                    }
+                },
+                {field: 'pay_id', title: '商户编号',minWidth:220},
+                {field: 'order_id', title: '云端订单编号',minWidth:200},
+                {field: 'price', title: 'RMB',minWidth:80, align:'center'},
+                {field: 'really_price', title: 'USDT',minWidth:80, align:'center'},
+                {field: 'state', title: '状态',minWidth:80,templet: function(d){
+                        if (d.state=="2"){
+                            return '<span style="color: orange">通知失败</span>';
+                        }else if (d.state=="1"){
+                            return '<span style="color: green">完成</span>';
+                        }else if (d.state=="0"){
+                            return '<span style="color: orange">待支付</span>';
+                        }else if (d.state=="-1"){
+                            return '<span style="color: red">过期</span>';
+                        }
+                    }
+                },
+
+                {title: '操作', minWidth: 120, align:'center', toolbar: '#barDemo'}
+
+            ]]
+            ,page:true
+        });
+
+        //监听行工具事件
+        table.on('tool(test)', function(obj){ //注：tool 是工具条事件名，test 是 table 原始容器的属性 lay-filter="对应的值"
+            var data = obj.data //获得当前行数据
+                ,layEvent = obj.event; //获得 lay-event 对应的值
+            if(layEvent === 'info'){
+                var out = "<p>创建时间："+formatDate(data.create_date)+"</p>";
+                out += "<p>支付时间："+formatDate(data.pay_date)+"</p>";
+                out += "<p>关闭时间："+formatDate(data.close_date)+"</p>";
+                out += "<p>订单号："+data.trade_id+"</p>";
+                layer.alert(out);
+
+            }else if(layEvent === 'bd'){
+                layer.confirm('确认客户已实际到账且回调未达？将按订单金额完成发货/充值。', function(index){
+                    layer.msg('操作中', {
+                        icon: 16
+                        ,shade: 0.01
+                    });
+
+                    $.post("setBd","id="+data.id,function (data) {
+                        if (data.code==1){
+                            layer.msg("操作成功！");
+                            myTable.reload({
+                                where: {
+                                    state:$("#state").val(),
+                                    type:$("#type").val()
+                                }
+                            });
+                        }else if(data.code==-2){
+                            layer.confirm('补单失败，异步通知返回错误，是否查看通知返回数据？', {
+                                btn: ['查看','取消'] //按钮
+                            }, function(){
+                                alert(data.data);
+                            }, function(){
+
+                            });
+                        }else{
+                            layer.msg(data.msg);
+                        }
+
+
+
+                    });
+
+                    console.log(data.id);
+                });
+            }else if(layEvent === 'del'){
+                layer.confirm('确定要删除订单吗？', function(index){
+                    layer.msg('操作中', {
+                        icon: 16
+                        ,shade: 0.01
+                    });
+
+                    $.post("delOrder","id="+data.id,function (data) {
+                        if (data.code==1){
+                            layer.msg("操作成功！");
+                            myTable.reload({
+                                where: {
+                                    state:$("#state").val(),
+                                    type:$("#type").val()
+                                }
+                            });
+                        }else{
+                            layer.msg(data.msg);
+                        }
+
+
+
+                    });
+
+                    console.log(data.id);
+                });
+            }
+        });
+        form.on('select(state)', function(data){
+            myTable.reload({
+                where: {
+                    state:$("#state").val(),
+                    type:$("#type").val()
+                }
+            });
+
+        });
+
+        form.on('select(type)', function(data){
+            myTable.reload({
+                where: {
+                    state:$("#state").val(),
+                    type:$("#type").val()
+                }
+            });
+
+        });
+
+
+        //头工具栏事件
+        table.on('toolbar(test)', function(obj){
+            var checkStatus = table.checkStatus(obj.config.id);
+            switch(obj.event){
+                case 'delGq':
+                    layer.confirm('确定要删除所有过期订单吗？', function(index){
+                        layer.msg('操作中', {
+                            icon: 16
+                            ,shade: 0.01
+                        });
+
+                        $.post("delGqOrder",function (data) {
+                            if (data.code==1){
+                                layer.msg("操作成功！");
+                                myTable.reload({
+                                    where: {
+                                        state:$("#state").val(),
+                                        type:$("#type").val()
+                                    }
+                                });
+                            }else{
+                                layer.msg(data.msg);
+                            }
+
+                        });
+
+                    });
+
+                    break;
+                case 'delLast':
+                    layer.confirm('确定要删除七天前的所有订单吗？', function(index){
+                        layer.msg('操作中', {
+                            icon: 16
+                            ,shade: 0.01
+                        });
+
+                        $.post("delLastOrder",function (data) {
+                            if (data.code==1){
+                                layer.msg("操作成功！");
+                                myTable.reload({
+                                    where: {
+                                        state:$("#state").val(),
+                                        type:$("#type").val()
+                                    }
+                                });
+                            }else{
+                                layer.msg(data.msg);
+                            }
+
+                        });
+
+                    });
+                    break;
+            };
+        });
+
+
+        form.render();
+
+    });
+
+
+</script>
+</body>
+</html>

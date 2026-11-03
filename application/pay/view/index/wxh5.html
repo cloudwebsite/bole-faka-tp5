@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="Content-Language" content="zh-cn">
+    <meta name="apple-mobile-web-app-capable" content="no"/>
+    <meta name="apple-touch-fullscreen" content="yes"/>
+    <meta name="format-detection" content="telephone=no,email=no"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="white">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta http-equiv="Expires" content="0">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="Cache" content="no-cache">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <title>订单:{$param['p2_Order']}付款 </title>
+ <link href="/static/pay/css/pay1.css" type="text/css" rel="stylesheet">
+<body>
+<div class="body">    
+    <h1 class="mod-title">
+        <span class="ico_log ico-2"></span>
+    </h1>
+    <div class="mod-ct">
+        <div class="order">
+        </div>
+        <div class="amount">￥{$money}</div>  		
+        <div class ="paybtn"><a href="{$mwebUrl}" class="btn btn-primary" target="_blank">点击跳转至支付页面</a></div> 
+              <div class="time-item" style = "padding-top: 10px">
+                    <div class="time-item" id="msg"><h1>订单：{$param['p2_Order']}</h1> </div>
+                </div>			
+    </div>
+
+</div>
+<script src="https:{:config('cdnpublic')}jquery/2.2.3/jquery.min.js"></script>  
+<script>
+    // 检查是否支付完成
+		var index = "";
+		$(document).ready(function() {
+			index = setInterval("ajaxstatus()", 2000);
+		});
+
+		function ajaxstatus() {
+			var date = new Date();
+			var timer = date.getTime().toString();
+			$.ajax({
+				url:"{:url('pay/index/checkdingdan')}?mcard={$param['p2_Order']}&t=" + timer,
+				type: "GET",
+				dataType: "text",
+				success: function(res) {
+					if(res == 1) { //订单状态为1表示支付成功	    
+						clearInterval(index);          
+						setTimeout("documentwrite()", 800);
+					}
+				  if(res == 3) { //订单状态为1表示支付成功	    
+						clearInterval(index);          
+						setTimeout("documentwriteuser()", 800);
+					}
+				},
+				error: function() {
+
+				}
+			});
+		}
+
+		function documentwrite() {
+
+			document.write("你的订单编号是：{$param['p2_Order']}<p><a href={:config('is_https')}://" + window.location.host + "/jingdian/getmail/index.html?mpid={$param['p5_Pid']}&number={$param['p2_Order']}>支付成功，如5秒内没跳转请点击我</a><script>location.href = \"{:url('@jingdian/Getmail/index')}\"+\"?mpid={$param['p5_Pid']}&number={$param['p2_Order']}\";<\/script>");
+		}
+		function documentwriteuser() {
+
+			document.write("你的订单编号是：{$param['p2_Order']}<p><a href={:config('is_https')}://" + window.location.host + "/jingdian/user/uspaylog.html>支付成功，如5秒内没跳转请点击我</a><script>location.href = \"{:url('@jingdian/user/uscenter')}\"+\"\";<\/script>");
+		}
+</script>
+</body>
+</html>

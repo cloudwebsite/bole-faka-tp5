@@ -1,0 +1,414 @@
+<html style="font-size: 22.08px;">
+
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0 user-scalable=no" />
+
+		<meta name="format-detection" content="telephone=no" />
+		<title>{:config('web_site_title')}</title>
+		<link rel="stylesheet" type="text/css" href="__IMGMOBILE__/css/foxui.min.css-v=0.2.css" />
+		<link rel="stylesheet" type="text/css" href="__IMGMOBILE__/css/style.css-v=3.0.0.css" />
+		<link rel="stylesheet" type="text/css" href="__IMGMOBILE__/css/iconfont.css-v=2017070719.css" />
+		<!--<link rel="stylesheet" href="//at.alicdn.com/t/font_82607_e93d131lklr6n7b9.css">-->
+		<script type="text/javascript" src="{:config('cdnpublic')}jquery/1.8.2/jquery.min.js"></script>
+
+		 <script src="/static/admin/js/layer/layer.js"></script>
+		
+		 <script src="/static/admin/js/laypage/laypage.js"></script>
+		<script src="/static/admin/js/laytpl/laytpl.js"></script>
+		 
+		<link rel="stylesheet" href="{:config('cdnpublic')}layer/3.1.1/mobile/need/layer.css" />
+		<script type="text/javascript" src="{:config('cdnpublic')}layer/3.1.1/mobile/layer.js"></script>
+		
+	</head>
+
+	<body ontouchstart="">
+		<div class="fui-page-group statusbar">
+
+			<div class="fui-page order-list-page  fui-page-current" id="fui-page-1523808333765" style="height: 736px;">
+				<div class="fui-header">
+					<div class="fui-header-left" style="top:0.8rem;">
+						<a class="back" onclick="back();"></a>
+					</div>
+					<div class="title">
+						<form method="post" action="{:url('mobile/Index/selectorder')}">
+							<div class="searchbar searchbar-active">
+								<div class="search-input" style="margin-left: 2rem;width: 85%;">
+									<i class="icon icon-search"></i>
+									<input type="search" name="key" id="key" value="{$val}" placeholder="输入商户单号或联系方式" style="border: 0; background-color: #efefef;">
+								</div>
+							</div>
+						</form>
+					</div>
+
+				</div>
+				
+				<div id="tab" class="fui-tab fui-tab-danger">
+			        <a id="tab1" class="external active" data-status="" onclick="tab1();">全部</a>
+			        <a id="tab2" class="external " data-status="0" onclick="tab2();">已提取</a>
+			        <a id="tab3" class="external " data-status="1" onclick="tab3();">未提取</a>
+			    </div>
+
+				<div class="fui-content navbar order-list" style="top:4.2rem;">
+					<div class="fui-content-inner">
+						<div class="container" id='list-content'>
+
+
+
+						</div>
+					</div>
+				</div>
+			</div>
+			{include file="public/imgmobile_navbar" /}	
+		</div>
+	
+		<script id="list-template" type="text/html">
+	  <div id="tab-1">
+	  {{# for(var i=0;i<d.length;i++){  }}
+	  	
+							<div class="fui-list-group order-item" data-orderid="5323" data-verifycode="">
+								<a href="{:url("mobile/Index/goodsdetail")}?mpid={{d[i].mflid}}" data-nocache="true">
+									<div class="fui-list-group-title lineblock2 ">
+										订单号: {{d[i].mcard}}
+										<span class="status text-cancel">
+											{{# if(d[i].type==0){ }}
+												{{# if(d[i].mstatus==0){ }}
+												 未提取
+												{{# }else if(d[i].mstatus==1){ }}
+												已提取
+												{{# }else if(d[i].mstatus==2){ }}
+												未付款
+												 {{# }else{ }}	
+												 未知数
+												 {{# } }}
+											{{# }else if(d[i].type==1){ }}
+												{{# if(d[i].mstatus==0){ }}
+												 已付款
+												{{# }else if(d[i].mstatus==1){ }}
+												等待发货
+												{{# }else if(d[i].mstatus==2){ }}
+												未付款
+												{{# }else if(d[i].mstatus==3){ }}
+												进行中
+												{{# }else if(d[i].mstatus==4){ }}
+												已撤回
+												{{# }else if(d[i].mstatus==5){ }}
+												卖家已发货
+												{{# }else{ }}	
+												 未知数
+												 {{# } }}
+											{{# } }}
+										</span>
+										
+									</div>
+									<div class="fui-list goods-list">
+										<div class="fui-list-media" style="">
+											<img class="" src="{{d[i].imgurl}}" onerror="this.src='/static/admin/images/head_default.gif'" data-lazyloaded="true" />
+										</div>
+										<div class="fui-list-inner">
+											<div class="text goodstitle towline">
+												{{d[i].name}}
+											</div>
+											<div class="subtitle" style="color:#999;">
+												
+											</div>
+										</div>
+										<div class="fui-list-angle">
+											&yen;
+											<span class="marketprice">{{d[i].mamount}}<br /> <span style="color: #999">x1</span> </span>
+										</div>
+									</div>
+									<div class="fui-list-group-title">
+										<span class="status noremark">共 <span>1</span> 个商品 实付: <span class="text-danger">&yen; <span class="bigprice">{{d[i].mamount}}</span></span>
+										</span>
+									</div>
+								</a>
+								<div class="fui-list-group-title lineblock   opblock">
+									
+									<span class="status noremark"> 
+										{{# if(d[i].type==0){ }}
+											{{# if(d[i].mstatus==0 && d[i].mflid!=0 ){ }}
+											 <a href="javascript:;" class="btn btn-sm btn-primary-o external" onclick="tiqu('{{d[i].mcard}}','{{d[i].mflid}}',{{# if(d[i].need_lianxi){ }}1{{# }else{ }}0{{# } }})">提取卡密</a>
+											 {{# }else if(d[i].mstatus==0 && d[i].mflid==0){ }}
+											<a href="javascript:;" class="btn btn-sm btn-default-o external" onclick="tiqubyorder('{{d[i].mcard}}')">点我提取</a>
+											{{# }else if(d[i].mstatus==1){ }}
+											<a href="javascript:;" class="btn btn-sm btn-danger-o externald" onclick="fenxiang('{{d[i].mcard}}')">查看卡密</a>
+											<a href="{:url('mobile/index/imgorderhistory')}?order={{d[i].mcard}}" class="btn btn-sm btn-success-oo externald">交易快照</a>
+											{{# }else if(d[i].mstatus==2){ }}
+											<a href="javascript:;" class="btn btn-sm btn-danger-o external" >未付款</a>
+											 {{# }else{ }}	
+											 <a href="javascript:;" class="btn btn-sm btn-danger-o external">未知订单</a>
+											 {{# } }} 
+										{{# }else if(d[i].type==1){ }}
+											{{# if(d[i].mstatus==0){ }}
+											<a href="javascript:;" class="btn btn-sm btn-primary-o external" onclick="getOrderDetailByOrder('{{d[i].mcard}}')">查看详情</a>
+											{{# }else if(d[i].mstatus==1){ }}	
+											<a href="javascript:;" class="btn btn-sm btn-default-o external" onclick="getOrderDetailByOrder('{{d[i].mcard}}')">查看详情</a>
+											{{# }else if(d[i].mstatus==2){ }}
+											<a href="javascript:;" class="btn btn-sm btn-danger-o externald">未付款</a>
+											{{# }else if(d[i].mstatus==3){ }}
+											
+											<a href="javascript:;" class="btn btn-sm btn-default-o external" onclick="getOrderDetailByOrder('{{d[i].mcard}}')">查看详情</a>
+											{{# }else if(d[i].mstatus==4){ }}
+											<a href="javascript:;" class="btn btn-sm btn-default-o external" onclick="getOrderDetailByOrder('{{d[i].mcard}}')">查看详情</a>
+											{{# }else if(d[i].mstatus==5){ }}
+											<a href="javascript:;" class="btn btn-sm btn-default-o external" onclick="getOrderDetailByOrder('{{d[i].mcard}}')">查看详情</a>
+											 {{# }else{ }}	
+											 <a href="javascript:;" class="btn btn-sm btn-danger-o external">未知订单</a>
+											 {{# } }}
+											 <a href="{:url('mobile/index/imgorderhistory')}?order={{d[i].mcard}}" class="btn btn-sm btn-success-oo externald">交易快照</a>
+										{{# } }} 
+        </span>
+								</div>
+							</div>
+				{{# } }}
+		</div>		
+		<div id="tab-2" style="display: none;">
+		 {{# for(var i=0;i<d.length;i++){  }}
+	  	                {{# if(d[i].mstatus==1 && d[i].type==0){ }}
+							<div class="fui-list-group order-item" data-orderid="5323" data-verifycode="" >
+								<a href="{:url("mobile/Index/goodsdetail")}?mpid={{d[i].mflid}}" data-nocache="true">
+									<div class="fui-list-group-title lineblock2 ">
+										订单号: {{d[i].mcard}}
+										<span class="status text-cancel">
+											{{# if(d[i].mstatus==0){ }}
+										 未提取
+										{{# }else if(d[i].mstatus==1){ }}
+										已提取
+										{{# }else if(d[i].mstatus==2){ }}
+										未付款
+										 {{# }else{ }}	
+										 未知数
+										 {{# } }}  	
+										</span>
+										
+									</div>
+									<div class="fui-list goods-list">
+										<div class="fui-list-media" style="">
+											<img class="" src="{{d[i].imgurl}}" onerror="this.src='/static/admin/images/head_default.gif'" data-lazyloaded="true" />
+										</div>
+										<div class="fui-list-inner">
+											<div class="text goodstitle towline">
+												{{d[i].name}}
+											</div>
+											<div class="subtitle" style="color:#999;">
+												
+											</div>
+										</div>
+										<div class="fui-list-angle">
+											&yen;
+											<span class="marketprice">{{d[i].mamount}}<br /> <span style="color: #999">x1</span> </span>
+										</div>
+									</div>
+									<div class="fui-list-group-title">
+										<span class="status noremark">共 <span>1</span> 个商品 实付: <span class="text-danger">&yen; <span class="bigprice">{{d[i].mamount}}</span></span>
+										</span>
+									</div>
+								</a>
+								<div class="fui-list-group-title lineblock   opblock">
+									
+									<span class="status noremark"> 
+										{{# if(d[i].mstatus==0 && d[i].mflid!=0 ){ }}
+										 <a href="javascript:;" class="btn btn-sm btn-primary-o external" onclick="tiqu('{{d[i].mcard}}','{{d[i].mflid}}',{{# if(d[i].need_lianxi){ }}1{{# }else{ }}0{{# } }})">提取卡密</a>
+										 {{# }else if(d[i].mstatus==0 && d[i].mflid==0){ }}
+										<a href="javascript:;" class="btn btn-sm btn-default-o external" onclick="tiqubyorder('{{d[i].mcard}}')">点我提取</a>
+										{{# }else if(d[i].mstatus==1){ }}
+										
+										<a href="javascript:;" class="btn btn-sm btn-danger-o externald" onclick="fenxiang('{{d[i].mcard}}')">查看卡密</a>
+										
+										{{# }else if(d[i].mstatus==2){ }}
+										<a href="javascript:;" class="btn btn-sm btn-danger-o external" >未付款</a>
+										 {{# }else{ }}	
+										 <a href="javascript:;" class="btn btn-sm btn-danger-o external">未知订单</a>
+										 {{# } }} 
+										 
+        </span>
+								</div>
+							</div>
+							{{# } }}  
+				{{# } }}	
+				</div>
+				<div id="tab-3" style="display: none;">
+				 {{# for(var i=0;i<d.length;i++){  }}
+	  							{{# if(d[i].mstatus==0){ }}
+							<div  class="fui-list-group order-item" data-orderid="5323" data-verifycode="">
+								<a href="{:url("mobile/Index/goodsdetail")}?mpid={{d[i].mflid}}" data-nocache="true">
+									<div class="fui-list-group-title lineblock2 ">
+										订单号: {{d[i].mcard}}
+										<span class="status text-cancel">
+											{{# if(d[i].mstatus==0){ }}
+										 未提取
+										{{# }else if(d[i].mstatus==1){ }}
+										已提取
+										{{# }else if(d[i].mstatus==2){ }}
+										未付款
+										 {{# }else{ }}	
+										 未知数
+										 {{# } }}  	
+										</span>
+										
+									</div>
+									<div class="fui-list goods-list">
+										<div class="fui-list-media" style="">
+											<img class="" src="{{d[i].imgurl}}" onerror="this.src='/static/admin/images/head_default.gif'" data-lazyloaded="true" />
+										</div>
+										<div class="fui-list-inner">
+											<div class="text goodstitle towline">
+												{{d[i].name}}
+											</div>
+											<div class="subtitle" style="color:#999;">
+												
+											</div>
+										</div>
+										<div class="fui-list-angle">
+											&yen;
+											<span class="marketprice">{{d[i].mamount}}<br /> <span style="color: #999">x1</span> </span>
+										</div>
+									</div>
+									<div class="fui-list-group-title">
+										<span class="status noremark">共 <span>1</span> 个商品 实付: <span class="text-danger">&yen; <span class="bigprice">{{d[i].mamount}}</span></span>
+										</span>
+									</div>
+								</a>
+								<div class="fui-list-group-title lineblock   opblock">
+									
+									<span class="status noremark"> 
+										{{# if(d[i].mstatus==0 && d[i].mflid!=0 ){ }}
+										 <a href="javascript:;" class="btn btn-sm btn-primary-o external" onclick="tiqu('{{d[i].mcard}}','{{d[i].mflid}}',{{# if(d[i].need_lianxi){ }}1{{# }else{ }}0{{# } }})">提取卡密</a>
+										 {{# }else if(d[i].mstatus==0 && d[i].mflid==0){ }}
+										<a href="javascript:;" class="btn btn-sm btn-default-o external" onclick="tiqubyorder('{{d[i].mcard}}')">点我提取</a>
+										{{# }else if(d[i].mstatus==1){ }}
+										<a href="javascript:;" class="btn btn-sm btn-danger-o externald" onclick="fenxiang('{{d[i].mcard}}')">查看卡密</a>
+										{{# }else if(d[i].mstatus==2){ }}
+										<a href="javascript:;" class="btn btn-sm btn-danger-o external" >未付款</a>
+										 {{# }else{ }}	
+										 <a href="javascript:;" class="btn btn-sm btn-danger-o external">未知订单</a>
+										 {{# } }} 
+										 
+        </span>
+								</div>
+							</div>
+							{{# } }}  
+				{{# } }}	
+				</div>
+				</script>
+	<script type="text/javascript">
+	$('#myorder').addClass("active");
+	Ajaxpage();
+    function Ajaxpage(curr){
+        var key=$('#key').val();
+        $.getJSON('{:url("mobile/Index/selectorder")}', {page: curr || 1,key:key}, function(data){
+            //$("#spiner-example").css('display','none'); //数据加载完关闭动画 
+            if(data==''){
+                $("#list-content").html('<div class="content-empty" style="display: block;margin-top: 8rem;"><img src="__IMGMOBILE__/img/nolist.png" style="width: 6rem;margin-bottom: .5rem;"><br><p style="color: #999;font-size: .75rem">您暂时没有任何订单哦！</p><br><a href="/" class="btn btn-sm btn-danger-o external" style="border-radius: 100px;height: 1.9rem;line-height:1.9rem;width:  7rem;font-size: .75rem">去首页逛逛吧</a></div>');
+            }else{
+                var tpl = document.getElementById('list-template').innerHTML;
+                laytpl(tpl).render(data, function(html){
+                    document.getElementById('list-content').innerHTML = html;
+                });
+                laypage({
+                    cont: $('#AjaxPage'),//容器。值支持id名、原生dom对象，jquery对象,
+                    pages:'{$allpage}',//总页数
+                    skip: true,//是否开启跳页
+                    
+                    skin: '#1AB5B7',//分页组件颜色
+                    curr: curr || 1,
+                    groups: 3,//连续显示分页数
+                    jump: function(obj, first){
+                        if(!first){
+                            Ajaxpage(obj.curr)
+                        }
+                        //$('#allpage').html('第'+ obj.curr +'页，共'+ obj.pages +'页');
+                    }
+                });
+            }
+        });
+    }
+    
+    function gohome()
+		{
+			location.href="{:config('is_https')}://"+window.location.host+'/mobile';
+		}
+	function download(order)
+		{
+			location.href="{:url('Index/dc')}"+"?order="+order;
+		}
+		
+	function fenxiang(order)
+		{
+			top.location.href="{:url('Index/fenxiang')}"+"?order="+order.toString();		
+		}
+		
+				function tiqu(order,mpid,needLianxi)
+		{
+			needLianxi = needLianxi || 0;
+			var go = function(){
+				window.location.href="{:url('@mobile/Getmail/index')}"+"?mpid="+mpid+"&number="+order;
+			};
+			if (needLianxi != 1) { go(); return; }
+			layer.prompt({title:'请输入下单时填写的联系方式', formType:0}, function(val, index){
+				layer.close(index);
+				$.post("{:url('mobile/Index/confirmGetmail')}", {number:order, lianxi:val}, function(res){
+					if (res.code == 1) {
+						window.location.href="{:url('@mobile/Getmail/index')}"+"?mpid="+res.data.mpid+"&number="+res.data.number;
+					} else {
+						layer.msg(res.msg || '验证失败');
+					}
+				}, 'json');
+			});
+		}	
+				function tiqubyorder(order)
+		{
+			
+				window.location.href="{:url('@mobile/index/order')}"+"?number="+order;
+			
+			
+		}
+		
+		function getOrderDetailByOrder(order)
+		{
+			location.href="{:url('Order/getOrderDetailByOrder')}"+"?number="+order;
+		}
+		
+		function tab1(){
+			$('#tab1').addClass('active');
+			$('#tab2').removeClass('active');
+			$('#tab3').removeClass('active');
+			$("#tab-1").show();
+			if(removeAllSpace($("#tab-1").html())==""){
+				$("#tab-1").html('<div class="content-empty" style="display: block;margin-top: 8rem;"><img src="__IMGMOBILE__/img/nolist.png" style="width: 6rem;margin-bottom: .5rem;"><br><p style="color: #999;font-size: .75rem">您暂时没有任何订单哦！</p><br><a href="/" class="btn btn-sm btn-danger-o external" style="border-radius: 100px;height: 1.9rem;line-height:1.9rem;width:  7rem;font-size: .75rem">去首页逛逛吧</a></div>')
+			}
+			$("#tab-2").hide();
+			$("#tab-3").hide();
+		}
+		function tab2(){
+			$('#tab2').addClass('active');
+			$('#tab1').removeClass('active');
+			$('#tab3').removeClass('active');
+			$("#tab-2").show();
+			if(removeAllSpace($("#tab-2").html())==""){
+				$("#tab-2").html('<div class="content-empty" style="display: block;margin-top: 8rem;"><img src="__IMGMOBILE__/img/nolist.png" style="width: 6rem;margin-bottom: .5rem;"><br><p style="color: #999;font-size: .75rem">您暂时没有任何订单哦！</p><br><a href="/" class="btn btn-sm btn-danger-o external" style="border-radius: 100px;height: 1.9rem;line-height:1.9rem;width:  7rem;font-size: .75rem">去首页逛逛吧</a></div>')
+			}
+			$("#tab-1").hide();
+			$("#tab-3").hide();
+		}
+		function tab3(){
+			$('#tab3').addClass('active');
+			$('#tab2').removeClass('active');
+			$('#tab1').removeClass('active');
+			$("#tab-3").show();
+			
+			if(removeAllSpace($("#tab-3").html())==""){
+				$("#tab-3").html('<div class="content-empty" style="display: block;margin-top: 8rem;"><img src="__IMGMOBILE__/img/nolist.png" style="width: 6rem;margin-bottom: .5rem;"><br><p style="color: #999;font-size: .75rem">您暂时没有任何订单哦！</p><br><a href="/" class="btn btn-sm btn-danger-o external" style="border-radius: 100px;height: 1.9rem;line-height:1.9rem;width:  7rem;font-size: .75rem">去首页逛逛吧</a></div>')
+			}
+			$("#tab-2").hide();
+			$("#tab-1").hide();
+		}
+		function removeAllSpace(str) {
+	     return str.replace(/\s+/g, "");
+	    }
+		{include file="public/common" /}
+</script>	
+	</body>
+
+</html>

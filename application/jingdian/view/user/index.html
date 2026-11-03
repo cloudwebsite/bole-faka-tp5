@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>用户登录</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta name="Keywords" content="网站关键词">
+    <meta name="Description" content="网站介绍">
+    <link rel="stylesheet" href="__REG__/css/base.css">
+    <link rel="stylesheet" href="__REG__/css/iconfont.css">
+    <link rel="stylesheet" href="__REG__/css/reg.css">
+</head>
+<body>
+<div id="ajax-hook"></div>
+<div class="wrap">
+    <div class="wpn" style="margin-top: 150px;">
+        <div class="form-data pos">
+            <a href=""><img src="__REG__/img/login.png" class="head-logo"></a>
+            <div class="change-login">
+                
+               
+            </div>
+            <form action="{:url('index')}" method="post" id="dologin">
+            <div class="form1">
+                <p class="p-input pos">
+                    <label for="num">用户名/手机号</label>
+                    <input type="text" id="account" name="account">
+                 	<input type="hidden" id="former_url" name="former_url" value="{$former_url}">
+                    <span class="tel-warn num-err hide"><em>账号或密码错误，请重新输入</em><i class="icon-warn"></i></span>
+                </p>
+                <p class="p-input pos">
+                    <label for="pass">请输入密码</label>
+                    <input type="password" style="display:none"/>
+                    <input type="password" id="password" name="password">
+                    <span class="tel-warn pass-err hide"><em>账号或密码错误，请重新输入</em><i class="icon-warn"></i></span>
+                </p>
+                {if condition="config('CODE_TYPE') eq 0"}
+                <p class="p-input pos code">
+                    <label for="veri">请输入验证码</label>
+                    <input type="text" id="veri" name="code">
+                    <img id="veriimg" src="{:url('checkVerify')}" onclick="javascript:this.src='{:url('checkVerify')}?tm='+Math.random();">
+                    <span class="tel-warn img-err hide"><em>账号或密码错误，请重新输入</em><i class="icon-warn"></i></span>
+                    <!-- <a href="javascript:;">换一换</a> -->
+                </p>
+                {else/}
+                <div id="captcha" style="margin: 0 auto 16px;display: block;padding-left: 55px;">
+		            <div id="text">
+		               	 行为验证™ 安全组件加载中
+		            </div>
+		            <div id="wait" class="show">
+			                <div class="loading">
+			                    <div class="loading-dot"></div>
+			                    <div class="loading-dot"></div>
+			                    <div class="loading-dot"></div>
+			                    <div class="loading-dot"></div>
+			                </div>
+			        </div>
+			    </div>
+            	{/if}
+            
+            <div class="r-forget cl">
+                <a href="{:url('jingdian/user/reg')}" class="z" style="color: #76b9f7;">账号注册</a>
+                <a href="{:url('jingdian/user/resetpwd')}" class="y">忘记密码?</a>
+            </div>
+            <button class="lang-btn log-btn" id="loginbtn">登录</button>
+            </form>
+            
+            <div class="third-party">
+                <a href="#" class="log-qq icon-qq-round"></a>
+                <a href="#" class="log-qq icon-weixin"></a>
+                <a href="#" class="log-qq icon-sina1"></a>
+            </div>
+            <p class="right"> <a href="/" class="log-qq icon-home">返回首页</a></p>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="{:config('cdnpublic')}jquery/2.1.4/jquery.min.js"></script>
+<script src="__REG__/js/agree.js"></script>
+
+<script type="text/javascript" src="{:config('cdnpublic')}jquery.form/3.51/jquery.form.min.js"></script>
+<script type="text/javascript" src="{:config('cdnpublic')}layer/3.1.1/layer.js"></script> 
+<script type="text/javascript" src="/static/admin/js/lunhui.js"></script>
+<script type="text/javascript" src="__GT__/js/gt.js"></script> 
+<script type="text/javascript">
+	function removeAllSpace(str) {
+			if(typeof(str)=="undefined"){
+				return '';
+			}else{
+				return str.replace(/\s+/g, "");
+			}
+			
+		}
+	$('#veri').focus(function(){
+			$('#loginbtn').removeClass("off");
+			$('#loginbtn').attr('disabled',false);
+		});
+	$(function(){
+	        $('#dologin').ajaxForm({
+	            beforeSubmit: checkForm, // 此方法主要是提交前执行的方法，根据需要设置
+	            success: complete, // 这是提交后的方法
+	            dataType: 'json'
+	        });
+	        
+	        function checkForm(){
+	           {if condition="config('CODE_TYPE') eq 0"}
+				var veri=$("#veri").val();
+				veri=removeAllSpace(veri);
+				if(veri.length<4){					
+				  	layer.tips('验证码不正确', '#veri',{time:1000});
+				    return false;
+				}
+				{else/}
+				var result = publicObj.getValidate();
+	            if (!result) {
+	            	layer.tips('请先完成验证', '#captcha',{time:1000});
+	                return false;
+	            }
+	            
+	            {/if}
+	            $('#loginbtn').text('登录中...');
+	            $('#loginbtn').attr('disabled',true);
+	            $('#loginbtn').addClass("off");
+	        }
+	
+	
+	        function complete(data){
+	            if(data.code==1){	
+	                if(data.url=="{:config('is_https')}://"+window.location.host+"{:url('jingdian/index/index')}"){
+	                	data.url="{:url('user/uscenter')}";
+	                }
+	                lunhui.success(data.msg,data.url);
+	            }else{ 
+	                lunhui.error(data.msg);
+	                {if condition="config('CODE_TYPE') eq 0"}
+	                $('#veriimg').attr('src',"{:url('checkVerify')}");
+	                {else/}
+	                publicObj.reset();
+	                {/if}
+	                $('#loginbtn').text('登录');
+	                $('#loginbtn').attr('disabled',false);
+	                $('#loginbtn').removeClass("off");
+	                return false;   
+	            }
+	        }
+	    });
+	{if condition="config('CODE_TYPE') eq 1"}
+	var publicObj;
+	var handler = function (captchaObj) {
+        captchaObj.appendTo('#captcha');
+        captchaObj.onReady(function () {
+            $("#wait").hide();
+        });
+        publicObj=captchaObj;
+        
+        
+        $('#loginbtn2').click(function () {
+            var result = captchaObj.getValidate();
+            if (!result) {
+                return alert('请完成验证');
+            }
+            $.ajax({
+                url: '/jingdian/geetest/gtcheck',
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    geetest_challenge: result.geetest_challenge,
+                    geetest_validate: result.geetest_validate,
+                    geetest_seccode: result.geetest_seccode
+                },
+                success: function (data) {
+                    if (data.status === 'success') {
+                        alert('登录成功');
+                    } else if (data.status === 'fail') {
+                        alert('登录失败，请完成验证');
+                        captchaObj.reset();
+                    }
+                }
+            });
+        })
+        // 更多接口说明请参见：http://docs.geetest.com/install/client/web-front/
+        window.gt = captchaObj;
+    };
+
+
+    $.ajax({
+        url: "/jingdian/geetest/StartCaptchaServlet?t=" + (new Date()).getTime(), // 加随机数防止缓存
+        type: "get",
+        dataType: "json",
+        success: function (data) {
+        	$('#text').hide();
+            $('#wait').show();
+
+            // 调用 initGeetest 进行初始化
+            // 参数1：配置参数
+            // 参数2：回调，回调的第一个参数验证码对象，之后可以使用它调用相应的接口
+            initGeetest({
+                // 以下 4 个配置参数为必须，不能缺少
+                gt: data.gt,
+                challenge: data.challenge,
+                offline: !data.success, // 表示用户后台检测极验服务器是否宕机
+                new_captcha: data.new_captcha, // 用于宕机时表示是新验证码的宕机
+
+                product: "float", // 产品形式，包括：float，popup
+                width: "343px" 
+                
+                // 更多配置参数说明请参见：http://docs.geetest.com/install/client/web-front/
+            }, handler);
+        }
+    });
+    {/if}
+</script>	    
+</body>
+</html>

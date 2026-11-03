@@ -1,0 +1,79 @@
+    <html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <title>订单:{$param['p2_Order']}付款</title>
+		<script src="https:{:config('cdnpublic')}jquery/2.2.3/jquery.min.js"></script>
+    </head>
+    <body>
+    <br/>
+    <font color="#9ACD32"><b>该笔订单支付金额为<span style="color:#f00;font-size:50px">{$money}元</span>钱</b></font><br/><br/>
+    <div align="center">
+        <button style="width:210px; height:50px; border-radius: 15px;background-color:#FE6714; border:0px #FE6714 solid; cursor: pointer;  color:white;  font-size:16px;" type="button" onclick="callpay()" >立即支付</button>
+    </div>  
+        <script type="text/javascript">
+		$(document).ready(function() {
+			callpay();
+		});
+            //调用微信JS api 支付
+            function jsApiCall()
+            {
+                WeixinJSBridge.invoke(
+                    'getBrandWCPayRequest',
+                    {$jsApiParameters},
+                    function(res){
+                        WeixinJSBridge.log(res.err_msg);
+						if(res.err_msg=='get_brand_wcpay_request:ok'){
+							ajaxstatus();
+						}else{
+							alert('支付失败：'+res.err_code+res.err_desc+res.err_msg);
+						}
+                    }
+                );
+            }
+            function callpay()
+            {
+                if (typeof WeixinJSBridge == "undefined"){
+                    if( document.addEventListener ){
+                        document.addEventListener('WeixinJSBridgeReady', jsApiCall, false);
+                    }else if (document.attachEvent){
+                        document.attachEvent('WeixinJSBridgeReady', jsApiCall);
+                        document.attachEvent('onWeixinJSBridgeReady', jsApiCall);
+                    }
+                }else{
+                    jsApiCall();
+                }
+            }
+			
+		function ajaxstatus() {
+			var date = new Date();
+			var timer = date.getTime().toString();
+			$.ajax({
+				url:"{:url('pay/index/checkdingdan')}?mcard={$param['p2_Order']}&t=" + timer,
+				type: "GET",
+				dataType: "text",
+				success: function(res) {
+					if(res == 1) { //已结算后再跳提卡
+						setTimeout("documentwrite()", 800);
+					}
+				  if(res == 3) {
+						setTimeout("documentwriteuser()", 800);
+					}
+				},
+				error: function() {
+
+				}
+			});
+		}
+
+		function documentwrite() {
+
+			document.write("你的订单编号是：{$param['p2_Order']}<p><a href={:config('is_https')}://" + window.location.host + "/jingdian/getmail/index.html?mpid={$param['p5_Pid']}&number={$param['p2_Order']}>支付成功，如5秒内没跳转请点击我</a><script>location.href = \"{:url('@jingdian/Getmail/index')}\"+\"?mpid={$param['p5_Pid']}&number={$param['p2_Order']}\";<\/script>");
+		}
+		function documentwriteuser() {
+
+			document.write("你的订单编号是：{$param['p2_Order']}<p><a href={:config('is_https')}://" + window.location.host + "/jingdian/user/uspaylog.html>支付成功，如5秒内没跳转请点击我</a><script>location.href = \"{:url('@jingdian/user/uscenter')}\"+\"\";<\/script>");
+		}
+        </script>
+    </body>
+    </html>

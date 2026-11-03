@@ -1,0 +1,231 @@
+{include file="public/header" /}
+<link rel="stylesheet" type="text/css" href="/static/admin/webupload/webuploader.css">
+<link rel="stylesheet" type="text/css" href="/static/admin/webupload/style.css">
+<style>
+.file-item{float: left; position: relative; width: 110px;height: 110px; margin: 0 20px 20px 0; padding: 4px;}
+.file-item .info{overflow: hidden;}
+.uploader-list{width: 100%; overflow: hidden;}
+</style>
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>编辑订单</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <form class="form-horizontal" name="edit_order" id="edit_order" method="post" action="{:url('editorder')}">
+                        {:token()}
+                        <input type="hidden" name="id" value="{$integralorder.id}">
+                        
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">商品名称：</label>
+                            <div class="input-group col-sm-4">
+                                <input id="mname" type="text" disabled="disabled" class="form-control" name="mname" value="{$integralindex.mnamebie}" placeholder="请输入商品名称">
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">订单编号：</label>
+                            <div class="input-group col-sm-4">
+                                <input id="orderno" type="text" disabled="disabled" class="form-control" name="orderno" value="{$integralorder.orderno}" placeholder="请输入商品名称">
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">兑换数量：</label>
+                            <div class="input-group col-sm-4">
+                                <input id="money" type="text" disabled="disabled" class="form-control" name="money" value="{$integralorder.buynum}" placeholder="请输入商品名称">
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">消耗积分：</label>
+                            <div class="input-group col-sm-4">
+                                <input id="money" type="text" disabled="disabled" class="form-control" name="money" value="{$integralorder.money}" placeholder="请输入商品名称">
+                            </div>
+                        </div>
+
+                       
+                        
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">订单备注：</label>
+                            <div class="input-group col-sm-4">
+                                <textarea name="beizhu" cols="10" style="width: 100%">{$integralorder.beizhu}</textarea>
+                            </div>
+                        </div>
+                        
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">订单回执：</label>
+                            <div class="input-group col-sm-4">
+                            	<textarea name="statustext" cols="10" style="width: 100%">{$integralorder.statustext}</textarea>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">附加选项：</label>
+                            <div class="input-group col-sm-4">
+                            	<table class="table table-bordered table-hover">
+						            <thead>						                
+						            </thead>                     
+						            <tbody id="list-content">
+						            	{volist name="integralattach" id="vo"}
+						            	<tr>
+						            		<td>{$vo.title}</td>
+						            		<td>{$vo.text}</td>
+						            	</tr>
+						            	{/volist}
+						            </tbody>						                       
+						        </table>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">订单状态：</label>
+                            <div class="input-group col-sm-4">
+                                <select class="form-control m-b chosen-select" name="mstatus" id="mstatus">
+                                    <option value="5" {if condition="$integralorder.mstatus eq 5"} selected{/if}>确定发货</option>                                  
+                                    <option value="3" {if condition="$integralorder.mstatus eq 3"} selected{/if}>进行中</option>
+                                    <option value="4" {if condition="$integralorder.mstatus eq 4"} selected{/if}>撤销</option>
+                                    
+                                </select>
+                            </div>
+                        </div>
+                       
+
+                             
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <div class="col-sm-4 col-sm-offset-3">
+                                <button class="btn btn-primary" type="submit"><i class="fa fa-save"></i> 保存</button>&nbsp;&nbsp;&nbsp;
+                                <a class="btn btn-danger" href="javascript:history.go(-1);"><i class="fa fa-close"></i> 返回</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{include file="public/footer" /}
+<script type="text/javascript" src="/static/admin/webupload/webuploader.min.js"></script>
+
+<script type="text/javascript">
+    var $list = $('#fileList');
+    //上传图片,初始化WebUploader
+    var uploader = WebUploader.create({
+     
+        auto: true,// 选完文件后，是否自动上传。   
+        swf: '/static/admin/webupload/Uploader.swf',// swf文件路径 
+        server:{if condition="config('uploadtype') eq 0"} "{:url('Upload/uploadface')}"{else/}"{:url('Upload/Qiniuupload')}"{/if},
+        duplicate :true,// 重复上传图片，true为可重复false为不可重复
+        pick: '#imgPicker',// 选择文件的按钮。可选。
+        compress: false,//不启用压缩
+        resize: false,//尺寸不改变
+
+        accept: {
+            title: 'Images',
+            extensions: 'gif,jpg,jpeg,bmp,png',
+            mimeTypes: 'image/jpg,image/jpeg,image/png'
+        },
+
+        'onUploadSuccess': function(file, data, response) {
+            $("#data_photo").val(data._raw);
+            {if condition="config('uploadtype') eq 0"}
+            $("#img_data").attr('src', '/uploads/face/' + data._raw).show();
+            {else/}
+            $("#img_data").attr('src',  "{:config('qiniu_domain')}/"+data._raw).show();
+            {/if}
+        }
+    });
+
+    uploader.on( 'fileQueued', function( file ) {
+        $list.html( '<div id="' + file.id + '" class="item">' +
+            '<h4 class="info">' + file.name + '</h4>' +
+            '<p class="state">正在上传...</p>' +
+        '</div>' );
+    });
+
+    // 文件上传成功
+    uploader.on( 'uploadSuccess', function( file ) {
+        $( '#'+file.id ).find('p.state').text('上传成功！');
+    });
+
+    // 文件上传失败，显示上传出错。
+    uploader.on( 'uploadError', function( file ) {
+        $( '#'+file.id ).find('p.state').text('上传出错!');
+    }); 
+
+    //提交
+    $(function(){
+        $('#edit_order').ajaxForm({
+            beforeSubmit: checkForm, 
+            success: complete, 
+            dataType: 'json'
+        });
+   
+				
+        function checkForm(){
+
+        }
+
+    
+        function complete(data){
+            if(data.code==1){
+                layer.msg(data.msg, {icon: 6,time:1500,shade: 0.1}, function(index){
+                    window.location.href="{:url('integralmall/order')}";
+                });
+            }else{
+                layer.msg(data.msg, {icon: 5,time:1500,shade: 0.1});
+                return false;   
+            }
+        }   
+    });
+    
+    $('#enableyh').click(function(){
+					$(this).parent().parent().parent().after('<p style="margin:0 auto 0 26%;">数量大于<input name=mdy1[] type="text" style="width:50px;text-align:center;"> 个,单价为 <input name="mdj1[]" type="text" style="width:50px;text-align:center;" > 元 <a class="btn btn-danger btn-outline btn-xs"><i class="fa fa-trash-o"></i>删除</a><br><br></p>');
+				});
+        $('.form-control').mousemove(function(){
+			$(this).parent('div').find('span').css('visibility','visible');
+						}).mouseout(function(){  
+            $(this).parent('div').find('span').css('visibility','hidden');  
+        });
+function del_yh(id,mpid){
+ lunhui.confirma(id,mpid,'{:url("del_yh")}');
+
+    //location.href = './edit_order/id/'+id+'.html';
+}
+ //IOS开关样式配置
+   var elem = document.querySelector('.js-switch');
+        var switchery = new Switchery(elem, {
+            color: '#1AB394'
+        });
+    var config = {
+        '.chosen-select': {},                    
+    }
+    for (var selector in config) {
+        $(selector).chosen(config[selector]);
+    }
+    var configmflid = {
+        '.mflid-select': {},                    
+    }
+    for (var selectormflid in configmflid) {
+        $(selectormflid).chosen(configmflid[selector]);
+    }
+    var configattach = {
+        '.attach-select': {},                    
+    }
+    for (var selectorattach in configattach) {
+        $(selectorattach).chosen(configattach[selector]);
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,39 @@
+<div class="fui-navbar">
+
+	<a href="/" class="external nav-item" id="shouye">
+		<span class="icon icon-home"></span>
+		<span class="label">首页</span>
+	</a>
+
+	<a href="{:url('Index/category')}" class="external nav-item " id="quanbufenlei">
+		<span class="icon icon-list"></span>
+		<span class="label">全部分类</span>
+	</a>
+	
+	
+	{if condition="session('useraccount.account') eq null"}
+	<a href="{:url('Index/selectorder')}"  class="external nav-item " id="myorder">
+		<span class="icon icon-fenxiao2"></span>
+		<span class="label">我的订单</span>
+	</a>
+	
+	{/if}
+
+	<a href="{:url('Index/kefu')}" class="external nav-item " id="lianxikefu">
+		<span class="icon icon-person2"></span>
+		<span class="label">联系客服</span>
+	</a>
+	{if condition="session('useraccount.account') eq null"}
+	<a href="{:url("@mobile/Detail/getall")}" class="external nav-item " id="changjianwenti">
+		<span class="icon icon-question"></span>
+		<span class="label">常见问题</span>
+	</a>
+	{/if}
+	{if condition="config('web_reg_type') neq 0"}
+	
+	<a href="{:url('mobile/user/uscenter')}" class="external nav-item " id="huiyuanzhongxin">
+		<span class="icon icon-people"></span>
+		<span class="label">会员中心</span>
+	</a>
+	{/if}
+</div>

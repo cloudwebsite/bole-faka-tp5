@@ -1,0 +1,442 @@
+ {include file="public/user/userheader" /}
+    
+    <link rel="stylesheet" href="https://www.layuicdn.com/layui-v2.5.4/css/layui.css">
+    
+    
+    <link href="__USCENTER__/css/basic.css" rel="stylesheet" type="text/css"/>  
+    <link rel="stylesheet" href="__USCENTER__/css/iconfont.css">
+    <link rel="stylesheet" href="__USCENTER__/css/index.css">
+    <link rel="stylesheet" href="__USCENTER__/css/person_content.css">
+    <link rel="stylesheet" href="__USCENTER__/css/publish_need.css">
+    <link rel="stylesheet" href="__USCENTER__/css/common.css" /></head>
+    <link href="__USCENTER__/css/style.min.css?v=4.1.0" rel="stylesheet">
+    <script language="javascript" src="{:config('cdnpublic')}jquery/1.8.3/jquery.min.js"></script>
+    <script language="javascript" src="__USCENTER__/js/qiandao.js"></script>
+    <script src="__USCENTER__/js/wangeditor.min.js"></script>
+    <script src="__USCENTER__/js/plupload.full.min.js"></script>
+    <script language="javascript" src="https://www.layuicdn.com/layui-v2.5.4/layui.js"></script>
+    <script language="javascript" src="__USCENTER__/js/common.js"></script>
+    <script language="javascript" src="__USCENTER__/js/index.js"></script>
+    <script src="__USCENTER__/js/person_content.js"></script>
+    <style>
+    	body,div{
+    		margin: 0 auto;
+    	}
+    	
+    </style>
+ <body>
+    <!--头部-->
+    {include file="public/user/usertop" /}
+    <!--头部-->
+    <!--个人中心-->
+    <div>
+      <div class="clearfix person_conetent">﻿
+        <!--左侧菜单-->
+        {include file="public/user/userleft" /}
+        
+        <!--右侧展示-->
+        <div style="margin-left: 220px;margin-right: 40px;">
+
+            <!--积分明细-->
+            <div class="need_admin">
+                <div class="clearfix publish_need_tit">
+                    <h2 class="left">广告管理</h2>
+                </div>
+             <div class="layui-tab layui-tab-brief" lay-filter="tabData">
+			  
+			  <div class="layui-tab-content">
+			  	
+			  	<form method="post" action="{:url('index')}">
+			  	    {:token()}
+			  		<button type="button"  class="layui-btn  layui-btn-normal" onclick="yijianAdd();"><i class="layui-icon">&#xe61f;</i>添加广告</button>
+			  		<div class="layui-input-inline">
+				      <input type="text" id="key" name="key"  placeholder="请输入关键词" class="layui-input" value="{$val}">
+				    </div>				  		
+				  	<button type="submit"  class="layui-btn  layui-btn-danger"><i class="layui-icon">&#xe640;</i>查询</button>
+			  	</form>
+			  	
+			  	
+			  	<table class="layui-table" lay-skin="line">
+				    
+				    <thead>
+				      <tr>
+				      	<th width="10" style="text-align: center;"><input type="checkbox" name="like[write]"></th>
+				        <th width="15" style="text-align: center;">ID</th>
+				        <th width="200" style="text-align: center;">名称</th>
+				        <th width="80" style="text-align: center;">打开方式</th>
+				        <th width="160" style="text-align: center;">广告位</th>
+				        <th  style="text-align: center;">地址</th>
+				        <th width="80" style="text-align: center;">图片</th>	
+				        <th width="80" style="text-align: center;">排序</th>				       
+				        <th width="120" style="text-align: center;">操作</th>
+				      </tr> 
+				    </thead>
+				    <tbody id='list-content'>
+				    
+				    </tbody>
+				</table>
+				<div id="AjaxPage"></div>
+			  	 <!-- 加载动画 -->
+							<div class="spiner-example">
+							    <div class="sk-spinner sk-spinner-three-bounce">
+							        <div class="sk-bounce1"></div>
+							        <div class="sk-bounce2"></div>
+							        <div class="sk-bounce3"></div>
+							    </div>
+							</div>
+			  	
+			  </div>
+			</div>
+
+            </div>
+
+        </div>
+      </div>
+    </div>
+    
+    
+    <div id="yijianAdd" style="display: none;margin-top: 10px;">
+    	<form class="layui-form" action="{:url('jingdian/Friend/add_ad')}">
+  		<div class="layui-form-item">
+			    <label class="layui-form-label">名称</label>
+			    <div class="layui-input-inline">
+			      <input type="text" name="title" lay-verify="required" placeholder="请输入广告名称" autocomplete="off" class="layui-input">	      
+			    </div>
+  		</div>
+  		<div class="layui-form-item">
+		    <div class="layui-inline">
+		      <label class="layui-form-label">广告位</label>
+		      <div class="layui-input-inline">
+		        <select name="ad_position_id" lay-verify="required">
+		          <option value="">请选择广告位</option>
+		         
+		          {if !empty($position)}
+                  {foreach name="position" item="vo"}                
+                        <option value="{$vo.id}">{$vo.name}</option>
+                  {/foreach}
+                  {/if}
+		        </select>
+		      </div>
+		    </div>
+		</div>    
+  		<div class="layui-form-item">
+			    <label class="layui-form-label">地址</label>
+			    <div class="layui-input-inline">
+			     <input type="text" name="link_url" lay-verify="required" placeholder="请输入广告地址" autocomplete="off" class="layui-input">	      
+			    </div>
+  		</div>
+  		<div class="layui-form-item">
+			<label class="layui-form-label">广告图片：</label>
+			<div class="layui-input-inline">
+				<button id="demoMoreID" type="button" class="layui-btn demoMore"><i class="layui-icon"></i>上传图片</button>
+				<div class="layui-upload-list">
+					<input type="hidden" id="web_logo" name="images">
+					<img width="500" height="200" class="layui-upload-img" id="demo1" src="/static/admin/images/noimg.png">
+						    
+			</div>
+			</div>					    
+		</div>
+  		<div class="layui-form-item">
+			    <label class="layui-form-label">打开方式</label>
+			    <div class="layui-input-inline">
+			      <input type="radio" name="opentype" value="0" title="本窗口" checked>
+			      <input type="radio" name="opentype" value="1" title="新窗口" >		      
+			    </div>
+  		</div>
+  		<div class="layui-form-item">
+			    <label class="layui-form-label">排序</label>
+			    <div class="layui-input-inline">
+			     <input type="text" name="orderby" value="0" lay-verify="required" placeholder="请输入排序" autocomplete="off" class="layui-input">	      
+			    </div>
+  		</div>
+  		
+  		<div class="layui-form-item">
+			<div class="layui-input-block">
+			  <button class="layui-btn" lay-submit lay-filter="formyijianAdd">立即提交</button>
+			  <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+			</div>
+		</div>
+  		</form>
+    </div>
+    
+    
+    
+    
+    
+    
+    
+    
+    <script type="text/html" id="list-template">	  
+ 	{{# for(var i=0;i<d.length;i++){  }}
+	    <tr>
+	    	<td style="text-align: center;"><input type="checkbox" name="like[write]"></td>
+	    	<td style="text-align: center;">{{d[i].id}}</td>
+		    <td style="text-align: center;">{{d[i].title}}</td>
+		    <td style="text-align: center;">
+		    {{d[i].opentype}}
+			
+		    </td>
+		    <td style="text-align: center;">{{d[i].name}}</td>
+		    <td style="text-align: center;">{{d[i].link_url}}</td>
+		    <td style="text-align: center;"><img src="/uploads/images/{{d[i].images}}" style="height: 30px" onerror="this.src='/static/admin/images/no_img.jpg'"/></td>
+		    <td style="text-align: center;">{{d[i].orderby}}</td>
+		    
+		   
+		    <td style="text-align: center;">
+		    	<div class="layui-btn-group">				  
+				  <button class="layui-btn layui-btn-xs layui-btn-normal" onclick="editAd({{d[i].id}});">
+				    <i class="layui-icon">&#xe642;</i>编辑
+				  </button>
+				  <button class="layui-btn layui-btn-xs layui-btn-danger" onclick="delAd({{d[i].id}});">
+				    <i class="layui-icon">&#xe640;</i>删除
+				  </button>
+				  
+				</div>
+		    </td>
+		</tr>
+	 {{# } }}	
+	</script>
+               
+  
+
+    <!--非商家提示去认证-->
+    {include file="public/imgpc/footer" /}
+    
+    
+		
+	<script>
+
+	
+	var laytpl;
+	var laypage;
+	var layer;
+	var form;
+	layui.use(['laytpl','laypage','layer','form'], function(){
+	  laytpl = layui.laytpl;
+	  laypage = layui.laypage;
+	  layer = layui.layer;
+	  form = layui.form;
+	  
+	  form.on('submit(formyijianAdd)', function(data){
+		   	console.log(data.elem) //被执行事件的元素DOM对象，一般为button对象
+			console.log(data.form) //被执行提交的form对象，一般在存在form标签时才会返回
+			console.log(data.field) //当前容器的全部表单字段，名值对形式：{name: value}
+			var indexload = layer.load(0, {shade: [0.4,'#0f0e0e']});
+			$.getJSON('{:url("jingdian/Friend/add_ad")}',data.field, function(data){
+	            $(".spiner-example").css('display','none'); //数据加载完关闭动画 
+	           	layer.close(indexload);
+	           	if(data.code==1){
+	           		layer.alert(data.msg, {
+					  icon: 6,
+					  skin: 'layer-ext-moon',
+					  yes: function(index, layero){
+					    layer.close(index);
+					    location.reload()
+					  }
+					});
+	           	}else{
+	           		layer.alert(data.msg, {
+					  icon: 5,
+					  skin: 'layer-ext-moon',
+					  yes: function(index, layero){
+					  	layer.close(index);
+					    location.reload()
+					  }
+					});
+	           	}
+	        });
+			return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+		});
+		Ajaxpage();
+	});
+	layui.use('upload', function(){
+					  var upload = layui.upload;
+					   
+					  //logo
+					  var uploadInst_logo = upload.render({
+					    elem: '.demoMore' //绑定元素
+					    ,url: "{:url('@jingdian/Upload/upload')}" //上传接口
+					    ,accept:'images'
+					    ,acceptMime:'image/*'
+					    ,exts:'jpg|png|gif|bmp|jpeg'
+					    ,size:10240
+					    ,before: function(obj){
+					      //预读本地文件示例，不支持ie8
+					      layer.load(0, {shade: [0.4,'#0f0e0e']});
+					      obj.preview(function(index, file, result){
+					        $('#demo1').attr('src', result); //图片链接（base64）
+					      });
+					    }
+					    ,done: function(res){
+					    	 layer.closeAll('loading'); //关闭loading
+					      //如果上传失败
+					      if(res.code > 0){
+					        return layer.msg('上传失败');
+					      }				      
+					      $('#web_logo').val(res.data.src);
+					      return layer.msg('上传成功');
+					      //上传成功
+					    }
+					    ,error: function(){
+					    	 layer.closeAll('loading'); //关闭loading	
+					      //演示失败状态，并实现重传
+					      var demoText = $('#demoText');
+					      demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-xs demo-reload">重试</a>');
+					      demoText.find('.demo-reload').on('click', function(){
+					        uploadInst_logo.upload();
+					      });
+					    }
+					  });		  
+					});
+	
+	
+    function Ajaxpage(curr){
+        
+        var key=$('#key').val();
+        $.getJSON('{:url("Friend/index")}', {page: curr || 1,key:key}, function(data){
+            $(".spiner-example").css('display','none'); //数据加载完关闭动画 
+            if(data==''){
+                $("#list-content").html('<td colspan="20" style="padding-top:10px;padding-bottom:10px;font-size:16px;text-align:center">暂无数据</td>');
+            }else{
+                var tpl = document.getElementById('list-template').innerHTML;
+                laytpl(tpl).render(data, function(html){
+                    document.getElementById('list-content').innerHTML = html;
+                });
+                laypage.render({
+				    elem: 'AjaxPage'
+				    ,count: {$count}
+				    ,curr: curr || 1
+				    ,layout: ['count', 'prev', 'page', 'next', 'refresh', 'skip']
+				    ,jump: function(obj, first){
+				    	if(!first){
+				    		$(".spiner-example").show(); //数据加载完关闭动画 
+				    		document.getElementById('list-content').innerHTML='';
+                            Ajaxpage(obj.curr)
+                        }
+				      console.log(obj)
+				    }
+				  });
+                
+            }
+        });
+    }
+    
+    function editAd(id){
+    	location.href = '{:url("Friend/edit_ad")}'+'?id='+id;
+    	
+    }
+    function yijianAdd(){   	
+    	layer.open({
+		  type: 1,
+		  title:'添加广告',
+		  area: '700px',
+		  content: $('#yijianAdd')
+		});
+    }
+    function delAd(id){
+    	//询问框
+		layer.confirm('是否删除此广告？', {
+		  btn: ['确定','取消'] //按钮
+		}, function(){
+		  var indexload = layer.load(0, {shade: [0.4,'#0f0e0e']});
+		  $.getJSON('{:url("Friend/del_ad")}'+"?id="+id,{}, function(data){
+		  		layer.close(indexload);
+	           	if(data.code==1){
+	           		layer.alert(data.msg, {
+					  icon: 6,
+					  skin: 'layer-ext-moon',
+					  yes: function(index, layero){
+					  	layer.close(index);
+					    location.reload()
+					  }
+					});
+	           	}else{
+	           		layer.alert(data.msg, {
+					  icon: 5,
+					  skin: 'layer-ext-moon',
+					  yes: function(index, layero){
+					  	layer.close(index);
+					    location.reload()
+					  }
+					});
+	           	}
+		  	
+		  });
+		  
+		});
+    }
+    
+    function removeHTMLTag(str) {
+	            str = str.replace(/<(style|script|iframe)[^>]*?>[\s\S]+?<\/\1\s*>/gi,'').replace(/<[^>]+?>/g,'').replace(/\s+/g,' ').replace(/ /g,' ').replace(/>/g,' '); //去除HTML tag
+	            str = str.replace(/[ | ]*\n/g,'\n'); //去除行尾空白
+	            //str = str.replace(/\n[\s| | ]*\r/g,'\n'); //去除多余空行
+	            str=str.replace(/&nbsp;/ig,'');//去掉&nbsp;
+	            //str=str.replace(/\s/g,''); //将空格去掉
+	            return str;
+	}
+    function htmlspecialchars(str) {        
+              var s = "";  
+              if (str.length == 0) return "";  
+              for   (var i=0; i<str.length; i++)  
+              {  
+                  switch (str.substr(i,1))  
+                  {  
+                      case "<": s += "&lt;"; break;  
+                      case ">": s += "&gt;"; break;  
+                      case "&": s += "&amp;"; break;  
+                      case " ":  
+                          if(str.substr(i + 1, 1) == " "){  
+                              s += " &nbsp;";  
+                              i++;  
+                          } else s += " ";  
+                          break;  
+                      case "\"": s += "&quot;"; break;  
+                      case "\n": s += "<br>"; break;  
+                      default: s += str.substr(i,1); break;  
+                  }  
+              }  
+              return s;  
+          }
+  	function htmlspecialchars_decode(str){           
+              str = str.replace(/&amp;/g, '&'); 
+              str = str.replace(/&lt;/g, '<');
+              str = str.replace(/&gt;/g, '>');
+              str = str.replace(/&quot;/g, "''");  
+              str = str.replace(/&#039;/g, "'");  
+              return str;  
+    }
+  	function toDecimal(x){
+  		var f = parseFloat(x);
+		if(isNaN(f)) {
+			return false;
+		}
+		var f;
+		if(getFloor(x)<2){
+			f = Math.round(x * 100) / 100;
+		}else if(getFloor(x)>2){
+			f = Math.round(x * 10000) / 10000;
+		}	
+		var s = f.toString();
+		var rs = s.indexOf('.');
+		if(rs < 0) {
+			rs = s.length;
+			s += '.';
+		}
+		while(s.length <= rs + 2) {
+			s += '0';
+		}
+		return s;
+  	}
+  	
+	function getFloor(x){
+		var y = String(x).indexOf('.') + 1;
+		var count = String(x).length - y;
+		if(y <= 0) {
+			count=0;
+		}
+		return count;										
+	}
+	</script>
+ </body>
+
+</html>

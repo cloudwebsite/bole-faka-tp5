@@ -1,0 +1,128 @@
+{include file="public/header" /}
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="ibox float-e-margins">
+        <div class="ibox-title">
+            <h5>商品卡密</h5>
+        </div>
+        <div class="ibox-content">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="col-sm-4" style="padding-left:0;margin-bottom:8px;">
+                        <a href="{:url('Kami/addlog')}" class="btn btn-warning"><i class="fa fa-history"></i> 入库日志（全站）</a>
+                        <a href="{:url('Kami/key_stats')}" class="btn btn-info" style="margin-left:6px;"><i class="fa fa-bar-chart"></i> 卡密消耗统计</a>
+                    </div>
+                    <form name="admin_list_sea" class="form-search" method="get" action="{:url('goods')}">
+                        <div class="col-sm-4">
+                            <div class="input-group">
+                                <input type="text" id="key" class="form-control" name="key" value="{$val}" placeholder="商品名称"/>
+                                <span class="input-group-btn">
+                                    <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i> 搜索</button>
+                                </span>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="hr-line-dashed"></div>
+            <div class="example-wrap">
+                <div class="example">
+                    <table class="table table-bordered table-hover">
+                        <thead>
+                            <tr class="long-tr">
+                                <th width="6%">ID</th>
+                                <th width="28%">商品名称</th>
+                                <th width="10%">库存(未用)</th>
+                                <th width="10%">加密库存</th>
+                                <th width="10%">状态</th>
+                                <th width="14%">创建时间</th>
+                                <th width="22%">操作</th>
+                            </tr>
+                        </thead>
+                        <script id="list-template" type="text/html">
+                            {{# for(var i=0;i<d.length;i++){ }}
+                            <tr class="long-td">
+                                <td>{{d[i].id}}</td>
+                                <td>{{d[i].mnamebie || d[i].mname}}</td>
+                                <td><span class="badge badge-success">{{d[i].kamicount}}</span></td>
+                                <td>
+                                    {{# if(d[i].decrypt==1){ }}
+                                    <span class="label label-warning">加密</span>
+                                    {{# }else{ }}
+                                    <span class="label label-default">明文</span>
+                                    {{# } }}
+                                </td>
+                                <td>
+                                    {{# if(d[i].status==1){ }}
+                                    <span class="label label-primary">上架</span>
+                                    {{# }else{ }}
+                                    <span class="label label-danger">下架</span>
+                                    {{# } }}
+                                </td>
+                                <td>{{d[i].create_time}}</td>
+                                <td>
+                                    <a href="{:url('Kami/index')}?id={{d[i].id}}" class="btn btn-info btn-outline btn-xs">
+                                        <i class="fa fa-list"></i> 查看库存
+                                    </a>
+                                    <a href="{:url('Kami/add_kami')}?id={{d[i].id}}" class="btn btn-primary btn-outline btn-xs">
+                                        <i class="fa fa-plus"></i> 补货
+                                    </a>
+                                </td>
+                            </tr>
+                            {{# } }}
+                        </script>
+                        <tbody id="list-content"></tbody>
+                    </table>
+                    <div id="AjaxPage" style="text-align:right;"></div>
+                    <div style="text-align: right;">
+                        共{$count}条数据，<span id="allpage"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="spiner-example">
+    <div class="sk-spinner sk-spinner-three-bounce">
+        <div class="sk-bounce1"></div>
+        <div class="sk-bounce2"></div>
+        <div class="sk-bounce3"></div>
+    </div>
+</div>
+{include file="public/footer" /}
+<script type="text/javascript">
+Ajaxpage();
+function Ajaxpage(curr){
+    var key = $('#key').val();
+    $.getJSON('{:url("Kami/goods")}', {
+        page: curr || 1,
+        key: key
+    }, function(data){
+        $(".spiner-example").css('display','none');
+        if(data=='' || data.length==0){
+            $("#list-content").html('<td colspan="20" style="padding-top:10px;padding-bottom:10px;font-size:16px;text-align:center">暂无虚拟商品</td>');
+        }else{
+            var tpl = document.getElementById('list-template').innerHTML;
+            laytpl(tpl).render(data, function(html){
+                document.getElementById('list-content').innerHTML = html;
+            });
+            laypage({
+                cont: $('#AjaxPage'),
+                pages: '{$allpage}',
+                skip: true,
+                skin: '#1AB5B7',
+                curr: curr || 1,
+                groups: 3,
+                jump: function(obj, first){
+                    if(!first){
+                        Ajaxpage(obj.curr)
+                    }
+                    $('#allpage').html('第'+ obj.curr +'页，共'+ obj.pages +'页');
+                }
+            });
+        }
+    });
+}
+</script>
+</body>
+</html>

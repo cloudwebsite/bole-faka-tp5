@@ -1,0 +1,1 @@
+<?php use think\Route;Route::rule('mhoutai','madmin/index/login');

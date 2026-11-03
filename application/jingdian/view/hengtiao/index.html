@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="__MOBANAK__/css/ak_style.css" rel="stylesheet" type="text/css" />
+<link href="__MOBANAK__/css/akstyle.css" rel="stylesheet" type="text/css" />
+<link href="{:config('cdnpublic')}twitter-bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+<link href="{:config('cdnpublic')}font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet">
+
+<link href="__CSS__/lanrenzhijia.css" rel="stylesheet" type="text/css" /> 
+<link href="__MOBANAK__/css/main.css" rel="stylesheet">
+ <link href="__MOBANAK__/css/lanrenzhijia2.css" rel="stylesheet" type="text/css" /> 
+
+<meta name="keywords" content="{:config('web_site_keyword')}" />
+<meta charset="UTF-8" name="description" content="{:config('web_site_description')}" /> 
+<style>
+.search_box {
+    position: relative;
+    height: 60px;
+    line-height: 60px;
+     width: auto;
+    margin: -60px auto 0 auto;
+    background: #fff;
+    border-radius: 31px;
+    color: #33334f;
+    border: 1px solid rgba(118,126,173,0.3);
+    transition: .2s;
+    margin-bottom: 20px;
+}
+</style>
+{if condition="$param['isMobilePc'] eq 1"}
+{if condition="config('m_status') eq 0"}
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+{/if}
+{/if}
+<title>{:config('web_site_title')}</title>
+</head>
+<body onload="Init();">
+	<div class="left_nav">
+
+		<dl style="margin-bottom: 0px">
+			<dt>
+     商品分类
+    </dt>
+			<dd id="quanbu">
+				<a href="/" class="nav_left" style="text-decoration:none; color:#333;"><span>全部宝贝</span></a>
+			</dd>
+			{volist name="GoodsListAll" id="vo"} {if condition="count($vo['hehe']) neq 0"}
+			<dd class="fenlei">
+				<a style="text-decoration:none; color:#333;" href="{:url('Index/hengGoodByLmid',['lmid'=>$vo['id']])}" class="nav_left" id="{$vo['id']}" name="#floor{$vo['id']}">{$vo['name']}<span style="display:block;float:right;margin-right:20px;">[{:count($vo['hehe'])}]</span></a>
+
+				<div class="nav_right">
+					{volist name="vo['hehe']" id="f"}
+					<a style="text-decoration:none; color:#333;" href="{:url('Index/hengGoodByName',['key'=>strip_tags(htmlspecialchars_decode($f['mname']))])}" name="xianshi" id="{$f['id']}"><span>{:strip_tags(htmlspecialchars_decode($f['mname']))}</span></a>
+					{/volist}
+
+				</div>
+			</dd>
+			{/if} {/volist}
+
+		</dl>
+
+	</div>
+ 
+ 	<div class="toplogin">
+		<div class="login" style="margin: 0 auto;padding-top: 3px;line-height: 23px">
+		    <div class="loginr right">
+		        {if condition="config('web_reg_type') neq 0"}
+				{if condition="session('useraccount.account') eq null"}
+		        <a href="{:url('@jingdian/User/index')}">登录</a> | 
+		        <a href="{:url('@jingdian/User/reg')}">注册</a> | 
+		        {else/}
+				
+					欢迎您，<a href="{:url('@jingdian/User/usCenter')}">{:session('useraccount.account')}</a> 
+					<a href="{:url('@jingdian/User/loginOut')}">退出</a> | 
+				
+				{/if}
+				{/if}
+				{if condition="session('useraccount.account') eq null"}
+				
+					<a href="{:url('Index/selectorder')}">我的订单</a> |
+				
+				{else/}
+				
+					<a href="{:url('user/usorder')}">我的订单</a> |
+				
+				{/if}
+		       
+		        <a style="color:#F60" href="{:url('@jingdian/Detail/getAll')}">常见问题</a> | 
+		        <a style="color:#F60" href="https://wpa.qq.com/msgrd?v=3&amp;uin={:config('WEB_QQ')}&amp;site=qq&amp;menu=yes" target="_blank">联系客服</a>
+		    </div>
+		</div>
+	</div>
+	<div class="clearit"></div>
+ <!-- 页头 开始 -->
+  <div class="top_bg">
+		<div class="top_in">
+			<div class="topbox conter">
+				<div class="topl left">
+	
+					<a href="/"><img style="padding-right:50px;width:200px;height:50px;" src="/uploads/images/{:config('WEB_logo')}" alt="" title=""></a>
+	
+					<a href="/" style="color:#9ad400">首页</a>
+					            
+                 	 {volist name="GoodsListAll" id="vo" offset="0" length='2'}
+					<a href="{:url('Index/hengGoodByLmid',['lmid'=>$vo['id']])}" >{$vo['name']}</a>
+					{/volist}	
+	
+				</div>
+	
+			</div>
+		</div>
+	</div>
+                  
+                  <!-- 页头 结束 -->
+
+
+
+           
+
+
+
+                  <!-- 上部分 开始 -->
+                  <div class="shangjia_wai">
+
+                        <div class="shangjia_out">
+                              <div class="shangjia_t_bg" {if condition="config('pc_jingdian_gg_color') neq ''"}style="background: {:config('pc_jingdian_gg_color')};"{/if}>商家公告</div>
+                              <div class="shagnjia_kuang">
+                                    <div class="shangjia_nei">
+                                    
+                                          
+                                            {foreach name="GongGao" item="v"} 
+                                {:htmlspecialchars_decode($v['content'])}
+                                {/foreach}
+                         
+                                        
+                                    </div>
+                                    
+                                    
+                                    
+                                    
+                                    
+                              </div>
+                          
+                              
+                    
+                          
+                              <div class="clearit"></div>
+                          
+                              
+                        </div>
+                    
+                    
+
+                    
+
+
+                  </div>
+                  <div class="clearit"></div>
+                  <!-- 上部分 结束 -->
+
+
+
+                  <!-- 上部分 开始 -->
+                  <div class="shangjia_wai">
+                         <form name="search" action="{:url('Index/hengGoodByName')}" method="get">
+                        <div class="search_box" style="margin-top: 0px;width:48%;float:left;">
+                          <i class="iconfont icon-sousuo"></i>
+                        
+                          <input type="text" value="" name="key" placeholder="请输入商品名称关键词" class="order_input">
+                          <button  style="background:rgba(224, 41, 110, 0.9)">商品搜索</button>
+                          </form>
+                        </div>
+                        
+                        <div class="search_box" style="margin-top: 0px;width:48%;float:right;">
+                          <i class="iconfont icon-sousuo"></i>
+                          <input type="text" value="" placeholder="请输入订单号或者联系方式" class="order_input" id="orderid_input">
+                          <button onclick="orderid_or_contact()">订单查询</button>
+                        </div>
+                        <div class="shangjia_out">
+                           
+                              
+                              <div class="shagnjia_kuang">
+                                    <div class="shangjia_neiquan">
+                                    
+                                          <table class="table table-hover table-striped table-bordered" style="margin-bottom: 0px;">
+                                          
+                                  
+                                  <thead  id="shopztr">
+                                    <tr>
+                                      <th>商品名称</th>
+                                     
+                                      <th style="text-align: center;">单价(元/个)</th>
+                                      <th style="text-align: center;">库存</th>                                     
+                                      <th style="text-align: center;">操作</th>
+                                    </tr>
+                                  </thead>
+                                  
+                               
+                                  
+                                  <tbody>
+                                    
+                                    {volist name="GoodsListAll" id="vo"}
+                                    {if condition="count($vo['hehe']) neq 0"}
+                                    <tr>
+                                      <td colspan="6" style="padding: 0 0;"><div class="shangjia_shop" {if condition="$vo['color'] neq ''"}style="background:{$vo['color']}" {/if} id="#floor{$vo['id']}" >{:htmlspecialchars_decode($vo['loucengname'])} </div></td>
+                                      
+                                    </tr>
+                                    {volist name="vo['hehe']" id="v"}
+                                     <form method="post" action="{:url('Index/zywlpay')}"  id="form{$v.id}" target="_blank">
+                                    <tr name="shoptr" {if condition="$v['color'] neq ''"}style="background:{$v.color};"{/if}>
+                                        <input type="hidden" name="mpid" value="{$v.id}" /> 
+                                        <input type="hidden" name="countnum" id="countnum" value="{$v.count}" /> 
+                                        <input type="hidden" name="mmin" id="mmin" value="{$v.mmin}" /> 
+                                        <input type="hidden" name="mmax" id="mmax" value="{$v.mmax}" /> 
+                                        <input type="hidden" name="mname" id="mname" value="{:strip_tags(htmlspecialchars_decode($v['mname']))}" /> 		       
+                                        <input type="hidden" name="mprice" id="mprice" value="{$v.mprice}" /> 
+                                        <input type="hidden" name="sendbeishu" id="sendbeishu" value="{$v.sendbeishu}" />
+                                        <input type="hidden" name="attachgroupid" id="attachgroupid" value="{$v.attachgroupid}" /> 
+                                         <input type="hidden" name="mnotice" id="mnotice" value="{:strip_tags(htmlspecialchars_decode($v['mnotice']))}" /> 
+                                    <div id="xqnotice{$v.id}" style="display:none;"> {:htmlspecialchars_decode($v['xqnotice'])} </div>
+                                      <td class="text-muted" style="cursor:pointer;line-height:2.5;" onclick="spxq({$v.id});">
+                                      {if condition="$v['type'] eq 0"}                                   
+                                      <span class="label" style="border-radius:100%;font-size: 10px;background-color: #a1d243;color: #FFF;">自动</span>                                  	
+                                      {else/}                                     
+                                      <span class="label" style="border-radius:100%;font-size: 10px;background-color: #f3ab26;color: #FFF;">手动</span>  
+                                      {/if}
+                                      <img src="{$v['imgurl']}" onerror="this.src='/static/admin/images/head_default.gif'" style="width:32px;height:32px;">{:htmlspecialchars_decode($v['mname'])}  &nbsp; &nbsp; &nbsp;{:htmlspecialchars_decode($v['mnotice'])}
+                                      </td>
+                                      <td class="text-info" style="text-align: center;line-height:2.5;">￥{if condition="$v.mprice lt 1"}{:number_format($v.mprice/100,4)}{else/}{:number_format($v.mprice/100,2)}{/if}</td>
+                                      <td  style="color: red;text-align: center;line-height:2.5;">{$v.count}</td>
+                                     
+                                      <td style="text-align: center;line-height:2.5;"><button class="btn btn-success" type="button" name="buyok">立即购买</button></td>
+                                    </tr>
+                                    </form>
+                                     {/volist}
+                                  
+                                
+                                  
+                                  
+                                    
+                                  {/if}  
+                                  {/volist}
+                                   </tbody>
+                                  
+                                  </table>
+                         
+                                        
+                                    </div>
+                                    
+                               
+
+                                    
+                                    
+                                    
+                              </div>
+                          
+                              
+                    
+                          
+                              <div class="clearit"></div>
+                          
+                              
+                        </div>
+                    
+
+
+                    
+
+
+                  </div>
+                  <div class="clearit"></div>
+                  <!-- 上部分 结束 -->
+           
+     
+
+       
+{foreach name="ChangJian" item="v"}
+<div class="xxsmbox center"  style="">
+    <div class="xxsmbt">{:htmlspecialchars_decode($v['title'])}</div>
+    <div class="xxsm center">
+    <span id="goodxxcon">
+
+{:htmlspecialchars_decode($v['content'])}
+
+</span>
+   </div>
+</div>
+
+				
+		       
+		      
+								
+							
+		
+{/foreach}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="endbqbox" {if condition="config('pc_jd_footer_color') neq ''"} style="background: {:config('pc_jd_footer_color')};"{/if}>
+<div class="endbq conter">
+
+<div class="endbqxx right">
+<a href="https://beian.miit.gov.cn/"><font color="#FFFFFF">{:config('web_site_icp')}</font></a> {:config('web_site_copy')} {:config('web_site_cnzz')}
+</div>
+  
+</div>
+</div>
+
+
+
+<div class="main-im">
+<div id="open_im" class="open-im" style='display: none;'>
+    &nbsp;
+</div>
+<div class="im_main" id="im_main" style="display: block;">
+	<div id="close_im" class="close-im">
+		<a href="javascript:void(0);" title="点击关闭">&nbsp;</a>
+	</div>
+	<a href="https://wpa.qq.com/msgrd?v=3&amp;uin={:config('WEB_QQ')}&amp;site=qq&amp;menu=yes" target="_blank" class="im-qq qq-a" title="在线QQ客服">
+	<div class="qq-container">
+	</div>
+	<div class="qq-hover-c">
+		<img class="img-qq" src="__IMG__/qq.png"/>
+	</div>
+	<span> QQ在线咨询</span></a>
+	<div class="im-tel">
+		{if condition="config('WEB_QQ') neq ''"}
+		<div>
+      QQ在线咨询
+		</div>
+		<div>
+			<a target="_blank" href="https://wpa.qq.com/msgrd?v=3&amp;uin={:config('WEB_QQ')}&amp;site=qq&amp;menu=yes"><img border="0" src="__MOBANAK__/images/button_11.gif" alt="点击这里给我发消息" title="点击这里给我发消息"/></a>
+		</div>
+		{/if}
+		 {if condition="config('WEB_WANGWANG') neq ''"}
+		
+		<div>
+      旺旺咨询
+		</div>
+		<div>
+			<a target="_blank" href="http://www.taobao.com/webww/ww.php?ver=3&amp;touid={:config('WEB_WANGWANG')}&amp;siteid=cntaobao&amp;status=1&amp;charset=utf-8"><img border="0" src="http://amos.alicdn.com/online.aw?v=2&amp;uid={:config('WEB_WANGWANG')}&amp;site=cntaobao&amp;s=1&amp;charset=utf-8" alt="点这里给我发消息"/></a>
+		</div>
+		{/if}
+	</div>
+	<div class="im-footer" style="position:relative">
+	{if condition="config('weixin_erweima') neq ''"}
+	<div class="weixing-container">
+		<div class="weixing-show">
+			<div class="weixing-txt">
+				微信扫一扫<br>
+				添加我为好友
+			</div>
+			<img class="weixing-ma" src="/uploads/images/{:config('weixin_erweima')}" onerror="this.src='/static/admin/images/head_default.gif'" height="118px" width="118px">
+			<div class="weixing-sanjiao">
+			</div>
+			<div class="weixing-sanjiao-big">
+			</div>
+		</div>
+	</div>
+	{/if}
+	<div class="go-top">
+		<a href="javascript:;" title="返回顶部"></a>
+	</div>
+	<div style="clear:both">
+	</div>
+</div>
+</div>
+
+
+<script src="{:config('cdnpublic')}jquery/2.1.4/jquery.min.js"></script>
+<script src="{:config('cdnpublic')}layer/3.1.1/layer.js"></script>
+{include file="public/order_disclaimer_boot" /}
+<script src="https://www.layuicdn.com/layui-v2.5.4/layui.js"></script>
+<script src="/static/admin/js/lunhui.js"></script>
+<script src="__JS__/js.js"></script>
+<script type="text/javascript">
+$(".fenlei .nav_left").each(function() {
+				$(this).click(function() {
+			
+					
+
+				});
+			});
+
+
+function spxq(mpid){
+	var index=layer.open({
+								      type: 2,
+								      title: '商品详情',
+								      skin: 'layui-layer-lan',
+								      shadeClose: true,
+								      shade: 0.7,
+								     // closeBtn: 0,
+								      maxmin: true, //开启最大化最小化按钮
+								      area: ['40%', '85%'],
+								      content: "{:url('Index/shopxq')}"+"?mpid="+mpid
+								    });
+							//layer.full(index);	    
+					 
+}	
+$(function() {		
+	$('[name=buyok]').click(function(){						
+					var countnum =$(this).parents('tr').find("input").next().val();
+					var mmin =$(this).parents('tr').find("input").next().next().val();
+					var mmax =$(this).parents('tr').find("input").next().next().next().val();
+					
+					
+				
+					var mpid =$(this).parents('tr').find("input").val();
+					var sendbeishu =$(this).parents('tr').find("input").next().next().next().next().next().next().val();
+
+					if(countnum=='0'){
+					
+			  		layer.msg('暂无库存，请联系客服', {icon: 2});							
+							return false;
+					}        		
+					$('#form'+mpid).submit();	        		
+	        		
+				});			
+				
+
+   
+
+
+$('#totop').on('click',function(){$(document).scrollTop($(window).height()-$(document).height());});	
+});
+function orderid_or_contact() {
+				var input_val = $('#orderid_input').val();
+				window.location.href = '{:url("Index/selectorder")}' + '?key=' + input_val;
+
+			}
+    function Init() {
+				
+				// 首页公告由 order_disclaimer_boot 自动弹出
+				var m = {$param['isMobilePc']};
+				var mstatus = {:config('m_status')};
+				var weiyong={$param['count']};
+				//判断是否是手机
+				if(m == 1) {
+					if(mstatus == 0) {
+						layer.open({
+							type: 1,
+							title: false //不显示标题栏
+								,
+							closeBtn: false,
+							area: '300px;',
+							shade: 0.8,
+							id: 'LAY_layuipro' //设定一个id，防止重复弹出
+								,
+							resize: false,
+							btn: ['切换到手机', '不切换模板'],
+							btnAlign: 'c',
+							moveType: 1 //拖拽模式，0或者1
+								,
+							content: '<div style="padding: 50px; line-height: 22px; background-color: #393D49; color: #fff; font-weight: 300;">是否切换到手机模版？</div>',
+							success: function(layero) {
+								var btn = layero.find('.layui-layer-btn');
+								btn.find('.layui-layer-btn0').attr({
+									href: "{:config('is_https')}://" + window.location.host + '/mobile'
+								});
+								btn.find('.layui-layer-btn1').attr({
+									href: "{:config('is_https')}://" + window.location.host +"{url('Index/index')}"+"?device=pc"
+								});
+							}
+						});
+						return false;
+
+					} else if(mstatus == 1) {
+						window.location.href = "{:config('is_https')}://" + window.location.host + '/mobile';
+						return false;
+					}
+
+				}
+				//检查是否有未用订单
+				if(weiyong>0){
+					//window.location.href = "{:url('Index/selectorder')}";
+					 layer.msg('您有未提取订单，请点击右上角订单查询', {
+            icon: 7,
+            anim:6,
+          }, function(){
+              layer.msg('您有未提取订单，请点击右上角订单查询', {
+                icon: 7,
+                offset: 'lb',
+                anim:6,
+                time: 200000000 //2秒关闭（如果不配置，默认是3秒）
+              }, function(){
+                //do something
+              }); 
+          }); 
+				}
+				
+			}
+			
+			$(function() {
+				$(".left_nav dd").hover(function() {
+					$(".nav_right", this).show();
+					
+					
+				});
+				$(".left_nav dd").mouseleave(function() {
+					$(".nav_right", this).hide();
+				});	
+
+			});
+//var top=$('.nav_right').offset().top - $(window).scrollTop();		
+
+var windowheight=$(window).height();
+var selfheight=$('.left_nav').outerHeight(true);
+var settop=(windowheight-selfheight)/2;
+if($(window).scrollTop()>100 || settop>100){
+$(".left_nav").css("top", settop+'px');
+}else{
+$(".left_nav").css("top", settop+100-$(window).scrollTop()+'px');
+}
+
+$(window).scroll(function() {
+				var windowheight=$(window).height();
+        var selfheight=$('.left_nav').outerHeight(true);
+        var settop=(windowheight-selfheight)/2;
+        if($(window).scrollTop()>100 || settop>100){
+        $(".left_nav").css("top", settop+'px');
+        }else{
+        $(".left_nav").css("top", settop+100-$(window).scrollTop()+'px');
+        }
+				
+});
+</script>
+  <div style=" position: fixed;left: 10px;bottom: 100px;z-index: 100; width: 110px;">{:config('web_music')}</div>
+</body>
+</html>

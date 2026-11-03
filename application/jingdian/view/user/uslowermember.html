@@ -1,0 +1,169 @@
+ {include file="public/user/userheader" /}
+    
+    <link rel="stylesheet" href="https://www.layuicdn.com/layui-v2.5.4/css/layui.css">
+    <link href="__USCENTER__/css/basic.css" rel="stylesheet" type="text/css"/>  
+    <link rel="stylesheet" href="__USCENTER__/css/iconfont.css">
+    <link rel="stylesheet" href="__USCENTER__/css/index.css">
+    <link rel="stylesheet" href="__USCENTER__/css/person_content.css">
+    <link rel="stylesheet" href="__USCENTER__/css/publish_need.css">
+    <link rel="stylesheet" href="__USCENTER__/css/common.css" /></head>
+    <link href="__USCENTER__/css/style.min.css?v=4.1.0" rel="stylesheet">
+    <script language="javascript" src="{:config('cdnpublic')}jquery/1.8.3/jquery.min.js"></script>
+    <script language="javascript" src="https://www.layuicdn.com/layui-v2.5.4/layui.js"></script>
+    <script language="javascript" src="__USCENTER__/js/common.js"></script>
+    <script language="javascript" src="__USCENTER__/js/index.js"></script>
+    <script src="__USCENTER__/js/person_content.js"></script>
+    <style>
+    	body,div{
+    		margin: 0 auto;
+    	}
+    </style>
+ <body>
+    <!--头部-->
+    {include file="public/user/usertop" /}
+    <!--头部-->
+    <!--个人中心-->
+    <div class="main">
+      <div class="clearfix person_conetent">﻿
+        <!--左侧菜单-->
+        {include file="public/user/userleft" /}
+        
+        <!--右侧展示-->
+        <div class="person_content_r right">
+
+            <!--积分明细-->
+            <div class="need_admin">
+                <div class="clearfix publish_need_tit">
+                    <h2 class="left">我的下级</h2>
+                </div>
+             <div class="layui-tab layui-tab-brief" lay-filter="tabData">
+			  <ul class="layui-tab-title" id="tab">
+			    <li class="layui-this">一级分销商<span class="layui-badge">({$countPid1})</span></li>
+			    <li>二级分销商<span class="layui-badge">({$countPid2})</span></li>
+			    <li>三级分销商<span class="layui-badge">({$countPid3})</span></li>
+			  </ul>
+			  <div class="layui-tab-content">
+			  	<table id="demo" lay-filter="test">
+			  		
+			  		
+			  	</table>
+			  	 <!-- 加载动画 -->
+							<div class="spiner-example">
+							    <div class="sk-spinner sk-spinner-three-bounce">
+							        <div class="sk-bounce1"></div>
+							        <div class="sk-bounce2"></div>
+							        <div class="sk-bounce3"></div>
+							    </div>
+							</div>
+			  	
+			  </div>
+			</div>
+			
+			
+            
+                 
+
+
+
+            </div>
+
+        </div>
+      </div>
+    </div>
+               
+  
+
+    <!--非商家提示去认证-->
+    {include file="public/imgpc/footer" /}
+    
+    
+		
+		<script>
+		var tableIns;
+		layui.use('element', function(){
+		  var $ = layui.jquery
+		  ,element = layui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
+	  
+		  element.on('tab(tabData)', function(data){
+			  console.log(this); //当前Tab标题所在的原始DOM元素
+			  console.log(data.index); //得到当前Tab的所在下标
+			  console.log(data.elem); //得到当前的Tab大容器
+			  console.log(this.innerHTML);
+			  //这里以搜索为例
+				$(".spiner-example").show(); //数据加载完关闭动画 
+				if(data.index>0){
+					tableIns.reload({
+					  where: { //设定异步数据接口的额外参数，任意设
+					    type: data.index+1		   
+					  }
+					  ,page: {
+					    curr: 1 //重新从第 1 页开始
+					  }
+					   ,cols: [[ //表头
+					      {type:'numbers'}
+					      ,{field: 'account', title: '用户账号'}
+					      ,{field: 'shangji', title: '上级账号'}
+					      ,{field: 'create_time', title: '注册时间',sort: true}
+					      
+					     
+					    ]]
+					});
+				}else{
+					tableIns.reload({
+					  where: { //设定异步数据接口的额外参数，任意设
+					    type: data.index+1		   
+					  }
+					  ,page: {
+					    curr: 1 //重新从第 1 页开始
+					  }
+					   ,cols: [[ //表头
+					      {type:'numbers'}
+					      ,{field: 'account', title: '用户账号'}
+					      
+					      ,{field: 'create_time', title: '注册时间',sort: true}
+					      
+					     
+					    ]]
+					});
+				}
+				
+			});
+		  
+		});
+		layui.use('table', function(){
+		  var table = layui.table;
+		  
+		  //第一个实例
+		  tableIns=table.render({
+		    elem: '#demo'
+		    
+		    ,size:'lg'
+		    ,url: '/jingdian/user/uslowermemberDo.html' //数据接口
+		    ,page:true
+		    ,cols: [[ //表头
+		      {type:'numbers'}
+		      ,{field: 'account', title: '用户账号'}
+		      ,{field: 'create_time', title: '注册时间',sort: true}
+		      
+		     
+		    ]]
+		    , done: function(res, curr, count){
+			    //如果是异步请求数据方式，res即为你接口返回的信息。
+			    //如果是直接赋值的方式，res即为：{data: [], count: 99} data为当前页数据、count为数据总长度
+			    console.log(res);
+			    
+			    //得到当前页码
+			    console.log(curr); 
+			    
+			    //得到数据总量
+			    console.log(count);
+			    $(".spiner-example").css('display','none'); //数据加载完关闭动画 
+			  }
+		  });
+		  
+		  
+		});
+		</script>
+ </body>
+
+</html>

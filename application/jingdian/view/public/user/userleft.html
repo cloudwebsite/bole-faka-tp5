@@ -1,0 +1,126 @@
+<div class="left person_content_l">
+          <a href="{:url('user/uscenter')}" class="home">
+            <span class="home_in">会员中心</span></a>
+          <div class="person_menu_item">
+            <div class="person_menu_title active">我是买家
+              <i class="iconfont icon-arrow-right arrow"></i></div>
+            <ul class="person_menu_lsit active">
+              <li>
+              	<a href="/">网站首页</a>
+              </li>
+              <li>
+              	<a href="{:url('user/uscenter')}">会员中心</a>
+              </li>
+              <li>
+                <a href="{:url('user/usorder')}">我的订单</a>
+              </li>
+			  <li>
+              	<a href="{:url('user/uslevel')}">自助升级</a>
+              </li>
+			  {if condition="config('sub_zizhu') neq 0"} 
+			  <li>
+              	<a href="{:url('user/ussub')}">自助开通分站</a>
+              </li>
+				{/if}
+            </ul>
+          </div>
+          {if $useraccount.fzhost}
+          <div class="person_menu_item">
+            <div class="person_menu_title active">我的分站
+              <i class="iconfont icon-arrow-right arrow"></i>
+            </div>
+            <ul class="person_menu_lsit active">
+			<li>
+              	<a href="{:url('user/ussubdetail')}">我的分站信息</a>
+              </li>
+              <li>
+              	<a href="{:url('config/index')}">基本配置</a>
+              </li>
+              <li>
+              	<a href="{:url('goodsset/usgoodslist')}">商品管理</a>
+              </li>
+              {if condition="session('child_useraccount.auth')['ordersauth'] eq 1"}
+              <li>
+              	<a href="{:url('goodsset/usOrder')}">用户订单</a>
+              </li>
+              {/if}
+              <li>
+              	<a href="{:url('navigation/usnavigation')}">导航管理</a>
+              </li>
+              <li>
+              	<a href="{:url('friend/index')}">广告管理</a>
+              </li>
+              <li>
+              	<a href="{:url('article/index')}">文章管理</a>
+              </li>
+            </ul>
+          </div>
+           {/if}
+          <div class="person_menu_item">
+            <div class="person_menu_title active">财务管理
+              <i class="iconfont icon-arrow-right arrow"></i></div>
+            <ul class="person_menu_lsit active">
+              <li>
+                <a href="{:url('user/uspay')}">在线充值</a>
+              </li>
+              <li>
+                <a href="{:url('user/usPaylog')}">财务明细</a>
+              </li>
+              <li>
+                <a href="{:url('user/usIntegrallog')}">积分明细</a>
+              </li>
+              <li>
+                <a href="{:url('user/tixian')}">申请提现</a>
+              </li>
+              <li>
+                <a href="{:url('user/usTixianlog')}">提现记录</a>
+              </li>
+            </ul>
+          </div>
+          
+           <div class="person_menu_item">
+            <div class="person_menu_title active">积分商城
+              <i class="iconfont icon-arrow-right arrow"></i></div>
+            <ul class="person_menu_lsit active">
+              <li>
+                <a href="{:url('jingdian/integral/index')}">积分兑换</a>
+              </li>
+              <li>
+                <a href="{:url('user/usjfOrder')}">兑换记录</a>
+              </li>
+              
+            </ul>
+          </div>
+          
+          <div class="person_menu_item">
+            <div class="person_menu_title active">账户安全
+              <i class="iconfont icon-arrow-right arrow"></i></div>
+            <ul class="person_menu_lsit active">
+              	<li>
+                <a href="{:url('user/usinfo')}">提现设置</a>
+                </li>
+              	<li>
+                <a href="{:url('user/usUpdatePassWord')}">修改密码</a>
+                </li>
+              
+            </ul>
+          </div>
+          
+          <div class="person_menu_item">
+            <div class="person_menu_title active">推广分销
+              <i class="iconfont icon-arrow-right arrow"></i></div>
+            <ul class="person_menu_lsit active">
+              	<li>
+                <a href="{:url('user/usmarket')}">我的推广</a>
+                </li>
+                <li>
+                <a href="{:url('user/uslowermember')}">我的下级</a>
+                </li>
+                <li>
+                <a href="{:url('user/ustgmoneylog')}">佣金明细</a>
+                </li>
+              
+            </ul>
+          </div>
+          
+        </div>

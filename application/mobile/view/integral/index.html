@@ -1,0 +1,397 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset=utf-8 "utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0 user-scalable=no">
+
+		<meta name="format-detection" content="telephone=no" />
+		<title>{:config('web_site_title')}</title>
+		<link rel="stylesheet" type="text/css" href="__MJF__/css/common.css">
+		<link rel="stylesheet" type="text/css" href="__IMGMOBILE__/css/foxui.min.css-v=0.2.css">
+		<link rel="stylesheet" type="text/css" href="__IMGMOBILE__/css/style.css-v=3.0.0.css">
+		<link rel="stylesheet" href="{:config('cdnpublic')}Swiper/4.2.6/css/swiper.min.css" />
+		<script type="text/javascript" src="{:config('cdnpublic')}Swiper/4.2.6/js/swiper.min.js"></script>
+		<script type="text/javascript" src="{:config('cdnpublic')}qrcodejs/1.0.0/qrcode.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="__IMGMOBILE__/css/foxui.diy.css-v=201705261600.css">
+		<link rel="stylesheet" type="text/css" href="__IMGMOBILE__/css/iconfont.css-v=2017070719.css">
+		<!--<link rel="stylesheet" href="//at.alicdn.com/t/font_82607_e93d131lklr6n7b9.css">-->
+		<script type="text/javascript" src="{:config('cdnpublic')}jquery/1.8.2/jquery.min.js"></script>
+		<link rel="stylesheet" href="{:config('cdnpublic')}layer/3.1.1/mobile/need/layer.css" />
+		<script type="text/javascript" src="{:config('cdnpublic')}layer/3.1.1/mobile/layer.js"></script>
+		
+		<style type="text/css">
+			 body {
+				position: absolute;
+				;
+				max-width: 750px;
+				margin: auto;
+			}
+			.fui-navbar {
+				max-width: 750px;
+			}
+			
+			.fui-navbar,
+			.fui-footer {
+				max-width: 750px;
+			}
+			
+			.fui-page.fui-page-from-center-to-left,
+			.fui-page-group.fui-page-from-center-to-left,
+			.fui-page.fui-page-from-center-to-right,
+			.fui-page-group.fui-page-from-center-to-right,
+			.fui-page.fui-page-from-right-to-center,
+			.fui-page-group.fui-page-from-right-to-center,
+			.fui-page.fui-page-from-left-to-center,
+			.fui-page-group.fui-page-from-left-to-center {
+				-webkit-animation: pageFromCenterToRight 0ms forwards;
+				animation: pageFromCenterToRight 0ms forwards;
+			}
+			.imagezdy{
+				height: 4rem;
+			    width: 4rem;
+			    float: left;
+			    background-size: 100%;
+			    background-repeat: no-repeat;
+			    background-position: center center;
+			    overflow: hidden;
+			    position: relative;
+			}
+			.imagezdy.triangle:before{
+				content: attr(data-text);
+			    position: absolute;
+			    width: 3.39rem;
+			    height: 2.4rem;
+			    background: #ff5555;
+			    z-index: 10;
+			    transform-origin: left bottom;
+			    transform: rotate(-45deg);
+			    -ms-transform: rotate(-45deg);
+			    -moz-transform: rotate(-45deg);
+			    -webkit-transform: rotate(-45deg);
+			    -o-transform: rotate(-45deg);
+			    color: #fff;
+			    line-height: 3.7rem;
+			    font-size: 0.6rem;
+			    text-align: center;
+			}
+			
+		</style>
+	</head>
+
+	<body>
+
+		<div class='fui-page-group '>
+
+
+		
+
+			<div class='fui-page  fui-page-current ' style="top: 0; background-color: #fafafa; ">
+
+				<div class="fui-header">
+
+					<div class="fui-header-left">
+
+					</div>
+
+					<div class="title"> {:config('m_title')}</div>
+
+					<div class="fui-header-right"></div>
+
+				</div>
+
+				<div class="fui-content navbar" id="container" style="background-color: #fafafa; padding-bottom: 0;">
+					
+					<div class="swiper-container">
+				    	<div class="swiper-wrapper">
+					        {foreach name="mjfpcbanner" item="v"}		
+							
+							<div class="swiper-slide"><a href="{$v['link_url']}" {if condition="$v['opentype'] eq 1"}target="_blank"{/if}><img src="/uploads/images/{$v['images']}" onerror="this.src='/static/admin/images/head_default.gif'" style="display: block; width: 100%; "></a></div>
+							{/foreach}
+							
+					        
+					    </div>
+					    <!-- 如果需要分页器 -->
+					    <div class="swiper-pagination"></div>
+					    
+					    
+					</div>
+					<div class="creditshop-index-page">
+					<div class="menu">
+			            <a class="item" href="javascript:void(0);">
+			                {if condition="session('useraccount.account') neq null"}
+			                <span class="text"><i class="icon icon-jifen"></i> 积分{:session('useraccount.integral')}</span>
+			                {else\}
+			                <span class="text"><i class="icon icon-my"></i> 登录</span>
+			                {/if}
+			            </a>
+			            <a class="item" href="{:url('mobile/user/usjforder')}">
+			                <span class="text"><i class="icon icon-navlist"></i> 兑换记录</span>
+			            </a>
+			        </div>
+			        </div>
+					
+					<div class="fui-searchbar bar" style="z-index: 0;">
+					    <div class="searchbar" style="background: #f1f1f2; padding: 10px 10px;">
+					            <form action="{:url('integral/goodsByName')}" method="post" style="position: relative;left:0;top:0;">
+					                <input type="submit" class="searchbar-cancel searchbtn" value="搜索" style="top: 0; right: 0">
+					                <div class="search-input radius" style="background: #ffffff;">
+					                    <i class="icon icon-search" style="color: #b4b4b4;"></i>
+					                    <input type="search" value="{$val|default=''}" placeholder="请输入关键字进行搜索" class="search" name="key" style="text-align: left; color: #999999; background: none;">
+					                </div>
+					            </form>
+					    </div>
+					</div>
+					{if condition="count($GoodsListAll[0]['goods']) neq 0"}
+					<div class="fui-title" {if condition="config('hotcolor') neq ''"}style="background: {:config('hotcolor')}; color: #ffffff; font-size: 15px; text-align: center; padding: 5px 5px; margin: 0;"{else/}style="background: #4678b4; color: #ffffff; font-size: 15px; text-align: center; padding: 5px 5px; margin: 0;"{/if}>
+						<a href="" style="color: #ffffff" data-nocache="true">
+							热门分类 </a>
+					</div>
+					{else\}
+					
+					<div class="content-empty" style="display: block;"><img src="__IMGMOBILE__/img/nolist.png" style="width: 6rem;margin-bottom: .5rem;"><br>
+						<p style="color: #999;font-size: .75rem">此分类下面无商品</p><br>
+						<a href="/mjf" class="btn btn-sm btn-danger-o external" style="border-radius: 100px;height: 1.9rem;line-height:1.9rem;width:  7rem;font-size: .75rem">去首页逛逛吧</a>
+					</div>
+					{/if}
+					<div class="fui-icon-group noborder col-4 circle" style="background: #ffffff">
+						{volist name="GoodsListAll" id="vo"}
+						{if condition="count($vo['goods']) neq 0"}
+						{if condition="$i elt 8"}
+						<a class="fui-icon-col external" onclick="categorybyid({$vo['id']});" data-nocache="true">
+							<div class="icon"><img style="border-radius: 0rem" {if condition="$vo['imgurl'] eq ''"}src="/static/admin/images/head_default.gif"{else/}src="{$vo['imgurl']}"{/if} onerror="this.src='/static/admin/images/head_default.gif'" /></div>
+							<div class="text" style="color: #666666;">{$vo['name']}</div>
+						</a>
+						{/if}
+						{else/}
+						<?php $i--; ?>
+						{/if}
+						{/volist}
+					</div>
+					
+
+
+					{volist name="GoodsListAll" id="vo"} {if condition="count($vo['goods']) neq 0"}
+					<div class="fui-title"  {if condition="$vo['color'] neq ''"}style="background: {$vo['color']}; color: #ffffff; font-size: 15px; text-align: center; padding: 5px 5px; margin: 0;"{else/}style="background: #4678b4; color: #ffffff; font-size: 15px; text-align: center; padding: 5px 5px; margin: 0;"{/if}>
+						<a href="" style="color: #ffffff" data-nocache="true">
+							{$vo['loucengname']} </a>
+					</div>
+					<div class="fui-goods-group block three" style="background: ;">
+					{volist name="vo['goods']" id="v"}
+					{if condition="$vo['css'] eq 0"}	
+	                    {if condition="config('wap_moban3_css') eq 0"}
+	                    <a class="fui-goods-item" data-goodsid="198"  onclick="goodsdetail({$v['id']});" style="position: relative;">
+	                    	{if condition="$v['tuijian'] neq 0"}
+							<div class="image triangle" data-text="推荐" data-lazyloaded="true" style="background-image: url(&quot;{$v['webimgurl']}&quot;);">
+							</div>
+							{else/}
+							<div class="image" data-text="推荐" data-lazyloaded="true" style="background-image: url(&quot;{$v['webimgurl']}&quot;);">
+							</div>
+							{/if}
+	                    {/if}
+	                    {if condition="config('wap_moban3_css') eq 1"}
+	                    <a class="fui-goods-item" data-goodsid="198"  onclick="goodsdetail({$v['id']});" style="position: relative;width:50%">
+	                    	{if condition="$v['tuijian'] neq 0"}
+							<div class="image triangle" data-text="推荐" data-lazyloaded="true" style="background-image: url(&quot;{$v['webimgurl']}&quot;);">
+							</div>
+							{else/}
+							<div class="image" data-text="推荐" data-lazyloaded="true" style="background-image: url(&quot;{$v['webimgurl']}&quot;);">
+							</div>
+							{/if}
+	                    {/if}
+	                    {if condition="config('wap_moban3_css') eq 2"}
+	                    <a class="fui-goods-item" data-goodsid="198"  onclick="goodsdetail({$v['id']});" style="position: relative;width:100%">
+	                    	{if condition="$v['tuijian'] neq 0"}
+							<div class="image triangle" data-text="推荐" data-lazyloaded="true" style="background-image: url(&quot;{$v['webimgurl']}&quot;);">
+							</div>
+							{else/}
+							<div class="image" data-text="推荐" data-lazyloaded="true" style="background-image: url(&quot;{$v['webimgurl']}&quot;);">
+							</div>
+							{/if}
+	                    {/if}
+	                    {if condition="config('wap_moban3_css') eq 3"}
+	                    <a class="fui-goods-item" data-goodsid="198"  onclick="goodsdetail({$v['id']});" style="position: relative;width:100%">
+	                    	{if condition="$v['tuijian'] neq 0"}
+							<div class="imagezdy triangle" data-text="推荐" data-lazyloaded="true" style="background-image: url(&quot;{$v['webimgurl']}&quot;);">
+							</div>
+							{else/}
+							<div class="imagezdy" data-text="推荐" data-lazyloaded="true" style="background-image: url(&quot;{$v['webimgurl']}&quot;);">
+							</div>
+							{/if}
+	                    {/if}
+	                {elseif condition="$vo['css'] eq 1" /}    
+	                <a class="fui-goods-item" data-goodsid="198"  onclick="goodsdetail({$v['id']});" style="position: relative;">
+	                		{if condition="$v['tuijian'] neq 0"}
+							<div class="image triangle" data-text="推荐" data-lazyloaded="true" style="background-image: url(&quot;{$v['webimgurl']}&quot;);">
+							</div>
+							{else/}
+							<div class="image" data-text="推荐" data-lazyloaded="true" style="background-image: url(&quot;{$v['webimgurl']}&quot;);">
+							</div>
+							{/if}
+                    {elseif condition="$vo['css'] eq 2" /}
+                    	<a class="fui-goods-item" data-goodsid="198"  onclick="goodsdetail({$v['id']});" style="position: relative;width:50%">
+                    		{if condition="$v['tuijian'] neq 0"}
+							<div class="image triangle" data-text="推荐" data-lazyloaded="true" style="background-image: url(&quot;{$v['webimgurl']}&quot;);">
+							</div>
+							{else/}
+							<div class="image" data-text="推荐" data-lazyloaded="true" style="background-image: url(&quot;{$v['webimgurl']}&quot;);">
+							</div>
+							{/if}
+					{elseif condition="$vo['css'] eq 3" /}	
+						<a class="fui-goods-item" data-goodsid="198"  onclick="goodsdetail({$v['id']});" style="position: relative;width:100%">
+							{if condition="$v['tuijian'] neq 0"}
+							<div class="image triangle" data-text="推荐" data-lazyloaded="true" style="background-image: url(&quot;{$v['webimgurl']}&quot;);">
+							</div>
+							{else/}
+							<div class="image" data-text="推荐" data-lazyloaded="true" style="background-image: url(&quot;{$v['webimgurl']}&quot;);">
+							</div>
+							{/if}
+					
+					{elseif condition="$vo['css'] eq 4" /}	
+						<a class="fui-goods-item" data-goodsid="198"  onclick="goodsdetail({$v['id']});" style="position: relative;width:100%">
+							{if condition="$v['tuijian'] neq 0"}
+							<div class="imagezdy triangle" data-text="推荐" data-lazyloaded="true" style="background-image: url(&quot;{$v['webimgurl']}&quot;);">
+							</div>
+							{else/}
+							<div class="imagezdy" data-text="推荐" data-lazyloaded="true" style="background-image: url(&quot;{$v['webimgurl']}&quot;);">
+							</div>
+							{/if}
+					{/if}
+							
+							<div class="detail">
+								<div class="name" style="color: #262626;">
+									{:htmlspecialchars_decode($v['mname'])} </div>
+								<p class="productprice noheight">
+
+								</p>
+								<div class="price">
+
+									<span class="text" style="color: #ed2822;">
+	                                    <p class="minprice">&yen;
+	                                    	{if condition="$v.mprice lt 1"}
+	                                    	{:number_format($v.mprice/100, 4)}
+	                                    	{else/}
+	                                    	{:number_format($v.mprice/100, 2)}
+	                                    	{/if}
+	                                    </p>
+	                                        
+	                                </span>
+									<span class="fui-text text-danger2" style="float:right;">兑换</span>
+								</div>
+							</div>
+						</a>
+						{/volist}
+					</div>
+					{/if} {/volist}
+
+					
+			
+				
+
+				
+
+
+					
+
+				</div>
+			{include file="public/mjf_navbar" /}			
+          <a class="diy-gotop external" style="position: fixed; overflow: hidden; z-index: 999; bottom: 60px; right: 10px; text-align: left;display: none;" id="gotop">
+						<div style="background: #000000; opacity: 0.5; line-height: 32px; text-align: center; border-radius: 30px; height: 30px; width: 30px;">
+							<i class="icon icon-top1" style="color: #ffffff; font-size: 20px;"></i>
+						</div>
+					</a>
+				<div class="wap-qrcode-container">
+					<p class="example1">{:config('shop_name')}</p>
+					<div class="wap-qrcode-image" id="wap-qrcode"></div>
+					<p class="example1">微信“扫一扫”浏览</p>
+				</div>
+			 	<link href="__IMGMOBILE__/css/plu.min.css" rel="stylesheet" type="text/css"/>
+			 	<style type="text/css">
+			        .fui-startadv {position: absolute;}        .fui-startadv:before {background: #000000;opacity: 0.3;}
+			        {if condition="androidOriphone() eq 1"}
+              .fui-startadv.small-bot .inner .close .close-btn:before,
+              .fui-startadv.small-top .inner .close .close-btn:before {         
+                  line-height: 2.4rem;  
+              }
+              {/if}
+			    </style>
+			     
+			    
+				
+				{include file="public/footer" /}
+				{include file="public/order_disclaimer_boot" /}
+<script type="text/javascript">
+	// 首页公告由 order_disclaimer_boot 自动弹出
+				
+	 var advsecond=$(".close-btn").data('second');
+        if(advsecond>0){
+            var endtime = parseInt(advsecond);
+            var advclose = setInterval(function () {
+                endtime--;
+                $(".fui-startadv .close-btn span").text(endtime);
+                if(endtime==0){
+                    $(".fui-startadv").fadeOut();
+                    clearInterval(advclose);
+                }
+            }, 1000);
+        }
+        $(".fui-startadv .fui-swipe-item").unbind('click').click(function () {
+            var click = $(this).data('type'), href = $(this).data('href');
+            if(click=='0'){
+                if(href){
+                    location.href = href;
+                }
+            }else{
+                $(".fui-startadv").fadeOut();
+            }
+        });
+        $(".fui-startadv .close").unbind('click').click(function () {          
+                $(".fui-startadv").fadeOut();            
+        });
+        $(".fui-startadv.small-bot").unbind('click').click(function () {          
+                $(".fui-startadv").fadeOut();            
+        });
+        
+	$('#shouye').addClass("active");
+	
+	var qrcode = new QRCode(document.getElementById("wap-qrcode"),{width:155,height:170}).makeCode(window.location.href);
+	$(function() {
+							$("#container").bind('scroll resize', function() {
+								var scrolltop = $(".fui-content").scrollTop();
+								if(scrolltop > "300") {
+									$("#gotop").fadeIn(100)
+								} else {
+									$("#gotop").fadeOut(100)
+								}
+							});
+							$("#gotop").unbind('click').click(function() {
+								$(".fui-content").animate({
+									scrollTop: "0px"
+								}, 1000)
+							});
+						});
+	function gg() {
+	  if (typeof showHomeTanggNotice === 'function') {
+	    showHomeTanggNotice(__TANGG_CONTENT__);
+	  }
+    }
+	
+
+{include file="public/mjfcommon" /}
+</script>
+<script>        
+  var mySwiper = new Swiper ('.swiper-container', {
+    direction: 'horizontal',
+    loop: true,
+    autoplay:true,
+    
+
+    
+   
+    
+   
+  })        
+  </script>
+</body>
+
+</html>

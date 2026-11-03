@@ -1,0 +1,11 @@
+<div class="web-title-container">
+	<a href="/" class="logo"><img src="/uploads/images/{:config('WEB_logo')}" width="300" height="53" /></a>
+	<div class="searchbox">
+		<form name="search" action="{:url('Index/goodscategoryByName')}" method="get">
+			<input type="search" name="key" id="word" value="" placeholder="请输入关键词" class="txt-search" />
+			<input type="submit" value="搜&nbsp;&nbsp;索" id="btn-search" class="btn-submit" />
+			
+		</form>
+	</div>
+
+</div>

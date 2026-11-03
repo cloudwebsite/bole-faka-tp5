@@ -1,0 +1,58 @@
+{include file="mobile@public/header" /}
+
+  
+  <body ontouchstart>
+    <header class='demos-header' style="padding: 30px 0;padding-bottom: 0px;">
+      <h1 class="demos-title">卡密信息</h1>
+    </header>
+	
+ <div class="weui-btn-area">
+      <a class="weui-btn weui-btn_primary" onclick="gohome();">返回首页</a>
+      <a class="weui-btn weui-btn_primary" onclick="downloadz('{$Order['data']['data_card']['mcard']}')">下载卡密</a>
+       <a class="weui-btn weui-btn_primary" onclick="fenxiang('{$Order['data']['data_card']['mcard']}')">查看卡密</a>
+    </div>	
+    <div class="weui-form-preview">
+ 	  <div class="weui-form-preview__hd">
+		<label class="weui-form-preview__label" style="font-size: 16px;bold;color: #000;">订单编号</label>
+		<p class="weui-form-preview__value" style="font-size: 16px;">{$Order['data']['data_card']['mcard']}</p>
+	  </div>   
+	 </div> 
+<div class="weui-cells weui-cells_form">
+  <div class="weui-cell">
+    <div class="weui-cell__bd">
+      <span id="text">
+                       {$html|htmlspecialchars_decode}
+                       </span>
+      <div class="weui-textarea-counter"></div>
+    </div>
+  </div>
+</div>
+	
+	
+	
+{include file="mobile@public/footer" /}   		
+   
+
+  </body>
+<script type="text/javascript">
+    $(function () {
+        $("#mysubmit").click(function () {
+            document.forms[0].submit();
+        });
+    });
+    
+      function gohome()
+		{
+			location.href="{:config('is_https')}://"+window.location.host+'/mobile';
+		}
+		function downloadz(order)
+		{
+			location.href="{:url('Index/dc')}"+"?order="+order;
+		}
+		
+		function fenxiang(order)
+		{
+			top.location.href="{:url('Index/fenxiang')}"+"?order="+order.toString();
+		}
+</script>
+</html>

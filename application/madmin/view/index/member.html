@@ -1,0 +1,248 @@
+{include file="public/headerlayer" /}
+
+	<body ontouchstart>
+
+		<div class='fui-page-group '>
+			
+			<script src='__JS__/foxui.min.js'></script>
+			<script src='__JS__/init.js'></script>
+			<script language="javascript" src="https://unpkg.com/layui-src@2.5.4/dist/layui.js"></script>
+			<link href="__CSS__/style_1.css" rel="stylesheet" type="text/css" />
+			<!--6Z2S5bKb5piT6IGU5LqS5Yqo572R57uc56eR5oqA5pyJ6ZmQ5YWs5Y+454mI5p2D5omA5pyJ-->
+			<div class='fui-page fui-page-current'>
+				<div class="fui-header fui-header-success">
+					<div class="fui-header-left">
+						<a class="back"></a>
+					</div>
+					<div class="title">会员管理</div>
+					<div class="fui-header-right">
+						
+					</div>
+				</div>
+				<!-- 顶部tab -->
+				
+				<div class='fui-content navbar'>
+
+					<!-- 搜索框 -->
+					<form method="post" action="{:url('member')}">
+					<div class="fui-searchbar bar">
+						<div class="searchbar center">
+							<input type="submit" class="searchbar-cancel searchbtn" value="搜索" />
+							<div class="search-input">
+								<i class="icon icon-search"></i>
+								<input type="search" placeholder="输入关键字..." class="search" id="keywords" name="key" value="{$val}" />
+							</div>
+						</div>
+					</div>
+					</form>
+					<!-- 商品列表 -->
+					<div class="fui-list-group nomargin container" id="list-content">
+						
+					</div>
+
+					<div class="fui-title center" id="AjaxPage"></div>
+					<div class="fui-title center hide" id="content-empty">没有数据</div>
+					
+				</div>
+
+				<div class="head-menu-mask"></div>
+				<div class="head-menu">
+					<!--<a><i class="icon icon-cascades"></i> 分类管理</a>-->
+					<!-- 伪功能批量菜单已隐藏 -->
+				</div>
+
+				
+				<!--4000097827-->
+				
+				
+			</div>
+
+			{include file="public/navbar" /}
+
+			
+			<script type="text/html" id="list-template">	  
+ 			{{# for(var i=0;i<d.length;i++){  }}
+			<div class="fui-list" data-id="72839" data-can="1">
+				<div class="fui-list-media round">
+					<img src="__IMG__/memberbaner.jpeg">
+			
+				</div>
+				<div class="fui-list-inner">
+					<div class="title">{{d[i].account}}</div>
+					<div class="subtitle">
+						<span class="total half">等级: {{d[i].group_name}}</span>
+						
+					</div>
+					<div class="subtitle">
+						<span class="total">积分: {{d[i].integral}}</span>
+						<span class="total">余额: {{toDecimal(d[i].money)}}</span>
+					</div>
+				</div>
+				<div class="fui-list-angle fundot-parent">
+					<div class="fundot"><i class="icon icon-more"></i></div>
+					
+				</div>
+			</div>
+ 			{{# } }}	
+ 			</script>
+
+			
+
+			
+	
+			
+
+			<a class="diy-gotop external" style=" position: fixed; overflow: hidden; z-index: 999; bottom: 136px; right: 10px; text-align: left; display:none;" id="gotop">
+				<div style="background: #000000; opacity: 0.5; line-height: 32px; text-align: center; border-radius: 30px; height: 30px; width: 30px;">
+					<i class="icon icon-top1" style="color: #ffffff; font-size: 20px;"></i>
+				</div>
+			</a>
+
+			<script>
+				$('#member').addClass('active');
+				$(function() {
+					$(".fui-content").bind('scroll resize', function() {
+						var scrolltop = $(".fui-content").scrollTop();
+						if(scrolltop > "300") {
+							$("#gotop").fadeIn(100)
+						} else {
+							$("#gotop").fadeOut(100)
+						}
+					});
+					$("#gotop").unbind('click').click(function() {
+						$(".fui-content").animate({
+							scrollTop: "0px"
+						}, 1000)
+					});
+					$("#tab a").unbind('click').click(function () {
+			            var status = $(this).data('status');
+			            
+			            FoxUI.loader.hide();
+			            $(this).addClass('active').siblings().removeClass('active');
+			            FoxUI.loader.show('loading');
+			            $(".batch-item").hide();
+			            $(".batch-out").show();
+			            $(".batch-hide").show();
+			            $(".fui-navbar").show();
+			            
+			            $(".container").empty();
+			           
+			        });
+			        $(".batch-btn").unbind('click').click(function () {
+			            $(".head-menu-mask").fadeOut();
+			            $(".head-menu").fadeOut();
+			            $(".fundot").removeClass('active');
+			            $(".funmenu").addClass('out').removeClass('in');
+			            $(".fui-navbar").hide();
+			            $(".batch-out").hide();
+			            $(".batch-hide").hide();
+			            $(".batch-item").show();
+			            if (modal.status == 'sale' || modal.status == 'out') {
+			                $(".batch-putoff").show();
+			                $(".batch-delete").show()
+			            } else if (modal.status == 'stock') {
+			                $(".batch-puton").show();
+			                $(".batch-delete").show()
+			            } else if (modal.status == 'cycle') {
+			                $(".batch-restore").show()
+			            }
+			            modal.batch = true
+			        });
+			        $(".batch-cancel").unbind('click').click(function () {
+			            $(".batch-item").hide();
+			            $(".batch-out").show();
+			            $(".batch-hide").show();
+			            $(".fui-navbar").show();
+			            $(".fui-footer.batch-item .fui-list-angle").hide();
+			            modal.batch = false
+			        });
+			        $(".checkall").unbind('click').click(function () {
+			            var checked = $(this).find(':checkbox').prop('checked');
+			            $(".batch-item-check").prop('checked', checked)
+			        });
+			       
+			        
+				});
+				
+				var laytpl;
+				var laypage;
+				var layer;
+				layui.use(['laytpl','laypage','layer'], function(){
+				  laytpl = layui.laytpl;
+				  laypage = layui.laypage;
+				  layer = layui.layer;
+				  Ajaxpage();
+				});  
+								
+			    function Ajaxpage(curr){			    				        
+			        var key=$('#keywords').val();      
+			        $.getJSON('{:url("member")}', {page: curr || 1,key:key}, function(data){
+			            FoxUI.loader.hide(); //数据加载完关闭动画 
+			            if(data==''){
+			                $('#content-empty').show();
+			            }else{
+			                var tpl = document.getElementById('list-template').innerHTML;
+			                laytpl(tpl).render(data, function(html){
+			                    document.getElementById('list-content').innerHTML = html;
+			                });
+			                laypage.render({
+							    elem: 'AjaxPage'
+							    ,count: {$count}
+							    ,curr: curr || 1
+							    ,layout: ['count', 'prev', 'page', 'next', 'refresh', 'skip']
+							    ,jump: function(obj, first){
+							    	
+							    	if(!first){								    		
+							    		FoxUI.loader.show('loading'); //数据加载完关闭动画							    		
+			                            Ajaxpage(obj.curr)
+			                        }
+							      //console.log(obj)
+							    }
+							  });
+			                
+			            }
+			        });
+			    }
+				function toDecimal(x){
+			  		var f = parseFloat(x);
+					if(isNaN(f)) {
+						return false;
+					}
+					var f;
+					if(getFloor(x)<2){
+						f = Math.round(x * 100) / 100;
+					}else if(getFloor(x)>2){
+						f = Math.round(x * 10000) / 10000;
+					}	
+					var s = f.toString();
+					var rs = s.indexOf('.');
+					if(rs < 0) {
+						rs = s.length;
+						s += '.';
+					}
+					while(s.length <= rs + 2) {
+						s += '0';
+					}
+					return s;
+			  	}
+			  	
+				function getFloor(x){
+					var y = String(x).indexOf('.') + 1;
+					var count = String(x).length - y;
+					if(y <= 0) {
+						count=0;
+					}
+					return count;										
+				}
+				function addkami(goodid){
+					window.location.href="{:url('addkami')}"+"?goodid="+goodid;
+				}
+			</script>
+
+			<span style="display:none"></span>
+			
+	</body>
+
+</html>
+
+<!--OTEzNzAyMDIzNTAzMjQyOTE0-->

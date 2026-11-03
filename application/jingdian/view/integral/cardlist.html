@@ -1,0 +1,181 @@
+{include file="public/integral/header" /}
+<style type="text/css">
+	/*主题字体颜色*/
+	/*有hover效果提前添加col-hover类名*/
+	/*有click效果提前添加col-on类名*/
+	/*有focus效果提前加col-focus*/
+	
+	.theme-col {
+		color: #d13636!important;
+	}
+	
+	.col-hover:hover {
+		color: #d13636!important;
+	}
+	
+	.col-on.active,
+	.col-on.active a {
+		color: #d13636!important;
+	}
+	
+	.col-focus:focus {
+		color: #d13636!important;
+	}
+	
+	.nav-pills>li.active>a,
+	.nav-pills>li>a:hover,
+	.nav-pills>li.active>a:focus {
+		color: #d13636!important;
+	}
+	/*主题背景颜色*/
+	/*有hover效果提前添加bg-hover类名*/
+	/*有click效果提前添加bg-on类名*/
+	/*有focus效果提前加bg-focus*/
+	
+	.theme-bg,
+	.layui-layer-btn0 {
+		background-color: #d13636!important;
+		color: #fff!important;
+	}
+	
+	.bg-hover:hover {
+		background-color: #d13636!important;
+	}
+	
+	.bg-on.active,
+	.bg-on.active a {
+		background-color: #d13636!important;
+	}
+	
+	.bg-focus:focus {
+		background-color: #d13636!important;
+	}
+	
+	.index-on {
+		background-color: #d13636!important;
+	}
+	/*主题边框颜色*/
+	/*有hover效果提前添加bd-hover类名*/
+	/*有click效果提前添加bd-on类名*/
+	/*有focus效果提前加bd-focus*/
+	
+	.theme-bd,
+	.layui-layer-btn0 {
+		border-color: #d13636!important;
+	}
+	
+	.bd-hover:hover {
+		border-color: #d13636!important;
+	}
+	
+	.bd-on.active {
+		border-color: #d13636!important;
+	}
+	
+	.bd-on.active a {
+		color: #d13636!important;
+	}
+	
+	.bd-focus:focus {
+		border-color: #d13636!important;
+	}
+	
+	.bb {
+		border-color: #d13636!important;
+	}
+	
+	.zc:hover {
+		color: #d13636!important;
+	}
+</style>
+</head>
+
+<body>
+	{include file="public/integral/top" /}
+	<!--                                                                   
+                                                                    
+
+      <!--导入内容页-->
+	<div class="content  section">
+	
+			<div class="flow-success">
+				<div class="page-title f16px color333 block clear">
+					<div class="dh-process step3 pull-right">
+						<ul>							
+							<li class="dh-processli-on dh-process-confirm">
+								<i class="iconfont icon-jindutiao-1 theme-col"></i>
+								<em class="pull-left colorfff tcenter theme-col mr5">1</em>
+								<span class="pull-left">确认订单</span>
+							</li>
+							<li class="dh-processlions dh-process-success">
+								<i class="iconfont icon-jindutiao- theme-col"></i>
+								<em class="pull-left bgwrite tcenter theme-col mr5">2</em>
+								<span class="pull-left">成功支付订单</span>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<div class="cartbox  block">
+					<div class="cart-goods-list border noborder-bottom">
+						<div class="cart-goods-head">
+							<div class="cart-h  tleft">发货信息</div>
+							
+						</div>
+						<div class="cart-goods-content">
+							<div class="cart-item-row cart-item-row1 clear">
+
+								
+									{if condition="isset($integralorder)"}
+									<div class="cart-h  tleft">
+									<span class="pull-left pt26 f-success-icon" style='margin-top:0px'></span>
+				                    <span class="pull-left pl20">                        
+				                        <p></p><h3>
+				                        {if condition="$integralorder['mstatus'] eq 0"}
+				                        	等待商家发货
+				                        {elseif condition="$integralorder['mstatus'] eq 1"/}
+				                        	等待商家发货
+				                        {elseif condition="$integralorder['mstatus'] eq 2"/}
+				                        	订单未付款
+				                        {elseif condition="$integralorder['mstatus'] eq 3"/}
+				                        	商家正在处理
+				                        {elseif condition="$integralorder['mstatus'] eq 4"/}
+				                        	订单已经撤回
+				                        {elseif condition="$integralorder['mstatus'] eq 5"/}
+				                        	订单处理完成！！！
+				                        {/if}	
+				                        
+				                        </h3><p></p>    				                                               				                        			
+				                        <p>订单商品：{$integralindex['mnamebie']}</p>
+				                        <p>订单编号：{$integralorder['orderno']}</p>				                        
+				                        <p>消费积分：<span class="theme-col">{$integralorder['money']}</span></p>                    
+				                    </span>
+				                    </div>
+									{else/}
+									<div class="cart-h cart-goodsimg tleft" style="width: auto;">
+									{$html}
+									</div>
+									{/if}
+									
+								
+								
+								
+
+							</div>
+						</div>
+					</div>
+				</div>
+				
+				
+			</div>
+		
+	</div>
+
+	<link rel="stylesheet" type="text/css" href="__JF__/css/iconfont.css">
+	
+
+	 {include file="public/integral/footer" /}
+
+	
+</body>
+
+</html>

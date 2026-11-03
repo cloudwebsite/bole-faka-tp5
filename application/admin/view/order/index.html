@@ -1,0 +1,454 @@
+{include file="public/header" /}
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated fadeInRight">
+    <!-- Panel Other -->
+    <div class="ibox float-e-margins">
+        <div class="ibox-title">
+            <h5>订单列表</h5>
+        </div>
+        <div class="ibox-content">
+            <!--搜索框开始-->           
+            <div class="row">
+                <div class="col-sm-12">   
+                                                   
+                    <form name="admin_list_sea" class="form-search" method="get" action="{:url('index')}">
+					        <div class="col-sm-1">
+		                            <div class="input-group">
+		                                  <select class="form-control m-b chosen-select" name="type" id='type'>
+												 <option value="999" {if condition="$type eq 999"}selected{/if}>所有</option>
+		                                          <option value="888" {if condition="$type eq 888"}selected{/if}>自动</option>
+		                                          <option value="1" {if condition="$type eq 1"}selected{/if}>手工</option>
+		                                  </select>		                               
+		                            </div>
+		                        </div>
+					        <div class="col-sm-1">
+		                            <div class="input-group">
+		                                  <select class="form-control m-b chosen-select" name="mstatus" id='mstatus'>
+												 <option value="" >所有</option>
+												 <option value="0" {if condition="$mstatus eq 0"}selected{/if}>已付款</option>
+		                                          <option value="1" {if condition="$mstatus eq 1"}selected{/if}>已下单</option>
+		                                          <option value="2" {if condition="$mstatus eq 2"}selected{/if}>未付款</option>
+												  <option value="3" {if condition="$mstatus eq 3"}selected{/if}>进行中</option>
+												  <option value="4" {if condition="$mstatus eq 4"}selected{/if}>已撤回</option>
+												  <option value="5" {if condition="$mstatus eq 5"}selected{/if}>已完成</option>
+		                                  </select>		                               
+		                            </div>
+		                        </div>
+					        <div class="col-sm-1">
+		                            <div class="input-group">
+		                             <button type="button"  onclick="export_order();" id="btnorder" class="btn btn-primary"><i class="fa fa-level-up"></i>导出订单</button>		                               
+		                            </div>
+		                        </div>
+					        <div class="col-sm-1">
+		                            <div class="input-group">
+		                             <a href="{:url('Kami/export_log')}" class="btn btn-warning"><i class="fa fa-search"></i>导出查询</a>
+		                            </div>
+		                        </div>
+					        <div class="col-sm-1">
+		                            <div class="input-group">
+		                             <a href="{:url('Order/sales_stats')}" class="btn btn-info"><i class="fa fa-bar-chart"></i>销售统计</a>
+		                            </div>
+		                        </div>
+                        <div class="col-sm-3">
+                            <div class="input-group">
+                                <input type="text" id="key" class="form-control" name="key" value="{$val}" placeholder="输入需查询的订单号/联系方式" />   
+                                <span class="input-group-btn"> 
+                                    <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i> 搜索</button> 
+                                </span>
+                            </div>
+                        </div>
+                    </form>                         
+                </div>
+            </div>
+            <!--搜索框结束-->
+            <div class="hr-line-dashed"></div>
+            <div class="example-wrap">
+                <div class="example">
+                    <table class="table table-bordered table-hover">
+                        <thead>
+                           	<tr>						                                    
+                              <td colspan="13" align="left">
+                                <button type="button" onclick="del_order();" id="btnorder" class="btn btn-danger"><i class="fa fa-trash-o"></i>删除</button>
+                                <button type="button"  onclick="mstatus(3);" id="btnorder" class="btn btn-primary"><i class="fa fa-level-up"></i>进行中</button>
+                                <button type="button"  onclick="mstatus(4);" id="btnorder" class="btn btn-warning"><i class="fa fa-level-down"></i>撤回订单</button>
+                                <button type="button"  onclick="mstatus(5);" id="btnorder" class="btn btn-info"><i class="fa fa-save"></i>订单完成</button>
+                              </td>
+                          </tr>
+                            <tr class="long-tr">
+                              <th width="6%"><input type="checkbox" name="all" id="all" onclick="checkAll()" />全选</th>
+                                <th width="10%">订单号</th>                               
+                                <th width="5%">金额(元)</th>              
+                                <th width="5%">类型</th>
+                                <th>商品名称</th>            
+                                <th width="5%">状态</th>
+                                <th width="6%">支付方式</th>
+                                <th width="10%">买家帐号</th>
+                                <th width="10%">来源网站</th>
+                                <th width="10%">添加时间</th>
+                                <th width="10%">更新时间</th>
+                            </tr>
+                        </thead>
+                        <script id="list-template" type="text/html">
+                            {{# for(var i=0;i<d.length;i++){  }}
+                            <tr class="long-td item-order">    
+                                <td><input type="checkbox" name="checkname[]" value="{{d[i].id}}" />{{d[i].id}}
+                                	{{# if(d[i].type==0){ }}
+									<i class="fa fa-unlock"></i>
+									{{# }else if(d[i].type==1){ }}
+									<i class="fa fa-lock"></i>
+									{{# } }}
+                                </td>
+                                
+                                   <td id="number"  style="display:none;" >{{removeHTMLTag(htmlspecialchars_decode(d[i].mcard))}}</td>                      
+                                                    
+                                <td id="xqnotice" style="display:none;" >
+                       				 {{# if(d[i].lianxi){ }}tel:{{d[i].lianxi}}{{# } }}
+                       				 {{# if(d[i].email){ }}mail:{{d[i].email}}{{# } }}
+                          		     {{# if(d[i].statustext){ }}状态信息：{{d[i].statustext}}{{# } }}
+                       				 {{# if(d[i].beizhu){ }}后台备注：{{d[i].beizhu}}{{# } }}
+                                     【{{d[i].mnamebie}}】
+                          		</td>
+                                
+                                  {{# if(d[i].type==0){ }}
+                                	<td style="text-align:left;padding-left:"><a target="_blank" href="/jingdian/index/fenxiang/order/{{d[i].mcard}}.html">{{removeHTMLTag(htmlspecialchars_decode(d[i].mcard))}}</a></td>
+                                 {{# }else{ }}
+                              		  <td style="text-align:left;padding-left:"><a target="_blank" href="/jingdian/order/getorderdetailbyorder.html?number={{d[i].mcard}}">{{removeHTMLTag(htmlspecialchars_decode(d[i].mcard))}}</a></td>
+                                  {{# } }}
+                                <td>{{d[i].mamount}}</td>
+                                <td>
+                                  {{# if(d[i].type==0){ }}
+                                  <span class="text-success">自动发货</span>
+                                  {{# }else{ }}
+                                  <span class="text-danger">手动发货</span>
+                                  {{# } }}
+									</td> 
+                                <td>{{d[i].mnamebie}}</td>
+                                <td>
+                                	{{# if(d[i].type==0){ }}
+        								{{# if(d[i].mstatus==0){ }}
+										 <span class="text-danger">未提取</span>
+										{{# }else if(d[i].mstatus==1){ }}
+										<span class="text-success">已提取</span>
+										{{# }else if(d[i].mstatus==2){ }}
+										<span class="text-danger">未付款</span>
+										 {{# }else{ }}	
+										 <span class="text-cancel">未知数</span>
+										 {{# } }}
+									{{# }else if(d[i].type==1){ }}
+										{{# if(d[i].mstatus==0){ }}
+										 <span class="text-success">已付款</span>
+										{{# }else if(d[i].mstatus==1){ }}
+										<span class="text-success">已下单</span>
+										{{# }else if(d[i].mstatus==2){ }}
+										<span class="text-danger">未付款</span>
+										{{# }else if(d[i].mstatus==3){ }}
+										<span class="text-warning">进行中</span>
+										{{# }else if(d[i].mstatus==4){ }}
+										<span class="text-primary">已撤回</span>
+										{{# }else if(d[i].mstatus==5){ }}
+										<span class="text-success">已完成</span>
+										{{# }else{ }}	
+										 <span class="text-cancel">未知数</span>
+										 {{# } }}									
+									{{# }else{ }}
+										{{d[i].mstatus}}-{{d[i].type}}
+									{{# } }}	 
+                                </td>
+                                <td>
+                                	{{# if(d[i].maddtype==0){ }}
+										 积分兑换
+										{{# }else if(d[i].maddtype==1){ }}
+										管理员
+										{{# }else if(d[i].maddtype==2){ }}
+										支付宝扫码
+										{{# }else if(d[i].maddtype==3){ }}
+										微信扫码
+										{{# }else if(d[i].maddtype==4){ }}
+										云闪付
+										{{# }else if(d[i].maddtype==5){ }}
+										余额支付
+										{{# }else if(d[i].maddtype==6){ }}
+										QQ钱包
+										{{# }else if(d[i].maddtype==7){ }}
+										财付通
+										{{# }else if(d[i].maddtype==8){ }}
+										USDT
+										{{# }else{ }}	
+										未知数
+										{{# } }}
+                                </td>
+                                <td>
+                                	{{# if(d[i].memberid==0){ }}
+									非会员
+									{{# }else{ }}
+									{{d[i].account}}
+									{{# } }}
+                                </td>
+                                <td>
+                                	{{# if(d[i].childid==0){ }}
+									主站
+									{{# }else{ }}
+									{{d[i].fzhost}}
+									{{# } }}
+                                </td>
+                                <td>{{d[i].create_time}}</td> 
+                                <td>{{d[i].update_time}}</td>    
+                                
+                                
+                                            
+                            </tr>
+                                
+                                
+                            {{# } }}
+                        </script>
+                        <tbody id="list-content"></tbody>
+                    </table>
+                    <div id="AjaxPage" style=" text-align: right;"></div>
+                   
+                    <div style="text-align: right;">
+                        共{$count}条数据，<span id="allpage"></span>
+                    </div>
+                </div>
+            </div>
+            <!-- End Example Pagination -->
+        </div>
+    </div>
+</div>
+<!-- End Panel Other -->
+</div>
+
+<!-- 加载动画 -->
+<div class="spiner-example">
+    <div class="sk-spinner sk-spinner-three-bounce">
+        <div class="sk-bounce1"></div>
+        <div class="sk-bounce2"></div>
+        <div class="sk-bounce3"></div>
+    </div>
+</div>
+
+{include file="public/footer" /}
+
+<script src="//www.layuicdn.com/layui-v2.4.5/layui.js?v=201811010202"></script>
+
+
+<script type="text/javascript">
+
+ 			  function Init(){
+ 			  $('.item-order').click(function() {	 
+					var val = $(this).children("#xqnotice").html();	
+                	var number = $(this).children("#number").html();
+					 $.getJSON('{:url("Order/getOrderAttach")}', {number: number}, function(data){
+                         		var htmlString ='';
+              					 for(var i=0; i<data.length; i++)  
+                                {
+                                   htmlString += data[i].title +"：";  
+                                   htmlString += data[i].text;  
+                                }
+                       
+                       
+                                       if(val.replace(/\s+/g,"")!=="") {
+                                                        
+										layer.closeAll('page');
+                                        window.index = layer.open({
+                                            type: 1,
+                                            title: number+"订单详情",
+                                            closeBtn: 0, //不显示关闭按钮
+                                            skin: 'layui-layer-lan',
+                                            shade: false,
+                                            area: ['20%', 'auto'],
+                                            offset: 'rb', //右下角弹出
+                                            anim: 2,
+                                            content: '<div style="padding: 15px 30px;margin: 15px;padding: 0px;overflow: hidden; ">'+ htmlString + val + '</div>' //iframe的url，no代表不显示滚动条
+
+                                        });
+                                    }
+					
+						});
+                
+					
+				});
+    
+    
+}
+    //laypage分页
+    Ajaxpage();
+    function Ajaxpage(curr){
+        var key=$('#key').val();
+        var selected=$('#type option:selected').val();
+        var mstatus=$('#mstatus option:selected').val();
+        $.getJSON('{:url("Order/index")}', {page: curr || 1,key:key,type:selected,mstatus:mstatus}, function(data){
+            $(".spiner-example").css('display','none'); //数据加载完关闭动画 
+            if(data==''){
+                $("#list-content").html('<td colspan="20" style="padding-top:10px;padding-bottom:10px;font-size:16px;text-align:center">暂无数据</td>');
+            }else{
+                var tpl = document.getElementById('list-template').innerHTML;
+                laytpl(tpl).render(data, function(html){
+                    document.getElementById('list-content').innerHTML = html;
+                });
+                laypage({
+                    cont: $('#AjaxPage'),//容器。值支持id名、原生dom对象，jquery对象,
+                    pages:'{$allpage}',//总页数
+                    skip: true,//是否开启跳页
+                    
+                    skin: '#1AB5B7',//分页组件颜色
+                    curr: curr || 1,
+                    groups: 3,//连续显示分页数
+                    jump: function(obj, first){
+                        if(!first){
+                            Ajaxpage(obj.curr)
+                        }
+                      
+    					Init();
+                        $('#allpage').html('第'+ obj.curr +'页，共'+ obj.pages +'页');
+                    }
+                });
+            }
+        });
+    }
+
+function checkAll() {  
+        var all=document.getElementById('all');//获取到点击全选的那个复选框的id  
+        var one=document.getElementsByName('checkname[]');//获取到复选框的名称  
+        if(all.checked==true){
+            for(var i=0;i<one.length;i++){  
+                one[i].checked=true;
+                
+            }  
+  
+        }else{  
+            for(var j=0;j<one.length;j++){  
+                one[j].checked=false;  
+            }  
+        }  
+}
+
+//更改订单状态
+function mstatus(status){
+
+        layer.open({
+          type: 0, 
+          anim: 3, //默认动画风格
+         // skin:'layui-layer-rim',
+         // area:['620px', 'auto'],
+          content: ' <div class="row" >'
+                    +'<div class="col-sm-10">'
+                    +'<div class="input-group">'
+                    +'<span class="input-group-addon">状态信息   :</span>'
+                    +'<textarea id="statustext" name="statustext" class="form-control" type="text" rows="3" placeholder="手工类订单回执可见"></textarea>'
+                    +'</div>'
+                    +'</div>'
+                      +'<div class="col-sm-10" style="margin-top: 10px">'
+                      +'<div class="input-group">'
+                      +'<span class="input-group-addon">操作备注:</span>'
+                      +'<textarea id="beizhu" name="beizhu"  class="form-control" type="text" rows="3"  placeholder="仅后台可见"></textarea>'
+                      +'</div>'
+                      +'</div>'
+                      +'</div>',
+
+
+
+                title: ['修改订单状态', 'font-size:18px;'],
+                btn: ['保存', '取消'] //只是为了演示
+                ,btnAlign: 'c'
+                ,yes: function(index, layero){
+                 console.log(layero, index);
+
+                 var one=document.getElementsByName('checkname[]');//获取到复选框的名称  
+                 var statustext=$("#statustext").val();//获取到复选框的名称  
+                 var beizhu=$("#beizhu").val();//获取到复选框的名称  
+                        for(var i=0;i<one.length;i++){  
+                           if(one[i].checked==true){
+                                $.getJSON('{:url("UpdateOrder")}', {'id' : one[i].value,'mstatus' : status,'statustext' : statustext,'beizhu' :beizhu}, function(res){
+                                    if(res.code == 1){										
+                        				layer.msg('更改成功',{icon:1,time:1000,shade: 0.1});
+                                    }else{									
+                        				layer.msg(res.msg,{icon:5,time:1000,shade: 0.1});
+                                    }
+
+                                });
+
+                           }
+
+                        } 
+                        Ajaxpage();
+                        layer.close(index); 
+                },
+
+                btn2: function(index, layero){
+                  layer.closeAll();
+                }
+        });	
+}
+
+function export_order(){
+    location.href="{:url('export')}";
+}
+//删除选中
+function del_order(){
+	layer.confirm('确认删除选中的订单吗?', {icon: 3, title:'提示'}, function(index){
+	        var one=document.getElementsByName('checkname[]');//获取到复选框的名称  
+	            for(var i=0;i<one.length;i++){  
+	               if(one[i].checked==true){
+	               	
+		               	$.getJSON('{:url("del_order")}', {'id' : one[i].value}, function(res){
+		               		if(res.code == 1){
+		               			layer.msg("删除成功",{icon:1,time:1000,shade: 0.1});
+                              	Ajaxpage();
+				            }else{
+				            	layer.msg("删除失败",{icon:2,time:1000,shade: 0.1});
+				            }
+				      
+				        });
+	               	
+	               }
+	               
+	            } 
+	            //layer.msg('操作成功',{icon:1,time:1000,shade: 0.1});
+	            //Ajaxpage();
+	            //layer.close(index);       
+	    })
+}
+function removeHTMLTag(str) {
+            str = str.replace(/<(style|script|iframe)[^>]*?>[\s\S]+?<\/\1\s*>/gi,'').replace(/<[^>]+?>/g,'').replace(/\s+/g,' ').replace(/ /g,' ').replace(/>/g,' '); //去除HTML tag
+            str = str.replace(/[ | ]*\n/g,'\n'); //去除行尾空白
+            //str = str.replace(/\n[\s| | ]*\r/g,'\n'); //去除多余空行
+            str=str.replace(/&nbsp;/ig,'');//去掉&nbsp;
+            //str=str.replace(/\s/g,''); //将空格去掉
+            return str;
+}
+function htmlspecialchars(str) {        
+              var s = "";  
+              if (str.length == 0) return "";  
+              for   (var i=0; i<str.length; i++)  
+              {  
+                  switch (str.substr(i,1))  
+                  {  
+                      case "<": s += "&lt;"; break;  
+                      case ">": s += "&gt;"; break;  
+                      case "&": s += "&amp;"; break;  
+                      case " ":  
+                          if(str.substr(i + 1, 1) == " "){  
+                              s += " &nbsp;";  
+                              i++;  
+                          } else s += " ";  
+                          break;  
+                      case "\"": s += "&quot;"; break;  
+                      case "\n": s += "<br>"; break;  
+                      default: s += str.substr(i,1); break;  
+                  }  
+              }  
+              return s;  
+          }
+  function htmlspecialchars_decode(str){           
+              str = str.replace(/&amp;/g, '&'); 
+              str = str.replace(/&lt;/g, '<');
+              str = str.replace(/&gt;/g, '>');
+              str = str.replace(/&quot;/g, "''");  
+              str = str.replace(/&#039;/g, "'");  
+              return str;  
+    }
+
+
+</script>
+</body>
+</html>

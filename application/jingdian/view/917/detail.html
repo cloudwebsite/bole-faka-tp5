@@ -1,0 +1,37 @@
+{include file="public/header_917" /}
+<link href="{:config('cdnpublic')}twitter-bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+
+<body>
+	{include file="public/top_917" /}
+
+	<div id="container">
+		<div class="shangpin">
+			<div class="row" style="margin-top:20px">
+				<div class="col-xs-6 col-md-3"></div>
+
+				<div class="col-xs-6 col-md-6">
+					{foreach name="detail" item="v"}
+					<div class="panel panel-primary">
+						<div class="panel-heading">
+							<i class="fa fa-list-alt"></i> {$v['title']}&nbsp;&nbsp;&nbsp;&nbsp;
+							<span style="float:right;">{$v['update_time']|date='Y-m-d H:i:s',###}</span>
+						</div>
+						<div class="panel-body">
+
+							<p>{:htmlspecialchars_decode($v['content'])}</p>
+
+						</div>
+					</div>
+					{/foreach}
+
+				</div>
+				<div class="col-xs-6 col-md-3"></div>
+			</div>
+
+		</div>
+
+		{include file="public/footer_917" /}
+
+</body>
+
+</html>

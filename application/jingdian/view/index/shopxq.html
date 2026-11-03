@@ -1,0 +1,97 @@
+{include file="public/header" /}
+<link href="{:config('cdnpublic')}twitter-bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+    <link href="{:config('cdnpublic')}font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="{:config('cdnpublic')}animate.css/2.0/animate.min.css" rel="stylesheet">
+    <link href="{:config('cdnpublic')}iCheck/1.0.2/skins/square/green.css" rel="stylesheet">
+    <link href="{:config('cdnpublic')}chosen/1.1.0/chosen.min.css" rel="stylesheet">
+    <link href="{:config('cdnpublic')}switchery/0.8.2/switchery.css" rel="stylesheet">
+    <link href="/static/admin/css/style.min.css?v=4.1.0" rel="stylesheet">
+    <link href="{:config('cdnpublic')}sweetalert/1.0.1/sweetalert.min.css" rel="stylesheet">
+<style>
+
+	#main{
+		text-align: center;
+	}
+	#content{
+		text-align: left;
+		width: 700px;
+    	background: white;
+	    margin: 0 auto;
+	    padding-top: 30px;
+	    padding-bottom: 30px;
+	    color: gray;
+	    line-height: 30px;
+	}
+
+</style>
+<body>
+
+			
+
+			
+			 {foreach name="param['data_fl']" item="v"} 
+
+			<div id="content">
+					
+					<div class="panel panel-default" style="margin-bottom: 5px;">
+					<div class="panel-heading">
+						<h3 class="panel-title">
+							商品详情
+						</h3>
+					</div>
+					<div class="panel-body">
+					<input type="hidden" name="mpid" value="{$v['id']}">
+					<p><span class="glyphicon glyphicon-align-justify"> 商品名称：</span> {:htmlspecialchars_decode($v['mname'])}</p>
+					<p><span class="glyphicon glyphicon-align-justify"> 商品单价：</span>{$v['mprice']/100} 元</p>	
+							
+							{if condition="$param['isyh'] eq 0"}
+							<p><span class="glyphicon glyphicon-align-justify"> 商品优惠：</span>无</p>
+
+							{else/}
+
+							<table class="table" style="margin-bottom: -15px !important">
+
+								<th>数量≥个</th>
+								<th>单价(元) </th>
+								{foreach name="$param['data_yh']" item="vo"}
+								<tr>
+									<td>{$vo['mdy']}</td>
+									<td>{$vo['mdj']/100}</td>
+								</tr>
+								{/foreach}
+							</table>
+
+							{/if}
+							
+							
+						
+					</div>
+					</div>
+					
+					
+					
+					
+					
+					<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">
+							购买注意事项
+						</h3>
+					</div>
+					<div class="panel-body" style="margin: 15px;padding: 0px;overflow: hidden; ">
+						{if condition="$v['xqnotice'] eq ''"}
+								 暂无注意事项
+								 {else/} 
+						{:htmlspecialchars_decode($v['xqnotice'])}
+						{/if}
+					</div>
+					</div>
+						
+			
+			
+			
+			</div>
+		
+	{/foreach} 
+</body>
+</html>

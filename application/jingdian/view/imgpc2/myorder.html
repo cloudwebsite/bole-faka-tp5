@@ -1,0 +1,537 @@
+{include file="public/imgpc2/head_title" /}
+		<link rel="stylesheet" href="__IMGPC2__/css/common.css" />
+		<link rel="stylesheet" href="__IMGPC__/css/center.css" />
+		<link href="__IMGPC__/css/style.min.css?v=4.1.0" rel="stylesheet">
+		<script type="text/javascript" src="{:config('cdnpublic')}jquery/1.7.2/jquery.min.js"></script>
+	</head>
+
+	<body>
+		<div class="header">
+			{include file="public/imgpc2/header_top" /}
+			<div class="head-bot">
+				<div class="nb">
+					{include file="public/imgpc2/header_search" /}
+					<div class="clearfix"></div>
+	
+					<!--原位置-->
+				</div>
+			</div>
+			<!--自定义导航，移动了位置-->
+			{include file="public/imgpc2/nav" /}
+			<!--自定义导航，移动了位置-->
+		</div>
+		<div class="center-body">
+			<div class="nb">
+
+				<div class="center-rside">
+					<div class="cen-center center1">
+						<div class="centerbar">
+							<div class="lside">
+								<ul>
+									<li>
+										<a id="tab1" onclick="tab1();"class="cur">全部订单</a><i class="line-grey"></i></li>
+									<li>
+										<a id="tab2" onclick="tab2();">已提取</a><i class="line-grey"></i></li>
+									<li>
+										<a id="tab3" onclick="tab3();">未提取</a><i class="line-grey"></i></li>
+									
+								</ul>
+							</div>
+							<form action="" method="post" action="{:url('jingdian/Index/selectorder')}">
+								<div class="rside">									
+									<div class="set-box">
+										<div class="search-box">
+											<input type="txt" name="key" id="key" value="{$val}" placeholder="商户订单号/联系方式" class="btn-search" />
+											<input type="submit" value="查询" class="btn-sub" />
+										</div>
+									</div>
+								</div>
+							</form>
+						</div>
+						
+						
+						<div class="dingdan" id='list-content'>
+							
+							
+							
+			                
+						</div>
+						
+					</div>
+
+				</div>
+			</div>
+		</div>
+		<div class="spiner-example">
+		    <div class="sk-spinner sk-spinner-three-bounce">
+		        <div class="sk-bounce1"></div>
+		        <div class="sk-bounce2"></div>
+		        <div class="sk-bounce3"></div>
+		    </div>
+		</div>
+		
+		
+		<script id="list-template" type="text/html">
+			<div id="tab-1">
+							{{# for(var i=0;i<d.length;i++){  }}
+							<div class="dd-list">
+								<div class="dd-title">
+									<p>下单时间：<span>{{d[i].create_time}}</span></p>
+									<p>订单编号：<span>{{d[i].mcard}}</span></p>
+									<!--<i class="icon-del"></i>-->
+								</div>
+								<div class="dd-detail">
+									<ul>
+										<li class="dd-col1">
+
+											<div class="more-pro">
+												<div class="box">
+													<a href="" target="_blank" class="pro-pic"><img src="{{d[i].imgurl}}" onerror="this.src='/static/admin/images/head_default.gif'" width="80" height="80" alt=""></a>
+													<div class="pro-details">
+														<a href="{:url('jingdian/Index/goodsdetail')}?mpid={{d[i].mflid}}" target="_blank">
+															<h3>{{d[i].name}}</h3>
+															
+														</a>
+													</div>
+												</div>
+												<div class="price">
+													￥
+													{{# if(d[i].mamount/d[i].buynum<0.01){ }}
+														{{(d[i].mamount/d[i].buynum).toFixed(4)}}
+													{{# }else{ }}	
+														{{(d[i].mamount/d[i].buynum).toFixed(2)}}
+												     {{# } }}  	
+														
+													
+												</div>
+												<div class="num">
+													x{{d[i].buynum}}
+												</div>
+												<div class="function">
+
+													<a href="https://wpa.qq.com/msgrd?v=3&amp;uin={:config('WEB_QQ')}&amp;site=qq&amp;menu=yes" class="qiangrey" target="_blank">申请售后</a>
+													
+
+												</div>
+											</div>
+
+										</li>
+										<li class="dd-col2">
+											总额：￥{{d[i].mamount}}
+											
+											<p class="qiangrey"></p>
+										</li>
+										<li class="dd-col3">
+											 {{# if(d[i].maddtype==0){ }}
+											 积分兑换
+											{{# }else if(d[i].maddtype==1){ }}
+											管理员										
+											{{# }else if(d[i].maddtype==2){ }}
+											支付宝扫码
+											{{# }else if(d[i].maddtype==3){ }}
+											微信扫码
+											{{# }else if(d[i].maddtype==4){ }}
+											聚合支付
+											{{# }else if(d[i].maddtype==5){ }}
+											余额支付
+											{{# }else if(d[i].maddtype==6){ }}
+											QQ钱包
+											{{# }else if(d[i].maddtype==7){ }}
+											财付通
+											 {{# }else{ }}	
+											 未知数
+											 {{# } }}
+										</li>
+										
+										<li class="dd-col4">
+										{{# if(d[i].type==0){ }}	
+											{{# if(d[i].mstatus==1){ }}
+											
+											<a onclick="downloadtxt('{{d[i].mcard}}');" target="_blank" >导出卡密</a>	
+	                                        <a onclick="fenxiang('{{d[i].mcard}}');" target="_blank" >查看卡密</a>
+	                                    	<a href="{:url('mobile/index/imgorderhistory')}?order={{d[i].mcard}}" style="margin-top:9px;">交易快照</a>
+	                                         
+	                                        {{# }else if(d[i].mstatus==0 && d[i].mflid!=0){ }}
+	                                       
+	                                        <a onclick="tiqu('{{d[i].mcard}}','{{d[i].mflid}}',{{# if(d[i].need_lianxi){ }}1{{# }else{ }}0{{# } }});" target="_blank" style="border-color: #de342f;color: #de342f;">提取卡密</a>
+	                                         {{# }else if(d[i].mstatus==0 && d[i].mflid==0){ }}
+	                                      
+	                                        <a href="/" target="_blank" style="border-color: #de342f;color: #de342f;">首页提取</a>
+	                                         {{# }else if(d[i].mstatus==2){ }}
+	                                      
+	                                        <a href="javascript:void(0);"  style="border-color: #de342f;color: #de342f;">未付款</a>
+	                                        {{# } }}  
+                                         {{# }else if(d[i].type!=0){}}
+			                                 <a onclick="getOrderDetailByOrder('{{d[i].mcard}}')" target="_blank" style="border-color: #de342f;color: #de342f;">查看详情</a>		
+			                                 {{# if(d[i].mstatus==1){ }}
+			                                		<span class="label label-info">已付款</span>
+			                                		
+			                                        {{# }else if(d[i].mstatus==0 && d[i].mflid!=0){ }}
+			                                        
+			                                        <span class="label label-warning">未提取</span>
+			                                        {{# }else if(d[i].mstatus==2){ }}
+			                                       
+			                                        <span class="label label-danger">未付款</span>
+			                                        {{# }else if(d[i].mstatus==3){ }}
+			                                       
+			                                        <span class="label label-danger">进行中</span>
+			                                        {{# }else if(d[i].mstatus==4){ }}
+			                                       
+			                                        <span class="label label-primary">已撤回</span>
+			                                        {{# }else if(d[i].mstatus==5){ }}
+			                                        
+			                                        <span class="label label-success">已完成</span>
+			                                        {{# } }}
+			                                        <a href="{:url('mobile/index/imgorderhistory')}?order={{d[i].mcard}}" style="margin-top:9px;">交易快照</a>
+			                             {{# } }}   
+											
+											
+											
+										</li>
+
+									</ul>
+								</div>
+								
+							</div>
+							{{# } }}
+						</div>		
+						<div id="tab-2" style="display: none;">
+							{{# for(var i=0;i<d.length;i++){  }}
+								{{# if(d[i].mstatus==1){ }}
+							<div class="dd-list">
+								<div class="dd-title">
+									<p>下单时间：<span>{{d[i].create_time}}</span></p>
+									<p>订单编号：<span>{{d[i].mcard}}</span></p>
+									<!--<i class="icon-del"></i>-->
+								</div>
+								<div class="dd-detail">
+									<ul>
+										<li class="dd-col1">
+
+											<div class="more-pro">
+												<div class="box">
+													<a href="" target="_blank" class="pro-pic"><img src="{{d[i].imgurl}}" onerror="this.src='/static/admin/images/head_default.gif'" width="80" height="80" alt=""></a>
+													<div class="pro-details">
+														<a href="{:url('jingdian/Index/goodsdetail')}?mpid={{d[i].mflid}}" target="_blank">
+															<h3>{{d[i].name}}</h3>
+															
+														</a>
+													</div>
+												</div>
+												<div class="price">
+													￥
+													{{# if(d[i].mamount/d[i].buynum<0.01){ }}
+														{{(d[i].mamount/d[i].buynum).toFixed(4)}}
+													{{# }else{ }}	
+														{{(d[i].mamount/d[i].buynum).toFixed(2)}}
+												     {{# } }}  	
+												</div>
+												<div class="num">
+													x{{d[i].buynum}}
+												</div>
+												<div class="function">
+
+													<a href="https://wpa.qq.com/msgrd?v=3&amp;uin={:config('WEB_QQ')}&amp;site=qq&amp;menu=yes" class="qiangrey" target="_blank">申请售后</a>
+
+												</div>
+											</div>
+
+										</li>
+										<li class="dd-col2">
+											总额：￥{{d[i].mamount}}
+											
+											<p class="qiangrey"></p>
+										</li>
+										<li class="dd-col3">
+											 {{# if(d[i].maddtype==0){ }}
+											 积分兑换
+											{{# }else if(d[i].maddtype==1){ }}
+											管理员										
+											{{# }else if(d[i].maddtype==2){ }}
+											支付宝扫码
+											{{# }else if(d[i].maddtype==3){ }}
+											微信扫码
+											{{# }else if(d[i].maddtype==4){ }}
+											聚合支付
+											{{# }else if(d[i].maddtype==5){ }}
+											余额支付
+											{{# }else if(d[i].maddtype==6){ }}
+											QQ钱包
+											{{# }else if(d[i].maddtype==7){ }}
+											财付通
+											 {{# }else{ }}	
+											 未知数
+											 {{# } }}
+										</li>
+										
+										<li class="dd-col4">
+											
+											{{# if(d[i].mstatus==1){ }}
+											
+											<a onclick="downloadtxt('{{d[i].mcard}}');" target="_blank" >导出卡密</a>	
+	                                        <a onclick="fenxiang('{{d[i].mcard}}');" target="_blank" >查看卡密</a>
+	                                    	
+	                                         
+	                                        {{# }else if(d[i].mstatus==0 && d[i].mflid!=0){ }}
+	                                       
+	                                        <a onclick="tiqu('{{d[i].mcard}}','{{d[i].mflid}}',{{# if(d[i].need_lianxi){ }}1{{# }else{ }}0{{# } }});" target="_blank" style="border-color: #de342f;color: #de342f;">提取卡密</a>
+	                                         {{# }else if(d[i].mstatus==0 && d[i].mflid==0){ }}
+	                                      
+	                                        <a href="/" target="_blank" style="border-color: #de342f;color: #de342f;">首页提取</a>
+	                                        {{# } }}  
+                                        
+											
+											
+											
+										</li>
+
+									</ul>
+								</div>
+								
+							</div>
+								{{# } }}
+							{{# } }}
+						</div>
+						<div id="tab-3" style="display: none;">
+							{{# for(var i=0;i<d.length;i++){  }}
+								{{# if(d[i].mstatus==0){ }}
+							<div class="dd-list">
+								<div class="dd-title">
+									<p>下单时间：<span>{{d[i].create_time}}</span></p>
+									<p>订单编号：<span>{{d[i].mcard}}</span></p>
+									<!--<i class="icon-del"></i>-->
+								</div>
+								<div class="dd-detail">
+									<ul>
+										<li class="dd-col1">
+
+											<div class="more-pro">
+												<div class="box">
+													<a href="" target="_blank" class="pro-pic"><img src="{{d[i].imgurl}}" onerror="this.src='/static/admin/images/head_default.gif'" width="80" height="80" alt=""></a>
+													<div class="pro-details">
+														<a href="{:url('jingdian/Index/goodsdetail')}?mpid={{d[i].mflid}}" target="_blank">
+															<h3>{{d[i].name}}</h3>
+															
+														</a>
+													</div>
+												</div>
+												<div class="price">
+													￥
+													{{# if(d[i].mamount/d[i].buynum<0.01){ }}
+														{{(d[i].mamount/d[i].buynum).toFixed(4)}}
+													{{# }else{ }}	
+														{{(d[i].mamount/d[i].buynum).toFixed(2)}}
+												     {{# } }}  	
+												</div>
+												<div class="num">
+													x{{d[i].buynum}}
+												</div>
+												<div class="function">
+
+													<a href="https://wpa.qq.com/msgrd?v=3&amp;uin={:config('WEB_QQ')}&amp;site=qq&amp;menu=yes" class="qiangrey" target="_blank">申请售后</a>
+
+												</div>
+											</div>
+
+										</li>
+										<li class="dd-col2">
+											总额：￥{{d[i].mamount}}
+											
+											<p class="qiangrey"></p>
+										</li>
+										<li class="dd-col3">
+											{{# if(d[i].maddtype==0){ }}
+											 积分兑换
+											{{# }else if(d[i].maddtype==1){ }}
+											管理员										
+											{{# }else if(d[i].maddtype==2){ }}
+											支付宝扫码
+											{{# }else if(d[i].maddtype==3){ }}
+											微信扫码
+											{{# }else if(d[i].maddtype==4){ }}
+											聚合支付
+											{{# }else if(d[i].maddtype==5){ }}
+											余额支付
+											{{# }else if(d[i].maddtype==6){ }}
+											QQ钱包
+											{{# }else if(d[i].maddtype==7){ }}
+											财付通
+											 {{# }else{ }}	
+											 未知数
+											 {{# } }}
+										</li>
+										
+										<li class="dd-col4">
+											
+											{{# if(d[i].mstatus==1){ }}
+											
+											<a onclick="downloadtxt('{{d[i].mcard}}');" target="_blank" >导出卡密</a>	
+	                                        <a onclick="fenxiang('{{d[i].mcard}}');" target="_blank" >查看卡密</a>
+	                                    	
+	                                         
+	                                        {{# }else if(d[i].mstatus==0 && d[i].mflid!=0){ }}
+	                                       
+	                                        <a onclick="tiqu('{{d[i].mcard}}','{{d[i].mflid}}',{{# if(d[i].need_lianxi){ }}1{{# }else{ }}0{{# } }});" target="_blank" style="border-color: #de342f;color: #de342f;">提取卡密</a>
+	                                         {{# }else if(d[i].mstatus==0 && d[i].mflid==0){ }}
+	                                      
+	                                        <a href="/" target="_blank" style="border-color: #de342f;color: #de342f;">首页提取</a>
+	                                        {{# } }}  
+                                        
+											
+											
+											
+										</li>
+
+									</ul>
+								</div>
+								
+							</div>
+								{{# } }}
+							{{# } }}
+						</div>
+							<div class="pages"></div>
+							
+							<div id="AjaxPage" style=" text-align: right;"></div>
+                   
+			                <div style="text-align: right;">
+			                      	  共{$count}条数据 <span id="allpage"></span>
+			                </div>
+							</script>
+		
+		
+		
+		
+		
+		
+		
+		
+		{include file="public/imgpc2/footer" /}
+		
+		<script src="{:config('cdnpublic')}jquery/1.9.1/jquery.min.js" type="text/javascript"></script>
+		<script src="__IMGPC__/js/main.js" type="text/javascript"></script>
+		
+		
+		<script src="{:config('cdnpublic')}layer/3.1.1/layer.js"></script>
+		
+		 <script src="/static/admin/js/laypage/laypage.js"></script>
+		<script src="/static/admin/js/laytpl/laytpl.js"></script>
+
+		<script type="text/javascript">
+			Ajaxpage();
+
+			function Ajaxpage(curr) {
+				var key = $('#key').val();
+				$.getJSON('{:url("jingdian/Index/selectorder")}', {
+					page: curr || 1,
+					key: key
+				}, function(data) {
+					$(".spiner-example").css('display','none'); //数据加载完关闭动画 
+					if(data == '') {
+						$("#list-content").html('<div style="width: 100%; height: 300px;padding-top: 50px; background-color: #FFF;text-align: center;font-size: 16px;"><img src="__IMGPC__/images/nolist.png"  style="width: 6rem;margin-bottom: .5rem;"><br><p style="color: #999;font-size: .75rem">您暂时没有任何订单哦！</p><br><a href="/" class="btn btn-sm btn-danger-o external" style="border-radius: 100px;height: 1.9rem;width:  7rem;font-size: .75rem">去首页逛逛吧</a></div>');
+					} else {
+						var tpl = document.getElementById('list-template').innerHTML;
+						laytpl(tpl).render(data, function(html) {
+							document.getElementById('list-content').innerHTML = html;
+						});
+						laypage({
+							cont: $('#AjaxPage'), //容器。值支持id名、原生dom对象，jquery对象,
+							pages: '{$allpage}', //总页数
+							skip: true, //是否开启跳页
+
+							skin: '#1AB5B7', //分页组件颜色
+							curr: curr || 1,
+							groups: 3, //连续显示分页数
+							jump: function(obj, first) {
+								if(!first) {
+									Ajaxpage(obj.curr)
+								}
+								//$('#allpage').html('第'+ obj.curr +'页，共'+ obj.pages +'页');
+							}
+						});
+					}
+				});
+			}
+			$(".advance").click(function() {
+				$(".slidedown-advance").slideToggle(300);
+			});
+			$(".i.icon-del").each(function() {
+				$(this).click(function() {
+					$(this).parentsUntil(".dd-list").hide();
+				});
+			});
+            
+			
+			function tab1(){
+			$('#tab1').addClass('cur');
+			$('#tab2').removeClass('cur');
+			$('#tab3').removeClass('cur');
+			$("#tab-1").show();
+			if(removeAllSpace($("#tab-1").html())==""){
+				$("#tab-1").html('<div style="width: 100%; height: 300px;padding-top: 50px; background-color: #FFF;text-align: center;font-size: 16px;"><img src="__IMGPC__/images/nolist.png" style="width: 6rem;margin-bottom: .5rem;"><br><p style="color: #999;font-size: .75rem">您暂时没有任何订单哦！</p><br><a href="/" class="btn btn-sm btn-danger-o external" style="border-radius: 100px;height: 1.9rem;width:  7rem;font-size: .75rem">去首页逛逛吧</a></div>')
+			}
+			$("#tab-2").hide();
+			$("#tab-3").hide();
+			}
+			function tab2(){
+				$('#tab2').addClass('cur');
+				$('#tab1').removeClass('cur');
+				$('#tab3').removeClass('cur');
+				$("#tab-2").show();
+				if(removeAllSpace($("#tab-2").html())==""){
+					$("#tab-3").html('<div style="width: 100%; height: 300px;padding-top: 50px; background-color: #FFF;text-align: center;font-size: 16px;"><img src="__IMGPC__/images/nolist.png" style="width: 6rem;margin-bottom: .5rem;"><br><p style="color: #999;font-size: .75rem">您暂时没有任何订单哦！</p><br><a href="/" class="btn btn-sm btn-danger-o external" style="border-radius: 100px;height: 1.9rem;width:  7rem;font-size: .75rem">去首页逛逛吧</a></div>')
+				}
+				$("#tab-1").hide();
+				$("#tab-3").hide();
+			}
+			function tab3(){
+				$('#tab3').addClass('cur');
+				$('#tab2').removeClass('cur');
+				$('#tab1').removeClass('cur');
+				$("#tab-3").show();
+				
+				if(removeAllSpace($("#tab-3").html())==""){
+					$("#tab-3").html('<div style="width: 100%; height: 300px;padding-top: 50px; background-color: #FFF;text-align: center;font-size: 16px;"><img src="__IMGPC__/images/nolist.png" style="width: 6rem;margin-bottom: .5rem;"><br><p style="color: #999;font-size: .75rem">您暂时没有任何订单哦！</p><br><a href="/" class="btn btn-sm btn-danger-o external" style="border-radius: 100px;height: 1.9rem;width:  7rem;font-size: .75rem">去首页逛逛吧</a></div>')
+				}
+				$("#tab-2").hide();
+				$("#tab-1").hide();
+			}
+			function removeAllSpace(str) {
+		     return str.replace(/\s+/g, "");
+		    }
+			function gohome(){
+				location.href="{:config('is_https')}://"+window.location.host;
+			}
+			function downloadtxt(order){
+				location.href="{:url('Index/dc')}"+"?order="+order;
+			}
+				
+			function fenxiang(order){
+				top.location.href="{:url('Index/fenxiang')}"+"?order="+order.toString();
+			}
+			function tiqu(order,mpid,needLianxi){
+				needLianxi = needLianxi || 0;
+				var go = function(){
+					location.href = "{:url('@jingdian/Getmail/index')}"+"?mpid="+mpid+"&number="+order;
+				};
+				if (needLianxi != 1) { go(); return; }
+				layer.prompt({title:'请输入下单时填写的联系方式', formType:0}, function(val, index){
+					layer.close(index);
+					$.post("{:url('jingdian/Index/confirmGetmail')}", {number:order, lianxi:val}, function(res){
+						if (res.code == 1) {
+							location.href = "{:url('@jingdian/Getmail/index')}"+"?mpid="+res.data.mpid+"&number="+res.data.number;
+						} else {
+							layer.msg(res.msg || '验证失败');
+						}
+					}, 'json');
+				});
+			}
+			
+			function getOrderDetailByOrder(order)
+			{
+				location.href="{:url('Order/getOrderDetailByOrder')}"+"?number="+order;
+			}
+		</script>
+
+	</body>
+
+</html>

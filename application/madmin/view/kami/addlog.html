@@ -1,0 +1,100 @@
+{include file="public/headerlayer" /}
+<body ontouchstart>
+<div class='fui-page-group '>
+	<script src='__JS__/foxui.min.js'></script>
+	<script src='__JS__/init.js'></script>
+	<script language="javascript" src="https://unpkg.com/layui-src@2.5.4/dist/layui.js"></script>
+	<link href="__CSS__/style_1.css" rel="stylesheet" type="text/css" />
+	<div class='fui-page fui-page-current'>
+		<div class="fui-header fui-header-success">
+			<div class="fui-header-left"><a class="back external" href="{:url('index/goods')}"></a></div>
+			<div class="title">{if condition="$goodid"}本商品入库{else/}全站入库日志{/if}</div>
+			<div class="fui-header-right"></div>
+		</div>
+		<div class='fui-content navbar'>
+			{if condition="$goodsname"}
+			<div class="fui-title">商品：{$goodsname}</div>
+			{/if}
+			<form method="get" action="{:url('kami/addlog')}">
+				{if condition="$goodid"}<input type="hidden" name="goodid" value="{$goodid}" />{/if}
+				<div class="fui-searchbar bar">
+					<div class="searchbar center">
+						<input type="submit" class="searchbar-cancel searchbtn" value="搜索" />
+						<div class="search-input">
+							<i class="icon icon-search"></i>
+							<input type="search" placeholder="补货标识..." class="search" name="key" value="{$val}" />
+						</div>
+					</div>
+				</div>
+			</form>
+			<div class="fui-list-group nomargin container" id="list-content"></div>
+			<div class="fui-title center" id="AjaxPage"></div>
+			<div class="fui-title center hide" id="content-empty">没有数据</div>
+		</div>
+	</div>
+	{include file="public/navbar" /}
+</div>
+<script type="text/html" id="list-template">
+{{# for(var i=0;i<d.length;i++){ }}
+<div class="fui-list-group">
+	<div class="fui-list">
+		<div class="fui-list-inner">
+			<div class="title">#{{d[i].id}} {{d[i].mname}}</div>
+			<div class="subtitle">标识：{{d[i].addbiaoshi}}</div>
+			<div class="subtitle">成功 {{d[i].successnum}} / 总数 {{d[i].addnum}} / 已存在 {{d[i].existnum}}</div>
+			<div class="subtitle">{{d[i].addqudao_label}} · {{d[i].userip}}</div>
+			<div class="subtitle">{{d[i].create_time_fmt}}</div>
+		</div>
+	</div>
+	<div class="fui-list" style="justify-content:flex-end;">
+		<a class="btn btn-sm btn-success" href="{:url('kami/index')}?id={{d[i].goodid}}&addid={{d[i].id}}">查看</a>
+		&nbsp;
+		<a class="btn btn-sm btn-danger" href="javascript:;" onclick="delBatch({{d[i].id}})">删未用</a>
+	</div>
+</div>
+{{# } }}
+</script>
+<script>
+layui.use(['laytpl','laypage','layer'], function(){
+	var laytpl = layui.laytpl, laypage = layui.laypage, layer = layui.layer;
+	function Ajaxpage(curr){
+		$.getJSON('{:url("kami/addlog")}', {
+			page: curr || 1,
+			key: '{$val}',
+			goodid: '{$goodid}'
+		}, function(data){
+			var list = data.list || [];
+			if(!list.length){
+				$('#content-empty').show();
+				$('#list-content').html('');
+			}else{
+				$('#content-empty').hide();
+				laytpl(document.getElementById('list-template').innerHTML).render(list, function(html){
+					document.getElementById('list-content').innerHTML = html;
+				});
+			}
+			laypage.render({
+				elem: 'AjaxPage',
+				count: data.count || 0,
+				curr: curr || 1,
+				limit: 15,
+				jump: function(obj, first){
+					if(!first){ Ajaxpage(obj.curr); }
+				}
+			});
+		});
+	}
+	window.delBatch = function(addid){
+		layer.confirm('只删除本批未使用卡密，已售保留。确定？', function(idx){
+			$.post('{:url("kami/del_by_addid")}', {addid: addid}, function(res){
+				layer.msg(res.msg || '');
+				if(res.code == 1){ Ajaxpage(1); }
+			}, 'json');
+			layer.close(idx);
+		});
+	};
+	Ajaxpage();
+});
+</script>
+</body>
+</html>

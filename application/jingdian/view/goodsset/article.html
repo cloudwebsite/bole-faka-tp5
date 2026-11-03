@@ -1,0 +1,372 @@
+ {include file="public/user/userheader" /}
+    
+    <link rel="stylesheet" href="https://www.layuicdn.com/layui-v2.5.4/css/layui.css">
+    
+    
+    <link href="__USCENTER__/css/basic.css" rel="stylesheet" type="text/css"/>  
+    <link rel="stylesheet" href="__USCENTER__/css/iconfont.css">
+    <link rel="stylesheet" href="__USCENTER__/css/index.css">
+    <link rel="stylesheet" href="__USCENTER__/css/person_content.css">
+    <link rel="stylesheet" href="__USCENTER__/css/publish_need.css">
+    <link rel="stylesheet" href="__USCENTER__/css/common.css" /></head>
+    <link href="__USCENTER__/css/style.min.css?v=4.1.0" rel="stylesheet">
+    <script language="javascript" src="{:config('cdnpublic')}jquery/1.8.3/jquery.min.js"></script>
+    <script language="javascript" src="__USCENTER__/js/qiandao.js"></script>
+    <script src="__USCENTER__/js/wangeditor.min.js"></script>
+    <script src="__USCENTER__/js/plupload.full.min.js"></script>
+    <script language="javascript" src="https://www.layuicdn.com/layui-v2.5.4/layui.js"></script>
+    <script language="javascript" src="__USCENTER__/js/common.js"></script>
+    <script language="javascript" src="__USCENTER__/js/index.js"></script>
+    <script src="__USCENTER__/js/person_content.js"></script>
+    <style>
+    	body,div{
+    		margin: 0 auto;
+    	}
+    	
+    </style>
+ <body>
+    <!--头部-->
+    {include file="public/user/usertop" /}
+    <!--头部-->
+    <!--个人中心-->
+    <div>
+      <div class="clearfix person_conetent">﻿
+        <!--左侧菜单-->
+        {include file="public/user/userleft" /}
+        
+        <!--右侧展示-->
+        <div style="margin-left: 220px;margin-right: 40px;">
+
+            <!--积分明细-->
+            <div class="need_admin">
+                <div class="clearfix publish_need_tit">
+                    <h2 class="left">文章管理</h2>
+                </div>
+             <div class="layui-tab layui-tab-brief" lay-filter="tabData">
+			  
+			  <div class="layui-tab-content">
+			  	
+			  	<form method="post" action="{:url('index')}">
+			  	    {:token()}
+			  		<button type="button"  class="layui-btn  layui-btn-normal" onclick="yijianAdd();"><i class="layui-icon">&#xe61f;</i>添加文章</button>
+			  		<div class="layui-input-inline">
+				      <input type="text" id="key" name="key"  placeholder="请输入关键词" class="layui-input" value="{$val}">
+				    </div>				  		
+				  	<button type="submit"  class="layui-btn  layui-btn-danger"><i class="layui-icon">&#xe640;</i>查询</button>
+			  	</form>
+			  	
+			  	
+			  	<table class="layui-table" lay-skin="">
+				    
+				    <thead>
+				      <tr>
+				      	<th width="5" style="text-align: center;"><input type="checkbox" name="like[write]"></th>
+				        <th width="8" style="text-align: center;">ID</th>
+				        <th width=""style="text-align: center;">标题</th>
+				        <th width="80" style="text-align: center;">分类</th>				        
+				        <th width="200" style="text-align: center;">操作</th>
+				      </tr> 
+				    </thead>
+				    <tbody id='list-content'>
+				    
+				    </tbody>
+				</table>
+				<div id="AjaxPage"></div>
+			  	 <!-- 加载动画 -->
+							<div class="spiner-example">
+							    <div class="sk-spinner sk-spinner-three-bounce">
+							        <div class="sk-bounce1"></div>
+							        <div class="sk-bounce2"></div>
+							        <div class="sk-bounce3"></div>
+							    </div>
+							</div>
+			  	
+			  </div>
+			</div>
+
+            </div>
+
+        </div>
+      </div>
+    </div>
+    
+    
+    <div id="yijianAdd" style="display: none;margin-top: 10px;">
+    	<form class="layui-form" action="{:url('jingdian/Article/add_article')}" method="post">
+    	    {:token()}
+  		<div class="layui-form-item">
+			    <label class="layui-form-label">标题</label>
+			    <div class="layui-input-inline">
+			      <input type="text" name="title" lay-verify="required" placeholder="请输入文章标题" autocomplete="off" class="layui-input">	      
+			    </div>
+  		</div>
+  		<div class="layui-form-item">
+		    <div class="layui-inline">
+		      <label class="layui-form-label">所属分类</label>
+		      <div class="layui-input-inline">
+		        <select name="cate_id">
+		          <option value="">请选择文章分类</option>
+		         
+		          {if !empty($cate)}
+                  {foreach name="cate" item="vo"}
+                    {if condition="$vo['name'] != '首页公告' and $vo['name'] != '免责声明'"}
+                        <option value="{$vo.id}">{$vo.name}</option>
+                    {/if}
+                  {/foreach}
+                  {/if}
+		        </select>
+		      </div>
+		    </div>
+		</div>    
+  		<div class="layui-form-item">
+			    <label class="layui-form-label">内容</label>
+			    <div class="layui-input-block" style="margin-right: 15px;">
+					<textarea id="demoEdit" style="display: none;" name="content"></textarea>
+				</div>
+  		</div>
+  		
+  		
+  		<div class="layui-form-item">
+			<div class="layui-input-block">
+			  <button class="layui-btn" lay-submit lay-filter="formyijianAdd">立即提交</button>
+			  <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+			</div>
+		</div>
+  		</form>
+    </div>
+    
+    
+    
+    
+    
+    
+    
+    
+    <script type="text/html" id="list-template">	  
+ 	{{# for(var i=0;i<d.length;i++){  }}
+	    <tr>
+	    	<td style="text-align: center;"><input type="checkbox" name="like[write]"></td>
+	    	<td style="text-align: center;">{{d[i].id}}</td>
+		    <td style="text-align: center;">{{d[i].title}}</td>
+		    <td style="text-align: center;">
+		    {{d[i].name}}
+			
+		    </td>
+		   
+		   
+		    <td style="text-align: center;">
+		    	<div class="layui-btn-group">				  
+				  <button class="layui-btn layui-btn-xs layui-btn-normal" onclick="editArticle({{d[i].id}});">
+				    <i class="layui-icon">&#xe642;</i>编辑
+				  </button>
+				  
+				  
+				{{# if(d[i].name!="首页公告" && d[i].name!='免责声明'){ }}
+                   <button class="layui-btn layui-btn-xs layui-btn-danger" onclick="delArticle({{d[i].id}});">
+				    <i class="layui-icon">&#xe640;</i>删除
+				   </button>
+                {{# } }}    
+				  
+				</div>
+		    </td>
+		</tr>
+	 {{# } }}	
+	</script>
+               
+  
+
+    <!--非商家提示去认证-->
+    {include file="public/imgpc/footer" /}
+    
+    
+		
+	<script>
+
+	
+	var laytpl;
+	var laypage;
+	var layer;
+	var form;
+	layui.use(['laytpl','laypage','layer','form'], function(){
+	  laytpl = layui.laytpl;
+	  laypage = layui.laypage;
+	  layer = layui.layer;
+	  form = layui.form;
+	  
+	  form.on('submit(formyijianAdd)', function(data){
+		   	console.log(data.elem) //被执行事件的元素DOM对象，一般为button对象
+			console.log(data.form) //被执行提交的form对象，一般在存在form标签时才会返回
+			console.log(data.field) //当前容器的全部表单字段，名值对形式：{name: value}
+			var indexload = layer.load(0, {shade: [0.4,'#0f0e0e']});
+			
+			return true; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+		});
+	Ajaxpage();	
+	}); 
+	var layedit;
+	
+	
+	
+    function Ajaxpage(curr){
+        
+        var key=$('#key').val();
+        $.getJSON('{:url("Article/index")}', {page: curr || 1,key:key}, function(data){
+            $(".spiner-example").css('display','none'); //数据加载完关闭动画 
+            if(data==''){
+                $("#list-content").html('<td colspan="20" style="padding-top:10px;padding-bottom:10px;font-size:16px;text-align:center">暂无数据</td>');
+            }else{
+                var tpl = document.getElementById('list-template').innerHTML;
+                laytpl(tpl).render(data, function(html){
+                    document.getElementById('list-content').innerHTML = html;
+                });
+                laypage.render({
+				    elem: 'AjaxPage'
+				    ,count: {$count}
+				    ,curr: curr || 1
+				    ,layout: ['count', 'prev', 'page', 'next', 'refresh', 'skip']
+				    ,jump: function(obj, first){
+				    	if(!first){
+				    		$(".spiner-example").show(); //数据加载完关闭动画 
+				    		document.getElementById('list-content').innerHTML='';
+                            Ajaxpage(obj.curr)
+                        }
+				      console.log(obj)
+				    }
+				  });
+                
+            }
+        });
+    }
+    
+    function editArticle(id){
+    	location.href = '{:url("Article/edit_article")}'+'?id='+id;
+    	
+    }
+    function yijianAdd(){   	
+    	layer.open({
+		  type: 1,
+		  title:'添加文章',
+		  area: '960px',
+		  content: $('#yijianAdd'),
+		  success: function(layero, index){
+		    layui.use('layedit', function(){
+					  layedit = layui.layedit;
+					  layedit.set({
+						  uploadImage: {
+						    url: "{:url('@jingdian/Upload/uploadfz')}" //接口url
+						    ,type: 'post' //默认post
+						  }
+						});
+					  layedit.build('demoEdit'); //建立编辑器
+					});
+		  }
+		  
+		});
+    }
+    function delArticle(id){
+    	//询问框
+		layer.confirm('是否删除此文章？', {
+		  btn: ['确定','取消'] //按钮
+		}, function(){
+		  var indexload = layer.load(0, {shade: [0.4,'#0f0e0e']});
+		  $.getJSON('{:url("Article/del_article")}'+"?id="+id,{}, function(data){
+		  		layer.close(indexload);
+	           	if(data.code==1){
+	           		layer.alert(data.msg, {
+					  icon: 6,
+					  skin: 'layer-ext-moon',
+					  yes: function(index, layero){
+					  	layer.close(index);
+					    location.reload()
+					  }
+					});
+	           	}else{
+	           		layer.alert(data.msg, {
+					  icon: 5,
+					  skin: 'layer-ext-moon',
+					  yes: function(index, layero){
+					  	layer.close(index);
+					    location.reload()
+					  }
+					});
+	           	}
+		  	
+		  });
+		  
+		});
+    }
+    
+    function removeHTMLTag(str) {
+	            str = str.replace(/<(style|script|iframe)[^>]*?>[\s\S]+?<\/\1\s*>/gi,'').replace(/<[^>]+?>/g,'').replace(/\s+/g,' ').replace(/ /g,' ').replace(/>/g,' '); //去除HTML tag
+	            str = str.replace(/[ | ]*\n/g,'\n'); //去除行尾空白
+	            //str = str.replace(/\n[\s| | ]*\r/g,'\n'); //去除多余空行
+	            str=str.replace(/&nbsp;/ig,'');//去掉&nbsp;
+	            //str=str.replace(/\s/g,''); //将空格去掉
+	            return str;
+	}
+    function htmlspecialchars(str) {        
+              var s = "";  
+              if (str.length == 0) return "";  
+              for   (var i=0; i<str.length; i++)  
+              {  
+                  switch (str.substr(i,1))  
+                  {  
+                      case "<": s += "&lt;"; break;  
+                      case ">": s += "&gt;"; break;  
+                      case "&": s += "&amp;"; break;  
+                      case " ":  
+                          if(str.substr(i + 1, 1) == " "){  
+                              s += " &nbsp;";  
+                              i++;  
+                          } else s += " ";  
+                          break;  
+                      case "\"": s += "&quot;"; break;  
+                      case "\n": s += "<br>"; break;  
+                      default: s += str.substr(i,1); break;  
+                  }  
+              }  
+              return s;  
+          }
+  	function htmlspecialchars_decode(str){           
+              str = str.replace(/&amp;/g, '&'); 
+              str = str.replace(/&lt;/g, '<');
+              str = str.replace(/&gt;/g, '>');
+              str = str.replace(/&quot;/g, "''");  
+              str = str.replace(/&#039;/g, "'");  
+              return str;  
+    }
+  	function toDecimal(x){
+  		var f = parseFloat(x);
+		if(isNaN(f)) {
+			return false;
+		}
+		var f;
+		if(getFloor(x)<2){
+			f = Math.round(x * 100) / 100;
+		}else if(getFloor(x)>2){
+			f = Math.round(x * 10000) / 10000;
+		}	
+		var s = f.toString();
+		var rs = s.indexOf('.');
+		if(rs < 0) {
+			rs = s.length;
+			s += '.';
+		}
+		while(s.length <= rs + 2) {
+			s += '0';
+		}
+		return s;
+  	}
+  	
+	function getFloor(x){
+		var y = String(x).indexOf('.') + 1;
+		var count = String(x).length - y;
+		if(y <= 0) {
+			count=0;
+		}
+		return count;										
+	}
+	</script>
+ </body>
+
+</html>

@@ -1,0 +1,30 @@
+<div class="globa-nav">
+	<div class="nav">
+		<div class="nav-classify">
+			<h3 class="nav-all-btn">全部分类</h3>
+			<ul class="menu-mainnav" style="height: 582px;">
+				{volist name="GoodsLmShop" id="vo" key='lmkey'}
+				{if condition="count($vo['hehe']) neq 0"}
+				{if condition="$lmkey elt 12"}
+				<li>
+					<div class="sortmaintitle">
+						<a href="{:url('jingdian/Index/goodscategory',['lmid'=>$vo['id']])}"><span style="font-size:16px;">☶</span> {$vo['name']}</a>
+					</div>					
+				</li>
+				{/if}
+				{/if}
+				{/volist}
+			</ul>
+		</div>
+		<ul class="nav-othder">
+			<li>
+				<a href="/">首页</a>
+			</li>
+			{volist name="navigation" id="v"}
+			<li>
+				<a href="{$v['text']}" {if condition="$v['opentype'] eq 1"}target="_blank"{/if}>{$v['name']}</a>
+			</li>
+			{/volist}					
+		</ul>
+	</div>
+</div>

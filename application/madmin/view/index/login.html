@@ -1,0 +1,201 @@
+{include file="public/header" /}
+
+	<body ontouchstart>
+
+		<div class='fui-page-group '>
+
+			<link href="__CSS__/style_1.css" rel="stylesheet" type="text/css" />
+			
+			<div class='fui-page fui-page-current'>
+				<div class="fui-header fui-header-success" style="background: #2c3845;">
+					<div class="fui-header-left">
+						<a class="back external" href="/">商城</a>
+					</div>
+					<div class="title">手机管理员后台</div>
+					<div class="fui-header-right"></div>
+				</div>
+				<div class='fui-content page-login'>
+					<form action="{:url('doLogin')}" method="post" id="dologin">
+				
+					<div class="panel-login">
+						<div class="fui-cell-group fui-cell-group-o">
+							<div class="fui-cell">
+								<div class="fui-cell-info">
+									<input type="text" placeholder="请输入用户名" class="fui-input" id="username" name="username" />
+								</div>
+							</div>
+							<div class="fui-cell">
+								<div class="fui-cell-info">
+									<input type="password" placeholder="请输入密码" class="fui-input" id="password" name="password" />
+								</div>
+							</div>
+							{if condition="$captcha_mode eq 'image'"}
+							<div class="fui-cell">
+		                        <div class="fui-cell-icon">
+		                            <i class="icon icon-safe"></i>
+		                        </div>
+		                        <div class="fui-cell-info">
+		                            <input type="tel" placeholder="请输入图形验证码" class="fui-input" maxlength="4" name="code" id="veri">
+		                        </div>
+		                        <img class="fui-cell-remark noremark" id="veriimg" src="{:url('checkVerify')}" onclick="javascript:this.src='{:url('checkVerify')}?tm='+Math.random();" style="width: 5rem">
+		                    </div>
+		                     {elseif condition="$captcha_mode eq 'geetest'"/}
+		                     <div class="fui-cell" style="margin-bottom: -8px;">
+			                <div id="captcha" style="width: 100%;">
+					            <div id="text">
+					               	 行为验证™ 安全组件加载中
+					            </div>
+					            <div id="wait" class="show">
+						                <div class="loading">
+						                    <div class="loading-dot"></div>
+						                    <div class="loading-dot"></div>
+						                    <div class="loading-dot"></div>
+						                    <div class="loading-dot"></div>
+						                </div>
+						         </div>
+						    </div>
+						    </div>
+			            	{/if}
+						</div>
+						<div><button type="submit" class="btn btn-success block btn-submit" style="width: 90%;">登录</button></div>
+					</div>
+					</form>
+				</div>
+
+				
+			</div>
+
+			
+
+			
+
+			
+			
+			
+
+			<a class="diy-gotop external" style=" position: fixed; overflow: hidden; z-index: 999; bottom: 136px; right: 10px; text-align: left; display:none;" id="gotop">
+				<div style="background: #000000; opacity: 0.5; line-height: 32px; text-align: center; border-radius: 30px; height: 30px; width: 30px;">
+					<i class="icon icon-top1" style="color: #ffffff; font-size: 20px;"></i>
+				</div>
+			</a>
+
+			<script type="text/javascript" src="https://unpkg.com/jquery-form@3.50.0/jquery.form.js"></script>
+			<script type="text/javascript" src="/static/admin/js/lunhui.js"></script>
+			<script type="text/javascript" src="__GT__/js/gt.js"></script> 
+			<script>
+				{if condition="$captcha_mode eq 'geetest'"}
+					var publicObj;
+					var handler = function (captchaObj) {
+				        captchaObj.appendTo('#captcha');
+				        captchaObj.onReady(function () {
+				            $("#wait").hide();
+				        });
+				        publicObj=captchaObj;     
+				        window.gt = captchaObj;
+				    };
+				
+				
+				    $.ajax({
+				        url: "/jingdian/geetest/StartCaptchaServlet?t=" + (new Date()).getTime(), // 加随机数防止缓存
+				        type: "get",
+				        dataType: "json",
+				        success: function (data) {
+				        	$('#text').hide();
+				            $('#wait').show();
+				
+				            // 调用 initGeetest 进行初始化
+				            // 参数1：配置参数
+				            // 参数2：回调，回调的第一个参数验证码对象，之后可以使用它调用相应的接口
+				            initGeetest({
+				                // 以下 4 个配置参数为必须，不能缺少
+				                gt: data.gt,
+				                challenge: data.challenge,
+				                offline: !data.success, // 表示用户后台检测极验服务器是否宕机
+				                new_captcha: data.new_captcha, // 用于宕机时表示是新验证码的宕机
+				
+				                product: "float", // 产品形式，包括：float，popup
+				                width: '99%' 
+				                
+				                // 更多配置参数说明请参见：http://docs.geetest.com/install/client/web-front/
+				            }, handler);
+				        }
+				    });
+		    	{/if}
+				$(function() {
+					$(".fui-content").bind('scroll resize', function() {
+						var scrolltop = $(".fui-content").scrollTop();
+						if(scrolltop > "300") {
+							$("#gotop").fadeIn(100)
+						} else {
+							$("#gotop").fadeOut(100)
+						}
+					});
+					$("#gotop").unbind('click').click(function() {
+						$(".fui-content").animate({
+							scrollTop: "0px"
+						}, 1000)
+					});
+					
+					$('#dologin').ajaxForm({
+			            beforeSubmit: checkForm, // 此方法主要是提交前执行的方法，根据需要设置
+			            success: complete, // 这是提交后的方法
+			            dataType: 'json'
+			        });
+			        function removeAllSpace(str) {
+						return str.replace(/\s+/g, "");
+					}
+			        function checkForm(){
+			           {if condition="$captcha_mode eq 'image'"}
+						var veri=$("#veri").val();
+						veri=removeAllSpace(veri);
+						if(veri.length<4){
+							layer.open({
+									content: '验证码不正确',
+									btn: '我知道了',
+									time: 30
+									});	
+						    return false;
+						}
+						{elseif condition="$captcha_mode eq 'geetest'"/}
+						var result = publicObj.getValidate();
+			            if (!result) {
+			            	layer.open({
+									content: '请先完成验证',
+									btn: '我知道了',
+									time: 30
+									});	
+			                return false;
+			            }
+			            {/if}
+						
+			            
+			        }
+			
+			
+			        function complete(data){
+			            if(data.code==1){	
+			                if(data.url=="{:config('is_https')}://"+window.location.host+"{:url('mobile/index/index')}"){
+			                	data.url="{:url('user/uscenter')}";
+			                }
+			                lunhui.success_mobile(data.msg,data.url);
+			            }else{ 
+			                lunhui.error_mobile(data.msg);
+			                {if condition="$captcha_mode eq 'image'"}
+			                $('#veriimg').attr('src',"{:url('checkVerify')}?tm="+Math.random());
+			                {elseif condition="$captcha_mode eq 'geetest'"/}
+			                publicObj.reset();
+			                {/if}			               			                
+			                return false;   
+			            }
+			        }
+					
+					
+				});
+			</script>
+
+			<span style="display:none"></span>
+			
+	</body>
+
+</html>
+

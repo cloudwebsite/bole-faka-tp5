@@ -1,0 +1,205 @@
+{include file="public/imgmobile_header" /}
+
+</head>
+
+<body ontouchstart="">
+
+	<div class="fui-page-group statusbar">
+		<style>
+			.fui-according-header {
+				font-size: .7rem;
+			}
+			
+			.fui-according-header .text {
+				color: #666666;
+				font-size: .65rem;
+				text-align: right;
+			}
+			
+			.fui-cell-group.recharge {
+				padding: .6rem 0;
+			}
+			
+			.fui-cell-group.recharge .fui-cell {
+				padding: 0;
+				font-size: .6rem;
+				height: 1rem;
+				line-height: 1rem;
+			}
+			
+			.fui-cell-group.recharge .fui-cell .fui-cell-text {
+				color: #666;
+			}
+			
+			.fui-cell-group.recharge .fui-cell:before {
+				display: none
+			}
+			
+			.fui-cell-group.recharge:before {
+				content: " ";
+				position: absolute;
+				left: 0;
+				right: 0;
+				top: 0;
+				height: 1px;
+				border-top: 1px solid #ebebeb;
+				color: #D9D9D9;
+				-webkit-transform-origin: 0 0;
+				-ms-transform-origin: 0 0;
+				transform-origin: 0 0;
+				-webkit-transform: scaleY(0.5);
+				-ms-transform: scaleY(0.5);
+				transform: scaleY(0.5);
+			}
+			
+			.fui-according.expanded .fui-according-header .text {
+				filter: alpha(opacity=0);
+				-moz-opacity: 0;
+				-khtml-opacity: 0;
+				opacity: 0;
+			}
+			
+			.fui-cell-group .fui-cell .fui-cell-icon {
+				width: auto;
+				margin-right: .75rem;
+			}
+			
+			.fui-cell-group .fui-cell .fui-cell-icon img {
+				width: 1.7rem;
+				height: 1.7rem;
+			}
+			
+			.fui-cell-info .title {
+				position: relative;
+				font-size: 0.7rem;
+				color: #000;
+				white-space: nowrap;
+				text-overflow: ellipsis;
+				overflow: hidden;
+				height: 1rem;
+				line-height: 1rem;
+			}
+			
+			.fui-cell.applyradio {
+				display: none;
+				height: 3.25rem;
+				padding: .4rem .6rem;
+			}
+			
+			.fui-cell.applyradio .fui-cell-info {
+				display: -webkit-box;
+				display: -webkit-flex;
+				display: -ms-flexbox;
+				display: flex;
+				height: 100%;
+				-webkit-box-orient: vertical;
+				-webkit-flex-direction: column;
+				-ms-flex-direction: column;
+				flex-direction: column;
+				-webkit-box-pack: justify;
+				-ms-flex-pack: justify;
+				-webkit-justify-content: space-around;
+				justify-content: space-around;
+			}
+			body {
+				position: absolute;
+				;
+				max-width: 750px;
+				margin: auto;
+			}
+			
+			.fui-navbar {
+				max-width: 750px;
+			}
+			
+			.fui-navbar,
+			.fui-footer {
+				max-width: 750px;
+			}
+			
+			.fui-page.fui-page-from-center-to-left,
+			.fui-page-group.fui-page-from-center-to-left,
+			.fui-page.fui-page-from-center-to-right,
+			.fui-page-group.fui-page-from-center-to-right,
+			.fui-page.fui-page-from-right-to-center,
+			.fui-page-group.fui-page-from-right-to-center,
+			.fui-page.fui-page-from-left-to-center,
+			.fui-page-group.fui-page-from-left-to-center {
+				-webkit-animation: pageFromCenterToRight 0ms forwards;
+				animation: pageFromCenterToRight 0ms forwards;
+			}
+		</style>
+
+		<div class="fui-page  fui-page-current order-pay-page" id="fui-page-1523806347935">
+			<div class="fui-header">
+				<div class="fui-header-left">
+					<a class="back" onclick="back();"></a>
+				</div>
+				<div class="title">基本资料</div>
+				<div class="fui-header-right">
+
+				</div>
+			</div>
+			<div class="fui-content navbar">
+				<form method="post"  action="{:url('user/usinfo')}" id="formreq">
+
+				<div class="fui-cell-group">
+
+					<div class="fui-cell">
+
+						<div class="fui-cell-label">支付宝帐号</div>
+
+						<div class="fui-cell-info c000"><input type="text" class="fui-input" id="alipayno"  value="{$hasUser['alipayno']}" name="alipayno"></div>
+
+					</div>
+
+					<div class="fui-cell">
+
+						<div class="fui-cell-label">支付宝姓名</div>
+
+						<div class="fui-cell-info c000" style="display: -webkit-box;display: -webkit-flex;display: -ms-flexbox;display: flex;-webkit-box-align: center;-webkit-align-items: center;-ms-flex-align: center;align-items: center;"><input type="text" class="fui-input" id="alipayname"  value="{$hasUser['alipayname']}" name="alipayname"></div>
+
+					</div>
+
+				</div>		
+				<button id="btn-alipay" class="btn btn-danger mtop  block btn-pay" style="width: 95%;" type="submit">确认修改</button>
+				</form>
+				
+
+			</div>
+			
+
+		</div>
+
+	</div>
+		<script type="text/javascript" src="{:config('cdnpublic')}jquery.form/3.51/jquery.form.min.js"></script>
+		<script type="text/javascript" src="/static/admin/js/lunhui.js"></script>
+	<script type="text/javascript">
+		{include file="public/common" /}
+		$(function(){
+	        $('#formreq').ajaxForm({
+	            beforeSubmit: checkForm, // 此方法主要是提交前执行的方法，根据需要设置
+	            success: complete, // 这是提交后的方法
+	            dataType: 'json'
+	        });
+	        
+	        function checkForm(){
+	           layer.open({type: 2});
+	        }
+	
+	
+	        function complete(data){
+	        	layer.closeAll();
+	        	
+	            if(data.code==1){		               
+	                lunhui.success_mobile(data.msg,data.url);
+	            }else{ 
+	                lunhui.error_mobile(data.msg);	                
+	            }
+	        }
+	    });
+				
+	</script>
+</body>
+
+</html>

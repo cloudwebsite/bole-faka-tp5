@@ -1,0 +1,555 @@
+body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,textarea,p,blockquote,th,td,img {margin:0; padding:0;}   
+body{color:#252525;font-size:14px; font-family:'Microsoft YaHei';background:url(../images/bg.jpg) repeat}
+fieldset,img { border:0; }   
+ul,ol,li{list-style-type:none;}
+select,input,img{vertical-align:middle;}
+table { border-collapse:collapse; border-spacing:0; }
+a{text-decoration:none; color:#707070}
+a:link{color:#252525;}
+a:visited{color:#252525;}
+a:hover,a:active,a:focus{color:#196196;}
+.center{ margin:0 auto}
+.right{ float:right;}
+.left{ float:left}
+.clearit{clear:both}
+
+.top_bg{background:url(../images/top_bg.jpg) repeat-x; height:87px; width:100%; margin:0 auto 27px;box-shadow:3px 3px 9px #c8c8c8;-moz-box-shadow:3px 3px 9px #c8c8c8;-webkit-box-shadow:3px 3px 9px #c8c8c8;}
+.top_in{ height:87px; margin:0 auto}
+.logo{width:164px; height:58px; float:left;padding-left:10px}
+.top_anniu{ height:32px;padding-top:16px}
+.chakan{ width:87px; height:32px; background:#f49332; font-size:14px; color:#ffffff; float: right; line-height:32px; text-align:center;border-radius:6px; margin-right:15px}
+.chakan:hover{ width:87px; height:32px; background:#d67311;}
+.chakanbuyuser{ width:290px; height:32px; font-size:14px;  float: left; line-height:32px; text-align:center; margin-right:15px}
+.chakan a{color:#fff;}
+
+.showq1{float:left;}
+.showq2{float:left;padding-top:5px;padding-left:10px;}
+.showxinyu{font-size:12px;color:#325884;}
+.textindent15{text-indent:15px;}
+
+.ismianze{color:#ff9b06;cursor:pointer;}
+
+.qrzfan{ width:200px; height:50px; line-height:50px; font-size:20px; border-radius:3px; display:block; border:0; color:#FFF; background:#F90; text-align:center; margin:10px auto 80px;cursor:pointer;}
+.qrzfan:hover{ background:#d67311;cursor:pointer;}
+
+.shangjia_wai{width: 1440px;height:auto; margin:0 auto}
+@media screen and (min-width: 1440px) { 
+.shangjia_wai {width: 1440px} 
+} 
+/* css 注释说明：设置了浏览器宽度不小于1201px时 abc 显示1200px宽度 */ 
+
+@media screen and (max-width: 1439px) { 
+.shangjia_wai {width: 1000px;} 
+} 
+@media screen and (max-width: 1200px) { 
+.shangjia_wai {width: 1000px;} 
+} 
+@media screen and (max-width: 1000px) { 
+.shangjia_wai {width: 800px;} 
+} 
+@media screen and (max-width: 800px) { 
+.shangjia_wai {width: 600px;} 
+} 
+@media screen and (max-width: 600px) { 
+.shangjia_wai {width: 400px;} 
+} 
+@media screen and (max-width: 400px) { 
+.shangjia_wai {width: 200px;} 
+} 
+@media screen and (max-width: 200px) { 
+.shangjia_wai {width: 100px;} 
+} 
+
+
+
+.shangjia_out{width: 1440px; height:auto; float:left}
+@media screen and (min-width: 1440px) { 
+.shangjia_out {width: 1440px} 
+} 
+/* css 注释说明：设置了浏览器宽度不小于1201px时 abc 显示1200px宽度 */ 
+@media screen and (max-width: 1439px) { 
+.shangjia_out {width: 1000px;} 
+} 
+@media screen and (max-width: 1200px) { 
+.shangjia_out {width: 1000px;} 
+} 
+@media screen and (max-width: 1000px) { 
+.shangjia_out {width: 800px;} 
+} 
+@media screen and (max-width: 800px) { 
+.shangjia_out {width: 600px;} 
+} 
+@media screen and (max-width: 600px) { 
+.shangjia_out {width: 400px;} 
+} 
+@media screen and (max-width: 400px) { 
+.shangjia_out {width: 200px;} 
+} 
+@media screen and (max-width: 200px) { 
+.shangjia_out {width: 100px;} 
+} 
+
+
+/* 设置了浏览器宽度不大于900px时 abc 显示200px宽度 */ 
+.shangjia_t_bg{ height:42px; background-color: rgba(71, 69, 69, 0.67);; color:#ffffff; font-size:18px; text-indent:23px; line-height:42px}
+.shangjia_shop{ background:rgb(205, 207, 204); font-size:18px; text-indent:5px; line-height:40px;border-radius: 0px;}
+.shagnjia_kuang{border:1px solid #d3d3d3; background:#fff; margin-bottom:20px;display: flex;}
+.shangjia_neiquan{width:100%; height:auto; line-height:33px; overflow:hidden;}
+.shangjia_nei{width:100%; height:auto;margin-left: 20px;; padding-top:13px; overflow:hidden; padding-bottom:17px}
+.shangjia_neiy{width:30%; height:auto; padding-top:13px; line-height:13px; overflow:hidden; padding-bottom:17px;margin-left: 100px;}
+.shangjiamc{height:33px;width:710px;}
+.shangjiaqq{width:710px; height:33px;}
+.shangjiagg{width:710px; height:auto; line-height:26px;}
+.gonggao{float:left; width:70px; height:26px;}
+.gonggao_de{width:640px;height:60px; overflow:auto;}
+.green:link,.green:visited{color:#6d9d12;}
+.green:hover{color:#252525;}
+.font_12{font-size:12px;}
+.shangjia_wenzi{width:200px; float:left; padding-left:23px;}
+.xuanze_t_bg{width:752px; height:42px; background:url(../images/xuanze_t_bg.jpg) no-repeat; color:#ffffff; font-size:18px; line-height:42px}
+.saoma{width:161px; height:42px; float:right; padding-right:5px;}
+.saoma_icon{width:28px; height:28px; float:left; padding-top:8px;cursor:pointer;}
+.xsewm{ width:140px; height:140px; padding-top:5px; display:none}
+.saoma:hover .xsewm{ width:140px; height:140px; background:#FFF; display: block; margin-top:10px}
+
+.saoma_word{width:120px; float:left; font-size:14px; padding-left:5px;cursor:pointer;}
+.fangxin_out{width:277px; float:right;}
+.fangxin_biankuang{width:275px; border:1px solid #d3d3d3; background:#fff; height:auto; overflow:hidden}
+.goumai{width:216px; height:30px; padding:9px 15px;}
+ 
+.mjxybox{ width:245px; height:auto; overflow:hidden; border-top:#d3d7d7 solid 1px}
+
+.xxsmbox_erpay{ width:1048px; border:#CCC solid 1px; margin-top:20px; background:#FFF}
+.shangjia_erpay{ padding-left:20px; padding-top:13px; line-height:33px;padding-bottom:17px}
+.erpaygexian{border-bottom:1px dashed #39C; height:2px;width:1000px;} 
+
+.xzspbox{width:750px; height:auto; border:#CCC solid 1px; overflow:hidden; background: #f6f6f6 url(../images/xzspbj.jpg) no-repeat; color:#252525; font-size:14px; line-height:42px; padding-top:10px}
+.xzsrk{ width:710px; height:36px; padding:5px 0; margin:0 auto;}
+.xzsrk2{ width:710px; height:22px; padding:5px 0; margin:0 auto}
+.shuoming{color:#999;height:30px; width:100px;display:inline-block;position:absolute;overflow:hidden}
+
+.xzspxzk{ height:28px; background:none; border:#ddd solid 1px; color:#3A3A3A; text-indent:1px;font-family:"Microsoft YaHei";}
+.xzspsrk{ width:150px; height:35px; background:none; border:#ddd solid 1px; color:#3A3A3A; text-indent:1px;font-family:"Microsoft YaHei";}
+.xzspsrk1{ width:150px; height:35px; background:none; border:#ddd solid 1px; color:#3A3A3A; text-indent:1px;font-family:"Microsoft YaHei";}
+
+.buymai{margin-top:10px;height:40px;width:100px;cursor:pointer}
+
+.xzspbz{ width:450px; height:auto; line-height:20px; font-size:12px; color:#666; background:#fbeabc; padding-left:10px; float:right}
+.xzspbz1{ width:450px; height:auto; line-height:38px; font-size:14px; color:#666; background:#fbeabc; padding-left:10px; margin-top:5px; float:right}
+.yfje{ width:710px; height:42px; padding:5px 0; margin:0 auto; border-top: #CCC dashed 1px; font-size:18px}
+
+.xzspbzpf{ width:450px; height:auto; line-height:20px; font-size:12px; color:#666; background:#fbeabc; padding-left:10px;margin-top:4px; float:right}
+
+.mzsm{width:275px; border:1px solid #d3d3d3; background:#FFF url(../images/mianze.jpg) no-repeat top center; height:auto; overflow:hidden; margin-top:20px; padding-bottom:15px}
+.mzsmbt{width:275px; height:55px; line-height:45px; color:#FFF; font-size:18px; text-indent:15px}
+.mzsm p{ width:245px; height:auto; line-height:26px; font-size:14px; margin:0 auto; text-indent:28px}
+
+.xxsmbox{ width:1440px; height:auto; overflow:hidden; border:#CCC solid 1px; margin-top:20px;margin-bottom:10px; background:#FFF}
+@media screen and (min-width: 1440px) { 
+.xxsmbox {width: 1440px} 
+} 
+/* css 注释说明：设置了浏览器宽度不小于1201px时 abc 显示1200px宽度 */ 
+@media screen and (max-width: 1439px) { 
+.xxsmbox {width: 1000px;} 
+} 
+@media screen and (max-width: 1200px) { 
+.xxsmbox {width: 1000px;} 
+} 
+@media screen and (max-width: 1000px) { 
+.xxsmbox {width: 800px;} 
+} 
+@media screen and (max-width: 800px) { 
+.xxsmbox {width: 600px;} 
+} 
+@media screen and (max-width: 600px) { 
+.xxsmbox {width: 400px;} 
+} 
+@media screen and (max-width: 400px) { 
+.xxsmbox {width: 200px;} 
+} 
+@media screen and (max-width: 200px) { 
+.xxsmbox {width: 100px;} 
+} 
+.xxsmbt{ width:1440px; height:42px; line-height:42px;background-color: #B63232; color:#FFF; font-size:18px; text-indent:20px}
+
+@media screen and (min-width: 1440px) { 
+.xxsmbt {width: 1440px} 
+} 
+/* css 注释说明：设置了浏览器宽度不小于1201px时 abc 显示1200px宽度 */ 
+@media screen and (max-width: 1439px) { 
+.xxsmbt {width: 1000px;} 
+} 
+@media screen and (max-width: 1200px) { 
+.xxsmbt {width: 1000px;} 
+} 
+@media screen and (max-width: 1000px) { 
+.xxsmbt {width: 800px;} 
+} 
+@media screen and (max-width: 800px) { 
+.xxsmbt {width: 600px;} 
+} 
+@media screen and (max-width: 600px) { 
+.xxsmbt {width: 400px;} 
+} 
+@media screen and (max-width: 400px) { 
+.xxsmbt {width: 200px;} 
+} 
+@media screen and (max-width: 200px) { 
+.xxsmbt {width: 100px;} 
+} 
+.xxsm{ width:1400px; height:auto; line-height:18px; color:#252525; font-size:14px; padding:15px 0;}
+
+@media screen and (min-width: 1440px) { 
+.xxsm {width: 1400px} 
+} 
+/* css 注释说明：设置了浏览器宽度不小于1201px时 abc 显示1200px宽度 */ 
+@media screen and (max-width: 1439px) { 
+.xxsm {width: 960px;} 
+} 
+@media screen and (max-width: 1200px) { 
+.xxsm {width: 960px;} 
+} 
+@media screen and (max-width: 1000px) { 
+.xxsm {width: 760px;} 
+} 
+@media screen and (max-width: 800px) { 
+.xxsm {width: 560px;} 
+} 
+@media screen and (max-width: 600px) { 
+.xxsm {width: 360px;} 
+} 
+@media screen and (max-width: 400px) { 
+.xxsm {width: 160px;} 
+} 
+@media screen and (max-width: 200px) { 
+.xxsm {width: 60px;} 
+} 
+
+.cyfkfs{ width:1030px; height:auto; overflow:hidden; line-height:48px; color:#252525; font-size:14px; padding:15px 0;}
+.cyfkfs li{ float:left; width:200px; height:48px; text-indent:20px; margin:10px 0}
+.cyfkfs li img{ border:#CCC solid 1px; float:right}
+.cyfkfs li img:hover{border:#6CF solid 1px;cursor:pointer;}
+
+.mzsm1{ width:1000px; height:auto; line-height:29px; color:#252525; font-size:13px; padding:15px 0;}
+
+.wyzf{ width:1440px; height:auto; overflow:hidden; line-height:48px; color:#252525; font-size:14px; padding:15px 0;}
+
+.zfts{ width:1000px;  margin-top:15px; margin-bottom:20px; _height:48px;line-height:28px; color:#666666; font-size:14px;  border-left:#c6a344 solid 5px; background:#fbeabc;}
+
+.cksl{ width:1000px; padding-top:5px; margin:5px auto}
+.dkxxbox{ width:1000px; height:aoto; margin:10px auto}
+.dkxx{ width:1000px; height:55px; margin-top:10px; border:#CCC solid 1px; background:#f6f6f6;}
+.dkxxnr{ width:310px; height:40px; line-height:40px; padding-left:6px; margin:6px auto}
+.dkxxxzk{ width:220px; height:40px; background:#FFF; border:#ddd solid 1px; color:#8b8b8b; text-indent:10px}
+.dkxxsrk{ width:220px; height:40px; background:#fff; border:#ddd solid 1px; color:#8b8b8b; text-indent:10px}
+.dyxy{ width:1000px; height:40px; line-height:40px; text-align:center; margin-top:10px}
+
+.sjxybt{padding-top:10px; font-size:13px; color:#325884}
+.xyzs{ padding-left:20px}
+
+
+
+
+/*弹出A*/
+#hot{
+	left: 0;
+	top: 0;
+	z-index: 99999;
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	display: none;
+	background: rgba(0,0,0,.5);
+}
+.hot-in{
+	width: 500px;
+	height: 570px;
+	position: absolute;
+	left: 50%;
+	margin-left: -250px;
+	top:33%;
+	margin-top: -225px;
+	
+	background:#FFF url(../images/tcbj.jpg) no-repeat top
+}
+.tcbt{ width:500px; height:42px; line-height:42px; color:#FFF; font-size:16px; text-indent:20px}
+.hot-in .hot-close{
+	right: 0px;
+	top: 0px;
+		width: 45px;
+		height: 42px;
+		background: url(../images/close.jpg) no-repeat;
+		position: absolute;
+		cursor: pointer;
+}
+.tcnrbox{ width:460px; height:auto; overflow:hidden; line-height:26px; padding-top:6px}
+.tcmzsm{ width:460px; height:auto; overflow:hidden; line-height:26px; padding-top:15px;}
+.tcmzsmbt{ font-size:18px; color:#399eb4}
+.tcmzsmnr{ border:#399eb4 solid 1px; border-radius:3px; background:#d2edfc; padding:5px 15px; margin-top:5px}
+
+.ddhtext{color:#cf0000;font-weight:bold}
+.lxtext{color:#cf0000;}
+.tstext{color:#FD8E13;}
+
+
+.wxdl{
+	width: 60px;
+	height: 100px;
+	position: fixed;
+	z-index:99;
+	left: 50%;
+	margin-left: 550px;
+	top:55%;
+	background:#FFF url(../images/wxdl.png) no-repeat top
+}
+
+.qqdl{
+	width: 60px;
+	height: 100px;
+	position: fixed;
+	z-index:99;
+	left: 50%;
+	margin-left: 550px;
+	top:67%;
+	background:#FFF url(../images/qqkf.png) no-repeat top
+}
+
+.fanhui{
+	width: 60px;
+	height: 60px;
+	position: fixed;
+	z-index:99;
+	left: 50%;
+	margin-left: 550px;
+	top:80%;
+	background:#FFF url(../images/zhiding.jpg) no-repeat top
+}
+
+
+
+
+.tcan1{width:100px; height:36px; font-weight:bold; line-height:36px; font-size:16px; border-radius:3px; border:none; color:#FFF; background:#F90; text-align:center; margin:10px 15px;font-family:"微软雅黑";}
+.tcan1:hover{background:#d67311; }
+.tcan2{width:100px; height:36px; font-weight:bold; line-height:36px; font-size:16px; border-radius:3px; border:none; color:#FFF; background:#99ca3d; text-align:center; margin:10px 15px;font-family:"微软雅黑";}
+.tcan2:hover{background:#80a834; }
+ 
+.zhong{text-align:center;}
+  
+.ui-tabs { padding: .2em; zoom: 1; }
+.ui-tabs .ui-tabs-nav { list-style: none; position: relative; padding: .2em .2em 0; }
+.ui-tabs .ui-tabs-nav li { position: relative; float: left; border-bottom-width: 0 !important; margin: 0 .2em -1px 0; padding: 0; }
+.ui-tabs .ui-tabs-nav li a { float: left; text-decoration: none; padding: .5em 1em; }
+.ui-tabs .ui-tabs-nav li.ui-tabs-selected { padding-bottom: 1px; border-bottom-width: 0; }
+.ui-tabs .ui-tabs-nav li.ui-tabs-selected a, .ui-tabs .ui-tabs-nav li.ui-state-disabled a, .ui-tabs .ui-tabs-nav li.ui-state-processing a { cursor: text; }
+.ui-tabs .ui-tabs-nav li a, .ui-tabs.ui-tabs-collapsible .ui-tabs-nav li.ui-tabs-selected a { cursor: pointer; } /* first selector in group seems obsolete, but required to overcome bug in Opera applying cursor: text overall if defined elsewhere... */
+.ui-tabs .ui-tabs-panel { padding: 1em 1.4em; display: block; border-width: 0; background: none; }
+.ui-tabs .ui-tabs-hide { display: none !important; }
+.Switch_div{width:1440px}
+/*品牌轮换开始*/
+ul.Switch{ width:1440;background:url(../images/t_bg.gif) repeat-x; height:36px; border-bottom:1px solid #ececec;}
+ul.Switch li{ float:left; margin-left:25px; text-align:center;width:81px; height:36px; line-height:40px; margin-top:3px;}
+ul.Switch li.tab{width:112px; height:36px;}
+
+ul.Switch li.tab_on{ width:112px; height:36px;background:url(../images/hover_bg.jpg) no-repeat;cursor:pointer;}
+ul.Switch li.tab_on a{color:#d52222; font-size:16px; font-weight:bold;}
+ul.Switch li.tab a{color:#333; font-size:16px; font-weight:bold;cursor:pointer;}
+
+.totop{width:60px; height:60px;display:block;cursor:pointer;}
+.xinyongka{float:left;height:17px;padding-left:20px;}
+
+.joinclub {
+width: 400px;
+height: 380px;
+border: 1px solid #F90;
+border-radius: 3px;
+background: #fff;
+padding-top: 10px;
+position: absolute;
+z-index: 99999999;
+display: none;
+left: 50%;/*FF IE7*/
+top: 50%;/*FF IE7*/
+margin-left: -220px!important;/*FF IE7 该值为本身宽的一半 */
+margin-top: -140px!important;/*FF IE7 该值为本身高的一半*/
+margin-top: 0px;
+position: fixed!important;/*FF IE7*/
+position: absolute;/*IE6*/
+ _top:expression(eval(document.compatMode && document.compatMode=='CSS1Compat') ? documentElement.scrollTop + (document.documentElement.clientHeight-this.offsetHeight)/2 :/*IE6*/
+ document.body.scrollTop + (document.body.clientHeight - this.clientHeight)/2);/*IE5 IE5.5*/
+}
+
+.weixinid {
+padding-top: 10px;
+position: absolute;
+z-index: 99999999;
+left: 50%;/*FF IE7*/
+top: 50%;/*FF IE7*/
+margin-left: -220px!important;/*FF IE7 该值为本身宽的一半 */
+margin-top: -140px!important;/*FF IE7 该值为本身高的一半*/
+margin-top: 0px;
+position: fixed!important;/*FF IE7*/
+position: absolute;/*IE6*/
+ _top:expression(eval(document.compatMode && document.compatMode=='CSS1Compat') ? documentElement.scrollTop + (document.documentElement.clientHeight-this.offsetHeight)/2 :/*IE6*/
+ document.body.scrollTop + (document.body.clientHeight - this.clientHeight)/2);/*IE5 IE5.5*/
+}
+
+.bg123 {
+background-color: #666;
+width: 100%;
+height: 100%;
+z-index: 99999998;
+left: 0;
+top: 0;/*FF IE7*/
+filter: alpha(opacity=50);/*IE*/
+opacity: 0.5;/*FF*/
+position: fixed!important;/*FF IE7*/
+position: absolute;/*IE6*/
+ _top:       expression(eval(document.compatMode && document.compatMode=='CSS1Compat') ? documentElement.scrollTop + (document.documentElement.clientHeight-this.offsetHeight)/2 :/*IE6*/
+ document.body.scrollTop + (document.body.clientHeight - this.clientHeight)/2);/*IE5 IE5.5*/
+}
+.joinclub01 {float:left; width:400px;text-align: center;padding-top:5px;}
+.joinclub02 {float:left; padding-left:40px; padding-top:5px; text-align:left; width:330px;}
+.joinclub03 { margin-top:10px; padding-top:10px; border-top:1px dashed #F90;}
+.joinclub04 { margin-top:5px; padding-top:5px;}
+
+
+.loading {
+width: 32px;
+height: 32px;
+position: absolute;
+z-index: 99999999;
+left: 50%;/*FF IE7*/
+top: 50%;/*FF IE7*/
+position: fixed!important;/*FF IE7*/
+position: absolute;/*IE6*/
+ _top:expression(eval(document.compatMode && document.compatMode=='CSS1Compat') ? documentElement.scrollTop + (document.documentElement.clientHeight-this.offsetHeight)/2 :/*IE6*/
+ document.body.scrollTop + (document.body.clientHeight - this.clientHeight)/2);/*IE5 IE5.5*/
+}
+
+
+.lxclub {
+width: 400px;
+height: 220px;
+border: 1px solid #F90;
+border-radius: 3px;
+background: #fff;
+padding-top: 10px;
+position: absolute;
+z-index: 99999999;
+display: none;
+left: 50%;/*FF IE7*/
+top: 50%;/*FF IE7*/
+margin-left: -220px!important;/*FF IE7 该值为本身宽的一半 */
+margin-top: -140px!important;/*FF IE7 该值为本身高的一半*/
+margin-top: 0px;
+position: fixed!important;/*FF IE7*/
+position: absolute;/*IE6*/
+ _top:expression(eval(document.compatMode && document.compatMode=='CSS1Compat') ? documentElement.scrollTop + (document.documentElement.clientHeight-this.offsetHeight)/2 :/*IE6*/
+ document.body.scrollTop + (document.body.clientHeight - this.clientHeight)/2);/*IE5 IE5.5*/
+}
+
+.lxclub01 {float:left; width:400px;text-align:center;padding-top:20px;font-size:18px;}
+.lxclub02 {float:left; width:400px;text-align:center;padding-top:20px;font-size:28px;color:#F60;font-weight:bold}
+.lxclub03 {float:left; width:400px;text-align:center;padding-top:30px;}
+.lxclub04 {float:left; width:400px;text-align:center;padding-top:15px;}
+
+.logindlreg{ width:292px; height:38px; line-height:38px; font-size:18px; text-align:center; color:#FFF; background:#F93; border:none; border-radius:5px; font-family:"微软雅黑";}
+.logindlreg:hover{ width:292px; height:38px; line-height:38px; font-size:18px; text-align:center; color:#FFF; background:#d67311; border:none; border-radius:5px; font-family:"微软雅黑"; }
+
+.wxclub {
+width: 550px;
+height: 300px;
+border: 1px solid #F90;
+border-radius: 3px;
+background: #fff;
+padding-top: 10px;
+position: absolute;
+z-index: 99999999;
+display: none;
+left: 45%;/*FF IE7*/
+top: 50%;/*FF IE7*/
+margin-left: -220px!important;/*FF IE7 该值为本身宽的一半 */
+margin-top: -140px!important;/*FF IE7 该值为本身高的一半*/
+margin-top: 0px;
+position: fixed!important;/*FF IE7*/
+position: absolute;/*IE6*/
+ _top:expression(eval(document.compatMode && document.compatMode=='CSS1Compat') ? documentElement.scrollTop + (document.documentElement.clientHeight-this.offsetHeight)/2 :/*IE6*/
+ document.body.scrollTop + (document.body.clientHeight - this.clientHeight)/2);/*IE5 IE5.5*/
+}
+
+.wxclub01 {float:left;width:550px;text-align:center;padding-top:10px;font-size:18px;}
+.wxclubl {float:left;width:260px;text-align:center;margin-left:8px;}
+.gexian {float:left;width:1px;height:200px;margin-left:10px;margin-top:20px;border-left:#D9D9D9 solid 1px;}
+.wxclubr {float:left;width:260px;text-align:center;margin-left:8px;}
+
+.logclub {
+width: 550px;
+height: 300px;
+border: 1px solid #F90;
+border-radius: 3px;
+background: #fff;
+padding-top: 10px;
+position: absolute;
+z-index: 99999999;
+display: none;
+left: 45%;/*FF IE7*/
+top: 50%;/*FF IE7*/
+margin-left: -220px!important;/*FF IE7 该值为本身宽的一半 */
+margin-top: -140px!important;/*FF IE7 该值为本身高的一半*/
+margin-top: 0px;
+position: fixed!important;/*FF IE7*/
+position: absolute;/*IE6*/
+ _top:expression(eval(document.compatMode && document.compatMode=='CSS1Compat') ? documentElement.scrollTop + (document.documentElement.clientHeight-this.offsetHeight)/2 :/*IE6*/
+ document.body.scrollTop + (document.body.clientHeight - this.clientHeight)/2);/*IE5 IE5.5*/
+}
+.endbox{ width:100%; height:280px; background:#43474c}
+.end{ width:1150px; height:260px; padding-top:20px;}
+.enddh{ width:240px; height:260px; float:left}
+.enddhbt{ line-height:40px; font-size:18px; color:#d3d3d3}
+.enddh li{line-height:33px; font-size:14px; color:#d3d3d3}
+.enddh li a{ color:#d3d3d3}
+
+.endbqbox{ width:100%; height:70px; background:#232323}
+.endbq{ width:1150px; height:70px; padding-top:10px; }
+.endbqxx{line-height:23px; font-size:12px; color:#FFF;margin-top: 14px;}
+
+input.buynum{
+                border: 1px solid #ccc;
+                width: 100px;
+                height: 140%;
+                text-align: center;
+                margin-top: -3px;
+                border-radius: 3px;
+                
+                -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+                box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+                -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+                -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+                transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s
+     }
+input.buynum:focus{
+                    border-color: #66afe9;
+                    outline: 0;
+                    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);
+                    box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6)
+            }
+input.mobile{
+                border: 1px solid #ccc;
+                height: 140%;
+                text-align: center;
+                border-radius: 3px;
+                padding-left:5px;
+                -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+                box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+                -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+                -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+                transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+                margin-top: -3px;
+     }
+input.mobile:focus{
+                    border-color: #66afe9;
+                    outline: 0;
+                    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);
+                    box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6)
+            } 
+               

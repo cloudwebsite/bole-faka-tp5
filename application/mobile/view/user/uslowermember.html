@@ -1,0 +1,193 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0 user-scalable=no">
+		<script>
+			document.documentElement.style.fontSize = document.documentElement.clientWidth / 750 * 40 + "px";
+		</script>
+		<meta name="format-detection" content="telephone=no" />
+		<title>{:config('web_site_title')}</title>
+		<link rel="stylesheet" type="text/css" href="__IMGMOBILE__/css/foxui.min.css-v=0.2.css">
+		<link rel="stylesheet" type="text/css" href="__IMGMOBILE__/css/style.css-v=3.0.0.css">
+		<script type="text/javascript" src="{:config('cdnpublic')}qrcodejs/1.0.0/qrcode.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="__IMGMOBILE__/css/iconfont.css-v=2017070719.css">
+		<link rel="stylesheet" href="__IMGMOBILE__/css/style_1.css">
+
+		<script type="text/javascript" src="{:config('cdnpublic')}jquery/1.8.2/jquery.min.js"></script>
+		<script type="text/javascript" src="__IMGMOBILE__/js/font.js"></script>
+		<script src="/static/admin/js/laypage/laypage.js"></script>
+		<script src="/static/admin/js/laytpl/laytpl.js"></script>
+
+		<link rel="stylesheet" href="{:config('cdnpublic')}layer/3.1.1/mobile/need/layer.css" />
+		<script type="text/javascript" src="{:config('cdnpublic')}layer/3.1.1/mobile/layer.js"></script>
+
+		<style type="text/css">
+			body {
+				position: absolute;
+				;
+				max-width: 750px;
+				margin: auto;
+			}
+			
+			.fui-navbar {
+				max-width: 750px;
+			}
+			
+			.fui-navbar,
+			.fui-footer {
+				max-width: 750px;
+			}
+			
+			.fui-page.fui-page-from-center-to-left,
+			.fui-page-group.fui-page-from-center-to-left,
+			.fui-page.fui-page-from-center-to-right,
+			.fui-page-group.fui-page-from-center-to-right,
+			.fui-page.fui-page-from-right-to-center,
+			.fui-page-group.fui-page-from-right-to-center,
+			.fui-page.fui-page-from-left-to-center,
+			.fui-page-group.fui-page-from-left-to-center {
+				-webkit-animation: pageFromCenterToRight 0ms forwards;
+				animation: pageFromCenterToRight 0ms forwards;
+			}
+		</style>
+
+	</head>
+
+	<body ontouchstart>
+
+		<div class='fui-page-group statusbar'>
+			
+			<div class="fui-page fui-page-current page-commission-down">
+				<div class="fui-header">
+					<div class="fui-header-left">
+						<a class="back" onclick="back();"></a>
+					</div>
+					<div class="title">我的下线({$countPid1+$countPid2+$countPid3})</div>
+				</div>
+				<div class="fui-content navbar">
+					<input type="hidden" name="type" id="type" value="{$type}">
+					<div class="fui-tab fui-tab-warning" id="tab">
+						<a class="{if condition='$type eq 1'}active{/if}" href="{:url('user/uslowermember')}" data-tab='level1'>一级({$countPid1})</a>
+						<a class="{if condition='$type eq 2'}active{/if}" href="{:url('user/uslowermember',['type'=>2])}" data-tab='level2'>二级({$countPid2})</a>
+						<a class="{if condition='$type eq 3'}active{/if}" href="{:url('user/uslowermember',['type'=>3])}" data-tab='level3'>三级({$countPid3})</a>
+					</div>
+
+					
+					<div class="fui-list-group" id="list-content">
+						
+					</div>
+					
+					{if condition="$count neq 0"}
+						<div style="background-color: #fff;padding: 25px;">
+		                	<div id="AjaxPage" style=" text-align: right;">
+		                		
+		                	</div>
+		                   
+		                    
+		                    <div style="text-align: right;">
+		                        	共{$count}条数据 <span id="allpage"></span>
+		                    </div>
+		                    
+		                </div>
+		            {/if}
+					<div class='infinite-loading' id="infinite-loading"><span class='fui-preloader'></span><span class='text'> 正在加载...</span></div>
+
+					
+
+				</div>
+				
+				
+				<script id="list-template" type="text/html">
+					 {{# for(var i=0;i<d.length;i++){  }}
+					 <div class="fui-list" style="height: 3.5rem">
+						
+						<div class="fui-list-inner">
+							<div class="row">
+							      <div class="row-text">
+								  
+								  {{d[i].account}}
+							      
+							      </div>
+							</div>
+							<div class="subtitle">
+							 {{# if(typeof(d[i].shangji)=="undefined"){ }}     
+							   一级分销商
+							 {{# }else{ }}
+							  上级：{{d[i].shangji}}
+							 {{# } }}     
+							    
+							</div>
+						</div>
+						<div class="row-remark">
+							
+							 {{d[i].create_time}}
+							
+							
+						</div>
+					</div>
+					 
+					 {{# } }}
+				</script>
+
+				
+				
+			</div>
+			<div class="fui-navbar">
+					<a href="{:url('mobile/user/usfxcenter')}" class="external nav-item ">
+						<span class="icon icon-home"></span>
+						<span class="label">分销中心</span>
+
+					</a>
+					
+					<a href="{:url('user/ustgmoneylog')}" class="external nav-item ">
+						<span class="icon icon-list"></span>
+						<span class="label">佣金明细</span>
+					</a>
+
+					<a href="{:url('user/uslowermember')}" class="external nav-item active">
+						<span class="icon icon-group"></span>
+						<span class="label">我的下线</span>
+					</a>
+					
+				</div>
+
+
+
+	<script type="application/javascript">
+		{include file="public/common" /}
+		Ajaxpage();
+	    function Ajaxpage(curr){
+		    var type=$('#type').val();
+	        $.getJSON('{:url("mobile/user/uslowermember")}', {page: curr || 1,type:type}, function(data){
+	            $("#infinite-loading").css('display','none'); //数据加载完关闭动画 
+	            if(data==''){
+	                $("#list-content").html('<div class="content-empty" style="display: block;margin-top: 8rem;"><img src="__IMGMOBILE__/img/nolist.png" style="width: 6rem;margin-bottom: .5rem;"><br><p style="color: #999;font-size: .75rem">暂时没有任何数据！</p></div>');
+	            }else{
+	                var tpl = document.getElementById('list-template').innerHTML;
+	                laytpl(tpl).render(data, function(html){
+	                    document.getElementById('list-content').innerHTML = html;
+	                });
+	                laypage({
+	                    cont: $('#AjaxPage'),//容器。值支持id名、原生dom对象，jquery对象,
+	                    pages:'{$allpage}',//总页数
+	                    skip: true,//是否开启跳页
+	                    
+	                    skin: '#1AB5B7',//分页组件颜色
+	                    curr: curr || 1,
+	                    groups: 3,//连续显示分页数
+	                    jump: function(obj, first){
+	                        if(!first){
+	                            Ajaxpage(obj.curr)
+	                        }
+	                        //$('#allpage').html('第'+ obj.curr +'页，共'+ obj.pages +'页');
+	                    }
+	                });
+	            }
+	        });
+	    }
+	</script>		
+	</body>
+
+</html>

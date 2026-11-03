@@ -1,0 +1,13 @@
+<div class="header">
+	<div class="header_n">
+		<div class="header_nl l">
+			<img onclick="gohome();" src="/uploads/images/{:config('WEB_logo')}" onerror="this.src='/static/admin/images/head_default.gif'" width="400" height="70"/>
+		</div>
+		<div class="header_nr r">
+			<a href="{:url('Index/selectorder')}" target="_blank">订单查询</a>
+			<a href="javascript:void(0);" onclick="if(typeof showHomeTanggNotice==='function'){showHomeTanggNotice(__TANGG_CONTENT__);}else if(typeof m1!=='undefined'){m1.show();}" name="gonggao">商家公告</a>
+			<a href="{:url('Detail/getall')}" target="_blank">常见问题</a>
+			<a href="https://wpa.qq.com/msgrd?v=3&uin={:config('web_qq')}&Site=&Menu=yes" target="_blank">联系客服</a>
+		</div>
+	</div>
+</div>

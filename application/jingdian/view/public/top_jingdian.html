@@ -1,0 +1,66 @@
+  <div class="toop">
+    <div class="toop_r">
+             
+																
+												<div class="toop_rl">
+		                        	欢迎光临
+		                        <span id="welcome">现在是：2017年12月31日  星期日 14:33:21</span>
+		                        <span id="showAsks"> 下午好,工作怎么样，还顺利吧!</span>
+		                  </div>											
+											
+                    <div class="toop_nav">
+                    	{if condition="config('web_reg_type') neq 0"}
+											{if condition="session('useraccount.account') eq null"}
+												
+											
+												<a href="{:url('@jingdian/User/index')}">登录</a>
+											
+											
+												<a href="{:url('@jingdian/User/reg')}">注册</a>
+											
+											{else/}
+											
+												欢迎您，<a href="{:url('@jingdian/User/usCenter')}">{:session('useraccount.account')}</a>
+											
+											
+												<a href="{:url('@jingdian/User/loginOut')}">退出</a>
+										
+											{/if}
+											{/if}
+											{if condition="session('useraccount.account') eq null"}
+											
+												<a href="{:url('Index/selectorder')}">我的订单</a>
+											
+											{else/}
+											
+												<a href="{:url('user/usorder')}">我的订单</a>
+											
+											{/if}
+                    	
+                    	
+                    	
+                        <span id="labUserCode">
+                        	<a onclick="gohome();">网站首页</a> |
+                        	<span id="labUserCode">
+                        		<a href="https://wpa.qq.com/msgrd?v=3&uin={:config('web_qq')}&Site=&Menu=yes">联系客服</a> |
+                        		<a href="{:url('Detail/getall')}" target="_blank">常见问题</a> 
+                        	</span>
+                        </span>	
+                       			
+                    </div>
+                </div>
+             </div>   
+             
+ <div class="top" {if condition="config('pc_jingdian_title_beijing_color') neq ''"} style="background: {:config('pc_jingdian_title_beijing_color')};"{/if}> 	
+     <div class="bar">
+      <h1  {if condition="config('pc_jingdian_title_color') neq ''"} style="display: initial;color: {:config('pc_jingdian_title_color')};"{else/}style="display: initial;"{/if}>{:config('WEB_title')}</h1>
+      <span>购买流程↓↓↓</span>
+     </div> 
+    </div> 
+    <script>
+    	function gohome()
+		{
+			location.href="{:config('is_https')}://"+window.location.host;
+		}
+    </script>
+ 

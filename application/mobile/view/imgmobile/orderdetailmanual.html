@@ -1,0 +1,268 @@
+<?php date_default_timezone_set("PRC");  ?>
+<!doctype html>
+
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0 user-scalable=no">
+
+		<meta name="format-detection" content="telephone=no" />
+		<title>{:config('web_site_title')}</title>
+		<link rel="stylesheet" type="text/css" href="__IMGMOBILE__/css/foxui.min.css-v=0.2.css" />
+		<link rel="stylesheet" type="text/css" href="__IMGMOBILE__/css/style.css-v=3.0.0.css" />
+		<link rel="stylesheet" type="text/css" href="__IMGMOBILE__/css/iconfont.css-v=2017070719.css" />
+		<link rel="stylesheet" type="text/css" href="__IMGMOBILE__/css/orderdetail.css?v=2.0.0">
+		<link rel="stylesheet" href="{:config('cdnpublic')}Swiper/4.2.6/css/swiper.min.css" />
+		<script type="text/javascript" src="{:config('cdnpublic')}Swiper/4.2.6/js/swiper.min.js"></script>
+		<!--<link rel="stylesheet" href="//at.alicdn.com/t/font_82607_e93d131lklr6n7b9.css">-->
+
+
+		<style type="text/css">
+			body {
+				position: absolute;
+				;
+				max-width: 750px;
+				margin: auto;
+			}
+			
+			.fui-navbar {
+				max-width: 750px;
+			}
+			
+			.fui-navbar,
+			.fui-footer {
+				max-width: 750px;
+			}
+			
+			.fui-page.fui-page-from-center-to-left,
+			.fui-page-group.fui-page-from-center-to-left,
+			.fui-page.fui-page-from-center-to-right,
+			.fui-page-group.fui-page-from-center-to-right,
+			.fui-page.fui-page-from-right-to-center,
+			.fui-page-group.fui-page-from-right-to-center,
+			.fui-page.fui-page-from-left-to-center,
+			.fui-page-group.fui-page-from-left-to-center {
+				-webkit-animation: pageFromCenterToRight 0ms forwards;
+				animation: pageFromCenterToRight 0ms forwards;
+			}
+			.aligncenter {
+				clear: both;
+				display: block;
+				margin: auto;
+			}
+		</style>
+
+		<style>
+			.danmu {
+				display: none;
+				opacity: 0;
+			}
+		</style>
+	</head>
+
+	<body ontouchstart>
+
+		<div class="fui-page cav order_detail fui-page-current" id="fui-page-1523813864586">
+
+			<div class="fui-header">
+				<div class="fui-header-left">
+					<a class="back" id="btn-back" href="/"></a>
+				</div>
+				<div class="title">
+					订单详情
+				</div>
+				<div class="fui-header-right"></div>
+			</div>
+
+			<div class="fui-content navbar">
+
+				<!--状态-->
+				<div class="order_detail_header">
+					<div class="order_detail_ststus">
+						<div style="font-size: 0.85rem;">
+							支付成功,等待卖家发货
+						</div>
+						<div>订单金额： ¥ {$Order['data']['data_card']['mamount']}</div>
+					</div>
+				</div>
+
+				<!--商品信息-->
+				<div class="fui-list-group">
+					<div class="fui-list_title"><i class="icon icon-dianpu1" style="margin-right: 0.25rem;"></i>{:config('shop_name')}</div>
+
+					<a class="fui-list" href="{:url("mobile/Index/goodsdetail")}?mpid={$Order['data']['mpid']}">
+						<div class="fui-list-media">
+							<img {if condition="$Order['data']['imgurl'] eq ''"}src="/static/admin/images/head_default.gif"{else/}src="{$Order['data']['imgurl']}"{/if} onerror="this.src='/static/admin/images/head_default.gif'">
+						</div>
+						<div class="fui-list-inner">
+							<div class="title">{$Order['data']['mname']}</div>
+
+						</div>
+						<div class="fui-list-angle" style="margin-right: 0">
+							<div style="color: #000">￥{$Order['data']['price']}</div>
+							<div class="num">x{$Order['data']['buynum']}</div>
+						</div>
+					</a>
+
+				</div>
+				<!--门店-->
+				<div class="fui-cell-group noborder order-info">
+					<div class="fui-cell">
+						<div class="fui-cell-info">
+							<span style="margin-right: 0.7rem;">订单编号</span>{$Order['data']['data_card']['mcard']} </div>
+						<div class="fui-cell-remark noremark">
+
+						</div>
+					</div>
+					<div class="fui-cell">
+						<div class="fui-cell-info">
+							<span style="margin-right:0.7rem;">创建时间</span>{:date("Y-m-d H:i:s",$Order['data']['data_card']['create_time'])}</div>
+						<div class="fui-cell-remark noremark">
+
+						</div>
+					</div>
+				
+					
+
+					
+				</div>
+				<!--消费码-->
+				<!--发货信息-->
+				<div class="fui-cell-group">
+					{if condition="count($Order['data']['attach']) eq 0"}
+					{else/}
+					<div class="fui-cell-title">附加信息 </div>
+					<div class="fui-cell">
+						
+								
+									<div class="fui-cell-info" style="white-space: normal;word-wrap: break-word;line-height: 1.5rem;">
+										{foreach name="$Order['data']['attach']" item="vo"}
+											{$vo.title}：{$vo.text}<br>
+										{/foreach}
+									</div>
+									
+					</div>
+					{/if}
+				</div>
+				<div class="fui-cell-group">
+					<div class="fui-cell-title">温馨提示 </div>
+					<div class="fui-cell">
+						<div class="fui-cell-info" style="white-space: normal;word-wrap: break-word;line-height: 1.5rem;">
+							手动发货商品，卖家正在积极处理。<br>如急用请联系卖家
+										<div class="fui-list-group order-item" data-orderid="5333" data-verifycode="">
+											<a href="mqqwpa://im/chat?chat_type=crm&amp;uin={:config('WEB_QQ')}&amp;version=1&amp;src_type=web&amp;web_src=">
+												<div class="fui-list-group-title lineblock2 " style="text-align: center;">
+													卖家联系QQ
+													
+												</div>
+			
+												<div class="fui-list goods-list" >
+													<div class="aligncenter fui-list-media" >
+														<i class="icon icon-qq" style="font-size: 0.7rem; color: #fd5454;"></i> 
+														<a href="https://wpa.qq.com/msgrd?v=3&uin={:config('WEB_QQ')}&site=qq&menu=yes">{:config('WEB_QQ')}</a>
+													</div>
+													
+													
+			
+												</div>
+			
+												
+											</a>
+											
+										</div>
+										<div class="fui-list-group order-item" data-orderid="5333" data-verifycode="">
+											<a  data-nocache="true">
+												<div class="fui-list-group-title lineblock2 " style="text-align: center;">
+													卖家联系电话
+													
+												</div>
+			
+												<div class="fui-list goods-list" >
+													<div class="aligncenter fui-list-media" >
+														<i class="icon icon-mobile2" style="font-size: 0.7rem; color: #fd5454;"></i> 
+														<a href="tel:{:config('web_mobile')}">{:config('web_mobile')}</a>
+													</div>
+													
+													
+			
+												</div>
+			
+												
+											</a>
+											
+										</div>
+						</div>
+					</div>
+					
+				</div>
+				
+				
+				
+				<div class="swiper-container">
+					    		<div class="swiper-wrapper">
+							        {foreach name="kamibanner" item="v"}		
+									
+									<div class="swiper-slide"><a href="{$v['link_url']}" {if condition="$v['opentype'] eq 1"}target="_blank"{/if}><img src="/uploads/images/{$v['images']}" onerror="this.src='/static/admin/images/head_default.gif'" style="display: block; width: 100%; "></a></div>
+									{/foreach}
+									
+							        
+							    </div>
+							    <!-- 如果需要分页器 -->
+							    <div class="swiper-pagination"></div>
+							    
+							    
+							</div>
+
+			</div>
+			
+
+		</div>
+    <script type="text/javascript">
+    
+    
+      function gohome()
+		{
+			location.href="{:config('is_https')}://"+window.location.host+'/mobile';
+		}
+		function downloadz(order)
+		{
+			location.href="{:url('Index/dc')}"+"?order="+order;
+		}
+		
+		function fenxiang(order)
+		{
+			top.location.href="{:url('Index/fenxiang')}"+"?order="+order.toString();
+		}
+		function timestampToTime(timestamp) {
+        var date = new Date(timestamp * 1000);//时间戳为10位需*1000，时间戳为13位的话不需乘1000
+        Y = date.getFullYear() + '-';
+        M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
+        D = date.getDate() + ' ';
+        h = date.getHours() + ':';
+        m = date.getMinutes() + ':';
+        s = date.getSeconds();
+        return Y+M+D+h+m+s;
+   }	
+</script>
+
+<script>        
+		  var mySwiper = new Swiper ('.swiper-container', {
+		    direction: 'horizontal',
+		    loop: false,
+		    autoplay:true,
+		    
+		    // 如果需要分页器
+		    pagination: {
+		      el: '.swiper-pagination',
+		      type: 'bullets',
+		    },
+		    
+		   
+		    
+		   
+		  })        
+		</script>
+	</body>
+
+</html>

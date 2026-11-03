@@ -1,0 +1,376 @@
+{include file="public/header" /}
+<link rel="stylesheet" href="__STATIC__/admin/git-update/updater.css">
+<style>
+.upgrade-box { padding: 10px 5px 20px; }
+.upgrade-meta { margin-bottom: 16px; color: #666; font-size: 13px; }
+.upgrade-meta a { color: #1e9fff; }
+.upgrade-toolbar { margin: 12px 0 18px; }
+.upgrade-toolbar label { margin-right: 8px; font-weight: normal; }
+.upgrade-terminal {
+  background: #1e1e1e; color: #d4d4d4; min-height: 280px; max-height: 420px;
+  overflow-y: auto; padding: 14px 16px; border-radius: 4px; font-size: 13px; line-height: 1.7;
+  font-family: Consolas, Monaco, monospace;
+}
+.upgrade-terminal .row { margin: 2px 0; }
+.upgrade-terminal .info { color: #888; margin-right: 8px; }
+.upgrade-terminal .danger, .upgrade-terminal .err { color: #f56c6c; }
+.upgrade-terminal .warning { color: #e6a23c; }
+.upgrade-progress {
+  height: 8px; background: #eee; border-radius: 4px; margin: 12px 0 0; overflow: hidden;
+}
+.upgrade-progress > i {
+  display: block; height: 100%; width: 0; background: #1e9fff; transition: width .2s;
+}
+.update-git-logs li { margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px dashed #e5e5e5; }
+.update-git-logs .date { color: #999; font-size: 12px; margin-left: 8px; }
+.upgrade-token-help {
+  margin-top: 16px; padding: 14px 16px; background: #f8fafc; border: 1px solid #e8eef5;
+  border-radius: 4px; font-size: 13px; color: #555; line-height: 1.7;
+}
+.upgrade-token-help h6 {
+  margin: 0 0 8px; font-size: 14px; font-weight: 600; color: #333;
+}
+.upgrade-token-help .token-plat { margin-top: 12px; }
+.upgrade-token-help .token-plat strong { color: #222; }
+.upgrade-token-help ol { margin: 6px 0 0 18px; padding: 0; }
+.upgrade-token-help li { margin: 2px 0; }
+.upgrade-token-help code { background: #eef2f7; padding: 1px 5px; border-radius: 3px; }
+.upgrade-token-help a { color: #1e9fff; }
+.upgrade-token-help .token-note { margin: 12px 0 0; color: #888; font-size: 12px; }
+.upgrade-backup-warn {
+  margin: 0 0 16px; padding: 12px 14px; background: #fff8e6; border: 1px solid #f0d78c;
+  border-radius: 4px; color: #8a6d3b; font-size: 13px; line-height: 1.75;
+}
+.upgrade-backup-warn strong { color: #a67c00; }
+.upgrade-backup-warn ol { margin: 6px 0 0 18px; padding: 0; }
+.upgrade-backup-warn li { margin: 2px 0; }
+.upgrade-backup-warn code { background: #f5ecd0; padding: 1px 5px; border-radius: 3px; }
+</style>
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="ibox float-e-margins">
+        <div class="ibox-title">
+            <h5>在线更新（Git 双源）</h5>
+        </div>
+        <div class="ibox-content upgrade-box">
+            <div class="upgrade-backup-warn">
+                <strong>⚠ 更新前请务必自行备份</strong>
+                <ol>
+                    <li><strong>数据库</strong>：导出整库 SQL（phpMyAdmin / 面板备份均可）</li>
+                    <li><strong>站点源码</strong>：打包网站根目录（至少保留 <code>conn.php</code>、<code>application/</code>、<code>public/</code>、<code>data/</code>）</li>
+                    <li>在线更新会覆盖业务代码；本机配置（如 <code>conn.php</code>、<code>data/</code>）会跳过，但仍可能因异常中断导致半更新状态</li>
+                </ol>
+            </div>
+
+            <div class="upgrade-meta">
+                本地版本：<strong id="localVer">{$local_version|default='—'}</strong>
+                &nbsp;|&nbsp; 分支：<strong>{$git_ref|default='main'}</strong>
+                &nbsp;|&nbsp; 上次更新提交：<strong id="localCommit">{if condition="$local_commit_short"}{$local_commit_short}{else /}无（将整包覆盖）{/if}</strong>
+                &nbsp;|&nbsp;
+                <a href="https://github.com/cloudwebsite/bole-faka-tp5" target="_blank">GitHub</a>
+                &nbsp;/&nbsp;
+                <a href="https://gitee.com/lailiyun/bole-faka-tp5" target="_blank">Gitee</a>
+            </div>
+
+            <div class="upgrade-toolbar">
+                <label>更新源：</label>
+                <select id="gitProvider" class="form-control" style="display:inline-block;width:180px;height:32px;padding:2px 8px;">
+                    <option value="github" {if condition="$git_provider eq 'github'"}selected{/if}>GitHub（cloudwebsite）</option>
+                    <option value="gitee" {if condition="$git_provider eq 'gitee'"}selected{/if}>Gitee（lailiyun）</option>
+                </select>
+                <button type="button" class="btn btn-primary btn-sm" id="btnCheck" style="margin-left:8px;">检查更新</button>
+                <button type="button" class="btn btn-success btn-sm" id="btnUpdate" style="margin-left:6px;" disabled>开始更新</button>
+                <button type="button" class="btn btn-warning btn-sm" id="btnSyncSql" style="margin-left:6px;">执行升级 SQL</button>
+                <button type="button" class="btn btn-default btn-sm" id="btnToken" style="margin-left:6px;">填写 Token</button>
+                <span id="tokenStatus" style="margin-left:10px;color:#888;font-size:12px;">
+                    GitHub：<em id="tokenGithubFlag">{if condition="$token_github_set"}已配置{else /}未配置{/if}</em>
+                    &nbsp;/&nbsp;
+                    Gitee：<em id="tokenGiteeFlag">{if condition="$token_gitee_set"}已配置{else /}未配置{/if}</em>
+                </span>
+            </div>
+
+            <div class="update-git">
+                <div class="update-git-item">
+                    <div class="update-git-version">
+                        <p>最新版本</p>
+                        <p id="remoteVer">检查中…</p>
+                    </div>
+                    <div class="update-git-logs" id="logList">
+                        <p style="color:#999;">更新日志将显示在这里</p>
+                    </div>
+                </div>
+                <div class="update-git-item">
+                    <div class="upgrade-terminal" id="terminal"></div>
+                    <div class="upgrade-progress"><i id="progressBar"></i></div>
+                </div>
+            </div>
+            <p style="margin-top:14px;color:#999;font-size:12px;">
+                说明：<code>data/commit</code> 记录上次成功更新到的 Git 提交；没有该文件（或内容非法）时，检查更新会提示用远端最新代码<strong>整包覆盖</strong>。
+                会跳过 <code>data/</code>、<code>conn.php</code>、<code>public/favicon.ico</code>、
+                <code>application/config.php</code>、<code>application/admin.php</code>、上传目录等。
+                Token 写入 <code>data/git_update.php</code>。更新结束后自动执行 <code>upgrade/sql/*.sql</code>。
+            </p>
+
+            <div class="upgrade-token-help">
+                <h6>🔐 Token 获取示例（可选，用于 Star / 提高额度）</h6>
+                <p style="margin:0;">拿到令牌后点「填写 Token」粘贴保存即可；仓库地址等已在 <code>data/git_update.php</code> 配好，不必改文件、不必复制配置。</p>
+
+                <div class="token-plat">
+                    <strong>🐙 GitHub</strong>
+                    <ol>
+                        <li>打开 <a href="https://github.com/settings/tokens" target="_blank" rel="noopener">github.com/settings/tokens</a></li>
+                        <li>生成 Classic Token（或 Fine-grained）</li>
+                        <li>Classic 建议勾选 <code>public_repo</code>（公开库读写 / Star 常用）；仅只读可不勾额外权限</li>
+                        <li>回到本页点「填写 Token」，粘贴后保存</li>
+                    </ol>
+                </div>
+
+                <div class="token-plat">
+                    <strong>🪶 Gitee</strong>
+                    <ol>
+                        <li>打开 <a href="https://gitee.com/profile/personal_access_tokens" target="_blank" rel="noopener">gitee.com/profile/personal_access_tokens</a></li>
+                        <li>新建私人令牌，勾选与仓库、用户相关的权限（含 Star 所需项）</li>
+                        <li>回到本页点「填写 Token」，粘贴后保存</li>
+                    </ol>
+                </div>
+
+                <p class="token-note">
+                    示例配置里 <code>auto_star</code> / <code>star_all_mirrors</code> 已为 <code>true</code>：
+                    检查或完成更新会尝试给双源仓库点 Star；失败不影响升级本身。
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{include file="public/footer" /}
+<script src="__STATIC__/admin/git-update/updater-client.js"></script>
+<script>
+(function () {
+    var apiUrl = '{:url("Upgrade/api")}';
+    var syncSqlUrl = '{:url("Upgrade/syncSql")}';
+    var client = null;
+    var $term = $('#terminal');
+    var $bar = $('#progressBar');
+    var $remote = $('#remoteVer');
+    var $logs = $('#logList');
+    var $btnUpdate = $('#btnUpdate');
+
+    function terminalAdapter() {
+        return {
+            addText: function (payload) {
+                if (payload === '　' || payload === ' ') {
+                    $term.append('<div class="row">&nbsp;</div>');
+                    $term.scrollTop($term[0].scrollHeight);
+                    return;
+                }
+                if (typeof payload === 'string') {
+                    payload = { text: payload };
+                }
+                var cls = payload.color === 'danger' ? 'danger' : (payload.color === 'warning' ? 'warning' : '');
+                var info = payload.info ? '<span class="info">' + payload.info + '</span>' : '';
+                var text = payload.text || '';
+                $term.append('<div class="row ' + cls + '">' + info + text + '</div>');
+                if (payload.progress) {
+                    $bar.css('width', '10%');
+                }
+                $term.scrollTop($term[0].scrollHeight);
+            },
+            setProgress: function (n) {
+                n = Math.max(0, Math.min(100, n * 1 || 0));
+                $bar.css('width', n + '%');
+            },
+            setError: function (msg) {
+                this.addText({ text: msg || '错误', color: 'danger' });
+            }
+        };
+    }
+
+    function renderLogs(data) {
+        if (!data) return;
+        $remote.text(data.version || (data.msg || '—'));
+        var logs = data.logs || [];
+        if (!logs.length) {
+            $logs.html('<p style="color:#999;">暂无更新日志</p>');
+            return;
+        }
+        var html = '<ul style="list-style:none;padding:0;margin:0;">';
+        for (var i = 0; i < logs.length; i++) {
+            var item = logs[i];
+            html += '<li><strong>' + (item.title || '') + '</strong>'
+                + '<span class="date">' + (item.date || '') + '</span>'
+                + '<div style="margin-top:6px;color:#555;">' + (item.message || '') + '</div></li>';
+        }
+        html += '</ul>';
+        $logs.html(html);
+    }
+
+    function createClient() {
+        var provider = $('#gitProvider').val() || 'github';
+        $term.empty();
+        $bar.css('width', '0');
+        $btnUpdate.prop('disabled', true);
+        $remote.text('检查中…');
+        client = new GitOnlineUpdater({
+            apiUrl: apiUrl + (apiUrl.indexOf('?') >= 0 ? '&' : '?') + 'provider=' + encodeURIComponent(provider),
+            syncUrl: syncSqlUrl,
+            request: function (opt) {
+                $.ajax({
+                    url: opt.url,
+                    type: opt.type || 'POST',
+                    data: opt.data || {},
+                    dataType: 'json',
+                    timeout: opt.timeout || 60000,
+                    success: function (res) { opt.success && opt.success(res); },
+                    error: function (xhr) {
+                        opt.error && opt.error(new Error('请求失败 ' + (xhr && xhr.status ? xhr.status : '')));
+                    },
+                    complete: function () { opt.complete && opt.complete(); }
+                });
+            },
+            terminal: terminalAdapter(),
+            onReady: function (sys) {
+                if (sys && sys.version) {
+                    $('#localVer').text(sys.version);
+                }
+            },
+            onComplete: function () {
+                return true;
+            },
+            skipPrefixes: ['data/', 'runtime/', 'docs/', '更新/', '未修改前版本/', 'git在线升级/', '.git/', 'public/upload/', 'public/uploads/'],
+            skipFiles: ['README.md', 'LICENSE.md', '.gitignore', 'conn.php', 'public/favicon.ico', 'favicon.ico', 'application/config.php', 'application/admin.php']
+        });
+
+        // 劫持 checkVer 后刷新 UI（含已是最新时的更新日志）
+        var originCheck = client.checkVer.bind(client);
+        client.checkVer = function () {
+            return originCheck().then(function () {
+                if (client.noupdate) {
+                    $remote.text((client.lastdata && client.lastdata.version) ? client.lastdata.version : client.noupdate);
+                    $btnUpdate.prop('disabled', true);
+                    if (client.lastdata && (client.lastdata.logs || []).length) {
+                        renderLogs(client.lastdata);
+                    } else {
+                        $logs.html('<p style="color:#999;">当前已是最新版本</p>');
+                    }
+                } else if (client.lastdata && client.lastdata.version) {
+                    renderLogs(client.lastdata);
+                    $btnUpdate.prop('disabled', false);
+                } else {
+                    $logs.html('<p style="color:#999;">暂无更新日志</p>');
+                }
+            });
+        };
+        return client.mount();
+    }
+
+    function setTokenFlags(data) {
+        if (!data) return;
+        $('#tokenGithubFlag').text(data.github_set ? '已配置' : '未配置');
+        $('#tokenGiteeFlag').text(data.gitee_set ? '已配置' : '未配置');
+    }
+
+    function openTokenDialog() {
+        var html = ''
+            + '<div style="padding:16px 18px 8px;font-size:13px;line-height:1.7;">'
+            +   '<p style="margin:0 0 10px;color:#666;">粘贴后点「保存」会写入本机 <code>data/git_update.php</code>。留空表示不改动该项；勾选清除可删掉已存 Token。</p>'
+            +   '<div style="margin-bottom:12px;">'
+            +     '<label style="display:block;margin-bottom:4px;"><strong>🐙 GitHub Token</strong> '
+            +       '<a href="https://github.com/settings/tokens" target="_blank" rel="noopener">去获取</a></label>'
+            +     '<input type="password" id="dlgGithubToken" class="form-control" placeholder="粘贴 GitHub PAT（留空不修改）" autocomplete="off">'
+            +     '<label style="font-weight:normal;margin-top:6px;"><input type="checkbox" id="dlgClearGithub"> 清除已保存的 GitHub Token</label>'
+            +   '</div>'
+            +   '<div style="margin-bottom:8px;">'
+            +     '<label style="display:block;margin-bottom:4px;"><strong>🪶 Gitee Token</strong> '
+            +       '<a href="https://gitee.com/profile/personal_access_tokens" target="_blank" rel="noopener">去获取</a></label>'
+            +     '<input type="password" id="dlgGiteeToken" class="form-control" placeholder="粘贴 Gitee 私人令牌（留空不修改）" autocomplete="off">'
+            +     '<label style="font-weight:normal;margin-top:6px;"><input type="checkbox" id="dlgClearGitee"> 清除已保存的 Gitee Token</label>'
+            +   '</div>'
+            + '</div>';
+        layer.open({
+            type: 1,
+            title: '填写 Token（自动保存）',
+            area: ['520px', '380px'],
+            btn: ['保存', '取消'],
+            content: html,
+            yes: function (index) {
+                var payload = {
+                    github_token: ($('#dlgGithubToken').val() || '').trim(),
+                    gitee_token: ($('#dlgGiteeToken').val() || '').trim(),
+                    clear_github: $('#dlgClearGithub').is(':checked') ? 1 : 0,
+                    clear_gitee: $('#dlgClearGitee').is(':checked') ? 1 : 0
+                };
+                if (!payload.github_token && !payload.gitee_token && !payload.clear_github && !payload.clear_gitee) {
+                    layer.msg('请至少填写或清除一项');
+                    return;
+                }
+                var loadIdx = layer.load(1, { shade: 0.1 });
+                $.ajax({
+                    url: '{:url("Upgrade/saveToken")}',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: payload,
+                    success: function (res) {
+                        layer.close(loadIdx);
+                        if (res && res.code == 1) {
+                            setTokenFlags(res.data || {});
+                            layer.close(index);
+                            layer.msg(res.msg || '已保存');
+                        } else {
+                            layer.msg((res && res.msg) ? res.msg : '保存失败');
+                        }
+                    },
+                    error: function () {
+                        layer.close(loadIdx);
+                        layer.msg('请求失败');
+                    }
+                });
+            }
+        });
+    }
+
+    $('#btnCheck').on('click', function () {
+        createClient();
+    });
+    $('#btnUpdate').on('click', function () {
+        if (!client || client.noupdate) {
+            layer.msg('当前已是最新或请先检查更新');
+            return;
+        }
+        client.startUpdate();
+    });
+    $('#btnToken').on('click', openTokenDialog);
+    $('#btnSyncSql').on('click', function () {
+        var loadIdx = layer.load(1, { shade: 0.1 });
+        $.ajax({
+            url: syncSqlUrl,
+            type: 'GET',
+            dataType: 'json',
+            timeout: 120000,
+            success: function (res) {
+                layer.close(loadIdx);
+                var msg = (res && res.msg) ? res.msg : '完成';
+                var data = (res && res.data) || {};
+                if (data.ran && data.ran.length) {
+                    msg += '\n已执行：' + data.ran.join(', ');
+                }
+                if (res && res.code == 1) {
+                    layer.alert(msg, { title: '升级 SQL' });
+                } else {
+                    layer.alert(msg, { title: '升级 SQL 失败' });
+                }
+            },
+            error: function () {
+                layer.close(loadIdx);
+                layer.msg('请求失败');
+            }
+        });
+    });
+    $('#gitProvider').on('change', function () {
+        createClient();
+    });
+
+    createClient();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,52 @@
+{include file="public/header" /}
+  <body ontouchstart>
+    <header class='demos-header' style="padding: 30px 0;padding-bottom: 0px;">
+      <h1 class="demos-title">确认订单信息</h1>
+    </header>
+    <form role="form" method="POST"  action="{:url('Getmail/index')}">
+          <input type="hidden" name="mpid" value="{$Order['data']['mpid']}">
+					<input type="hidden" name="number" value="{$Order['data']['order']}">
+	 <div class="weui-cells weui-cells_form">
+
+		<div class="weui-cell">
+			<div class="weui-cell__hd"><label class="weui-label">订单编号</label></div>
+			<div class="weui-cell__bd"><a href="{:url('mobile/Index/selectorder')}?key={$Order['data']['order']}" target="_blank">{$Order['data']['order']}</a></div>
+		</div>
+		<div class="weui-cell">
+			<div class="weui-cell__hd"><label class="weui-label">应付金额</label></div>
+			<div class="weui-cell__bd" style="padding-left: 0px;color:red;">{:number_format($Order['data']['jine'],2)}￥</div>
+		</div>
+		<div class="weui-cell">
+			<div class="weui-cell__hd"><label class="weui-label">购买产品</label></div>
+			<div class="weui-cell__bd">{$Order['data']['mname']}</div>
+		</div>
+		<div class="weui-cell">
+			<div class="weui-cell__hd"><label class="weui-label">购买数量</label></div>
+			<div class="weui-cell__bd">{$Order['data']['canbuynum']}个</div>
+		</div>
+	</div>
+	<div class="weui-agree" style="font-size: 16px;font-weight: bold;padding: 20px 20px 0 20px;">
+		<span class="weui-agree__text">
+			<a href="./">取消订单</a>
+		</span>
+		<span class="weui-agree__text">
+			<a href="{:url('mobile/Index/selectorder')}?key={$Order['data']['order']}" style="float: right;" target="_blank">查询订单</a>
+		</span>
+    </div>
+    <div class="weui-btn-area">
+      <a class="weui-btn weui-btn_primary" href="javascript:" id="mysubmit">确认支付</a>
+    </div>
+	</form>
+	{include file="public/footer" /}   
+  </body>
+<script language='javascript'>  
+ $(function () {
+		var issubmit = false;
+        $('#mysubmit').click(function () {  
+			document.forms[0].submit();
+    });
+ });
+</script>
+  
+
+</html>

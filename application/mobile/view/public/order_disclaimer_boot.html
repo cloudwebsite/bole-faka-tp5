@@ -1,0 +1,15 @@
+<script src="/static/common/js/order_disclaimer.js?v=20261030e"></script>
+<script type="text/javascript">
+var __ORDER_DISCLAIMER__ = <?php echo json_encode(htmlspecialchars_decode((string)config('order_disclaimer')), JSON_UNESCAPED_UNICODE); ?>;
+var __ORDER_DISCLAIMER_WAIT__ = <?php $__odw = (int)config('order_disclaimer_wait'); echo ($__odw < 1 ? 10 : $__odw); ?>;
+var __TANGG_CONTENT__ = <?php echo json_encode(htmlspecialchars_decode((string)config('tangg_content')), JSON_UNESCAPED_UNICODE); ?>;
+var __TANGG_ON__ = <?php echo (int)config('tangg'); ?>;
+var __TANGG_DELAY_SEC__ = <?php $__tds = (int)config('tanggjiange'); echo ($__tds < 0 ? 0 : $__tds); ?>;
+if (typeof bootHomeTanggNotice === 'function') {
+  bootHomeTanggNotice({
+    tanggOn: __TANGG_ON__,
+    html: __TANGG_CONTENT__,
+    delaySec: __TANGG_DELAY_SEC__
+  });
+}
+</script>

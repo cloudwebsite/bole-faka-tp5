@@ -1,0 +1,45 @@
+<div class="head-top">
+	<div class="nb">
+		<div style="width:300px; margin-left:300px;color:#e01;float:left;font-size:16px;line-height: 15px;">
+
+		</div>
+		<div class="rside" style='float:right'>
+			<ul class="head-ul">
+				{if condition="config('web_reg_type') neq 0"}
+				{if condition="session('useraccount.account') eq null"}
+					
+				<li>
+					<a href="{:url('@jingdian/User/index')}">登录</a>
+				</li>
+				<li>
+					<a href="{:url('@jingdian/User/reg')}">注册</a>
+				</li>
+				{else/}
+				<li>
+					欢迎您，<a href="{:url('@jingdian/User/usCenter')}">{:session('useraccount.account')}</a>
+				</li>
+				<li>
+					<a href="{:url('@jingdian/User/loginOut')}">退出</a>
+				</li>
+				{/if}
+				{/if}
+				{if condition="session('useraccount.account') eq null"}
+				<li>
+					<a href="{:url('Index/selectorder')}">我的订单</a>
+				</li>
+				{else/}
+				<li>
+					<a href="{:url('user/usorder')}">我的订单</a>
+				</li>
+				{/if}
+				<li>
+					<a href="{:url('@jingdian/Detail/getAll')}">常见问题</a>
+				</li>
+				<li>
+					<a href="https://wpa.qq.com/msgrd?v=3&amp;uin={:config('WEB_QQ')}&amp;site=qq&amp;menu=yes">联系客服</a>
+				</li>
+
+			</ul>
+		</div>
+	</div>
+</div>

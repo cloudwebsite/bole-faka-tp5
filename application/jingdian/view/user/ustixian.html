@@ -1,0 +1,129 @@
+{include file="public/user/userheader" /}
+     <link href="__USCENTER__/css/basic.css" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" href="__USCENTER__/css/iconfont.css">
+    <script language="javascript" src="{:config('cdnpublic')}jquery/1.8.3/jquery.min.js"></script>
+    <script language="javascript" src="__USCENTER__/js/qiandao.js"></script>
+    <script src="__USCENTER__/js/wangeditor.min.js"></script>
+    <script src="__USCENTER__/js/plupload.full.min.js"></script>
+    <script src="{:config('cdnpublic')}layer/3.1.1/layer.js"></script>
+    <script src="__USCENTER__/js/person_content.js"></script>
+    <link rel="stylesheet" href="__USCENTER__/css/index.css">
+    <link rel="stylesheet" href="__USCENTER__/css/person_content.css">
+    <link rel="stylesheet" href="__USCENTER__/css/publish_need.css">
+    <link rel="stylesheet" href="__USCENTER__/css/common.css" /></head>
+    <link href="__USCENTER__/css/style.min.css?v=4.1.0" rel="stylesheet">
+ <body>
+    <!--头部-->
+    {include file="public/user/usertop" /}
+    <!--头部-->
+    
+    <!--个人中心-->
+    <div class="main">
+      <div class="clearfix person_conetent">﻿
+        <!--左侧菜单-->
+        {include file="public/user/userleft" /}
+        
+        <!--右侧展示-->
+        <div class="person_content_r right">
+
+            <!--在线充值-->
+            <div class="need_admin">
+                <div class="clearfix publish_need_tit">
+                    <h2 class="left">申请提现</h2>
+                </div>
+
+                <!--充值-->
+
+                <div class="recharge_content">
+                	<form method="post"  action="{:url('user/tixianDo')}" id="formreq">              		
+                    
+                    <dl class="recharge_item clearfix" style="margin-top: 0;">
+                        <dt class="left">提现金额</dt>
+                        <dd class="left">
+                            <input type="text"  class="input_default" placeholder="请输入提现金额" id="money" name="money" onkeyup="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}" onafterpaste="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}">
+                            元
+                        </dd>
+                    </dl>
+                    <dl class="clearfix">
+                        <dt class="left" style="margin-left: 110px;margin-top:5px;color: #e91165">可提现佣金：{:session('useraccount.tg_money')}元  最低提现金额：{if condition="config('fx_txmoney') eq 0"}无限制{else/}{:config('fx_txmoney')}元{/if}，单笔手续费：{if condition="config('fx_sxftype') eq 0"}{:config('fx_sxf')}元{else/}{:config('fx_sxf')}%{/if}，单日提现次数：{if condition="config('fx_txcount') eq 0"}无限制{else/}{:config('fx_txcount')}次{/if}</dt>    
+                    </dl>
+
+                    
+                    
+                    <div class="basic_info_btn">
+                        
+                        <button  class="basic_save">确定提现</button>
+                    </div>
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+      </div>
+    </div>
+             
+  
+
+    <!--非商家提示去认证-->
+    {include file="public/imgpc/footer" /}
+    <script type="text/javascript" src="{:config('cdnpublic')}jquery/2.1.4/jquery.min.js"></script>
+    <script type="text/javascript" src="{:config('cdnpublic')}jquery.form/3.51/jquery.form.min.js"></script>
+    <script type="text/javascript" src="/static/admin/js/lunhui.js"></script>
+    <script type="text/javascript" src="{:config('cdnpublic')}layer/3.1.1/layer.js"></script> 
+    <script>
+    	$(function(){
+	        $('#formreq').ajaxForm({
+	            beforeSubmit: checkForm, // 此方法主要是提交前执行的方法，根据需要设置
+	            success: complete, // 这是提交后的方法
+	            dataType: 'json'
+	        });
+	        
+	        function checkForm(){
+	             layer.load(0, {shade: [0.4,'#0f0e0e']});
+	             var money = $.trim($('#money').val());
+	             if(money<=0){
+	             	layer.tips("提现金额不正确",'#money', {
+		                tips: [1, '#2987e6'],
+		                time: 4000
+		            });
+		            layer.closeAll('loading');
+		            return false;
+	             }
+	             if(money<{:config('fx_txmoney')}){
+	             	layer.tips("最低{:config('fx_txmoney')}元起提现",'#money', {
+		                tips: [1, '#2987e6'],
+		                time: 4000
+		            });
+		            layer.closeAll('loading');
+		            return false;
+	             }
+	             if(money>{:session('useraccount.tg_money')}){
+	             	layer.tips("提现金额不能大于余额，当前余额："+{:session('useraccount.tg_money')},'#money', {
+		                tips: [1, '#2987e6'],
+		                time: 4000
+		            });
+		            layer.closeAll('loading');
+		            return false;
+	             }
+	        }
+	
+	
+	        function complete(data){
+	            layer.closeAll('loading');
+	            if(data.code==1){
+	                lunhui.success(data.msg,data.url);
+	            }else{ 
+	                lunhui.error(data.msg);	            
+	                return false;   
+	            }
+	        }
+	    });
+
+
+
+	</script>
+ </body>
+
+</html>

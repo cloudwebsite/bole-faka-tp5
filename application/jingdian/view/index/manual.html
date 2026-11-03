@@ -1,0 +1,106 @@
+{include file="public/header" /}
+<link href="{:config('cdnpublic')}twitter-bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+    <link href="{:config('cdnpublic')}font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="{:config('cdnpublic')}animate.css/2.0/animate.min.css" rel="stylesheet">
+    <link href="{:config('cdnpublic')}iCheck/1.0.2/skins/square/green.css" rel="stylesheet">
+    <link href="{:config('cdnpublic')}chosen/1.1.0/chosen.min.css" rel="stylesheet">
+    <link href="{:config('cdnpublic')}switchery/0.8.2/switchery.css" rel="stylesheet">
+    <link href="/static/admin/css/style.min.css?v=4.1.0" rel="stylesheet">
+    <link href="{:config('cdnpublic')}sweetalert/1.0.1/sweetalert.min.css" rel="stylesheet">
+<body>
+	
+		{include file="public/top_jingdian" /}
+
+	 <div class="row" style="margin-top:20px" >
+	 	<div class="col-xs-1 col-sm-2 col-md-3 col-lg-3 center-block"></div>
+	 	
+      <div class="col-xs-10 col-sm-8 col-md-6 col-lg-6 center-block">
+         <div class="panel panel-success">
+                    <div class="panel-heading">
+                        <i class="fa fa-list-alt"></i> 订单编号：{$Order['data']['order']} 
+                        <a class="glyphicon glyphicon-home" style="color: rgb(255, 140, 60);padding:0;margin:0;float:right;" onclick="gohome();"> 返回首页</a>
+                    </div>
+                    <div class="panel-body">
+                    	<div class="jumbotron">
+						    <div class="container">
+						        <h1>恭喜您!下单成功</h1>
+						        <br>
+						        <h3 style="color: red;">
+						        	耐心等待卖家为你发货    
+						        	卖家联系QQ:<a target="_blank" href="https://wpa.qq.com/msgrd?v=3&amp;uin={:config('WEB_QQ')}&amp;site=qq&amp;menu=yes"><img border="0" src="https://wpa.qq.com/pa?p=2:{:config('WEB_QQ')}:41" alt="点击这里给我发消息" title="点击这里给我发消息"/></a>
+						        
+						        </h3>
+						        <br>
+						        <p>订单编号：{$Order['data']['order']}</p>
+						        <p>商品名称：{$Order['data']['mname']}</p>
+						        <p>购买数量：{$Order['data']['canbuynum']}</p>
+						        <p>支付金额：{$Order['data']['jine']}￥</p>
+						        {if condition="count($Order['data']['attach']) eq 0"}
+								<p>附加选项：无</p>
+		
+									{else/}
+									<div class="well well-sm">
+									<div class="panel panel-default">
+								    <div class="panel-heading">附加信息</div>
+									    <table class="table">
+		
+										
+										{foreach name="$Order['data']['attach']" item="vo"}
+											<th>{$vo.title}</th>
+											{/foreach}
+											<tr>
+											{foreach name="$Order['data']['attach']" item="vo"}
+											
+												<td>{$vo.text}</td>
+											
+											{/foreach}
+											</tr>
+										</table>
+									</div>
+										
+									</div>
+		
+									{/if}
+						        
+						        <div class="well well-sm">以上是您下单的信息，请牢记订单编号,耐心等待客服为你发货</div>
+						        
+						    </div>
+						</div>
+						                    	
+                    	
+                      
+                    </div>
+                </div>
+      </div>
+      <div class="col-xs-1 col-sm-2 col-md-6 col-lg-6 center-block"></div>
+      </div>
+      
+
+	
+{include file="public/footer" /}
+	
+
+
+	<script>
+		function download(order)
+		{
+			location.href="{:url('Index/dc')}"+"?order="+order;
+		}
+		
+		function fenxiang(order)
+		{
+			top.location.href="{:url('Index/fenxiang')}"+"?order="+order.toString();
+		}
+		
+		function gohome()
+		{
+			location.href="{:config('is_https')}://"+window.location.host;
+		}
+		
+		
+
+ 
+
+	</script>
+</body>
+</html>

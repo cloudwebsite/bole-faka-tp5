@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>提示</title>
+<script src="https://cdn.staticfile.org/jquery/2.1.4/jquery.min.js"></script>
+<script src="https://cdn.staticfile.org/layer/3.1.1/layer.js"></script>
+</head>
+<body>
+<script type="text/javascript">
+	var msg = '{:addslashes($errormsg)}';
+	layer.open({
+		title: '提示',
+		content: msg || '操作失败',
+		yes: function(index) {
+			history.back();
+			layer.close(index);
+		}
+	});
+</script>
+</body>
+</html>

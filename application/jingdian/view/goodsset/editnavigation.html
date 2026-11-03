@@ -1,0 +1,169 @@
+ {include file="public/user/userheader" /}
+    
+    <link rel="stylesheet" href="https://www.layuicdn.com/layui-v2.5.4/css/layui.css">
+    
+    
+    <link href="__USCENTER__/css/basic.css" rel="stylesheet" type="text/css"/>  
+    <link rel="stylesheet" href="__USCENTER__/css/iconfont.css">
+    <link rel="stylesheet" href="__USCENTER__/css/index.css">
+    <link rel="stylesheet" href="__USCENTER__/css/person_content.css">
+    <link rel="stylesheet" href="__USCENTER__/css/publish_need.css">
+    <link rel="stylesheet" href="__USCENTER__/css/common.css" /></head>
+    <link href="__USCENTER__/css/style.min.css?v=4.1.0" rel="stylesheet">
+    <script language="javascript" src="{:config('cdnpublic')}jquery/1.8.3/jquery.min.js"></script>
+    <script language="javascript" src="__USCENTER__/js/qiandao.js"></script>
+    <script src="__USCENTER__/js/wangeditor.min.js"></script>
+    <script src="__USCENTER__/js/plupload.full.min.js"></script>
+    <script language="javascript" src="https://www.layuicdn.com/layui-v2.5.4/layui.js"></script>
+    <script language="javascript" src="__USCENTER__/js/common.js"></script>
+    <script language="javascript" src="__USCENTER__/js/index.js"></script>
+    <script src="__USCENTER__/js/person_content.js"></script>
+    <style>
+    	body,div{
+    		margin: 0 auto;
+    	}
+    	
+    </style>
+ <body>
+    <!--头部-->
+    {include file="public/user/usertop" /}
+    <!--头部-->
+    <!--个人中心-->
+    <div class="main">
+      <div class="clearfix person_conetent">﻿
+        <!--左侧菜单-->
+        {include file="public/user/userleft" /}
+        
+        <!--右侧展示-->
+        <div class="person_content_r right">
+
+            <!--积分明细-->
+            <div class="need_admin">
+                <div class="clearfix publish_need_tit">
+                    <h2 class="left">编辑导航</h2>
+                </div>
+             <div class="layui-tab layui-tab-brief" lay-filter="tabData">
+			  
+			  <div class="layui-tab-content">
+			  	<div class="layui-tab-item layui-show">
+			  		<form class="layui-form" action="{:url('Navigation/edit_navigation')}" method="post" lay-filter="formfilter">
+			  		    {:token()}
+					  <input type="hidden" name="id" value="{$navigation.id}">
+					  <hr class="layui-bg-gray">
+					  <div class="layui-form-item">
+					    <label class="layui-form-label">导航名称：</label>
+					    <div class="layui-input-inline" style="width: 700px;">
+					      <input type="text" name="name"  required  lay-verify="required" placeholder="请输入导航名称" autocomplete="off" class="layui-input">					    
+					    </div>	    
+					  </div>
+					  <hr class="layui-bg-gray">
+					  <div class="layui-form-item">
+					    <label class="layui-form-label">导航地址：</label>
+					    <div class="layui-input-inline" style="width: 700px;">
+					      <input type="text" name="text"  required  lay-verify="required" placeholder="请输入导航名称" autocomplete="off" class="layui-input">					    
+					    </div>	    
+					  </div>						
+						<hr class="layui-bg-gray">
+						<div class="layui-form-item" pane>						   
+							<label class="layui-form-label">状态：</label>
+							<div class="layui-input-block">
+							   <input type="radio"  title="开启" name='status' value="1" {if condition="$navigation.status eq 1 "}checked{/if}/>
+							   <input type="radio"  title="关闭" name='status' value="0" {if condition="$navigation.status eq 0 "}checked{/if}/>					     						    						    				     						    
+							</div>				    
+						</div>
+						<hr class="layui-bg-gray">
+						<div class="layui-form-item" pane>						   
+							<label class="layui-form-label">打开方式：</label>
+							<div class="layui-input-block">
+							   <input type="radio"  title="本窗口" name='opentype' value="0" {if condition="$navigation.opentype eq 0 "}checked{/if}/>
+							   <input type="radio"  title="新窗口" name='opentype' value="1" {if condition="$navigation.opentype eq 1 "}checked{/if}/>					     						    						    				     						    
+							</div>				    
+						</div>
+
+					  <hr class="layui-bg-gray">
+						<div class="layui-form-item">
+						    <label class="layui-form-label">排序：</label>
+						    <div class="layui-input-inline" style="width: 700px;">
+						      <input type="text" name="sort"  required  lay-verify="required" placeholder="请输入排序" autocomplete="off" class="layui-input">					    
+						    </div>	    
+						  </div>	
+					  
+					  <div class="layui-form-item">
+					    <div class="layui-input-block">
+					      <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+					      <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+					    </div>
+					  </div>
+					</form>	
+			  	</div>
+			  	
+			  	
+ 				
+ 				
+			  </div>
+			</div>
+			
+			
+            
+                 
+
+
+
+            </div>
+
+        </div>
+      </div>
+    </div>
+               
+  
+
+    <!--非商家提示去认证-->
+    {include file="public/imgpc/footer" /}
+		<script>
+					
+					
+					//color
+					
+					layui.use('colorpicker', function(){
+					  var colorpicker = layui.colorpicker;
+					  
+					  
+					  //热门
+					  colorpicker.render({
+					    elem: '#test-form-color'
+					    ,color:$("input[name='color']").val()
+					    ,done: function(color){				    	
+					      $("input[name='color']").val(color);
+					    }
+					  });
+					
+					
+					});
+					
+					//Demo
+					layui.use('form', function(){
+					  var form = layui.form;
+					  //初始化赋值
+					  form.val("formfilter", {
+						  "name": "{$navigation.name}"
+						 ,"text": "{$navigation.text}"
+						 ,"sort": "{$navigation.sort}"
+						 
+						
+						 
+						});
+					  //基本配置表单提交
+					  form.on('submit(formDemo)', function(data){
+					    layer.load(0, {shade: [0.4,'#0f0e0e']});
+					    return true;
+					  });
+		  
+					});
+					
+					
+					
+					
+		</script>
+ </body>
+
+</html>

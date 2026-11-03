@@ -1,0 +1,38 @@
+{include file="public/header" /}
+
+<body>
+
+	<script src="{:config('cdnpublic')}jquery/2.1.4/jquery.min.js"></script>
+	<script src="__JS__/js.js"></script>
+	<script src="{:config('cdnpublic')}layer/3.1.1/layer.js"></script>
+	<script src="/static/admin/js/lunhui.js"></script>
+	<script type="text/javascript">
+		var msg = "你有N个订单未使用，是否查看？";
+		parent.layer.closeAll('loading');
+		layer.open({
+					type: 1,
+					title: false, //不显示标题栏
+					
+
+
+					id: 'LAY_layuipro' //设定一个id，防止重复弹出
+						,
+
+					btn: ['查看', '关闭'],
+					btnAlign: 'c',
+					moveType: 1 //拖拽模式，0或者1
+						,
+					content: '<div style="padding: 20px; line-height: 10px; background-color: #393D49; color: #fff; font-weight: 300;">你有未使用订单是否查看？</div>',
+					success: function(layero) {
+							var btn = layero.find('.layui-layer-btn');
+							btn.find('.layui-layer-btn0').attr({
+								href: "{:config('is_https')}://" + window.location.host + '/mobile'
+
+							});
+						}
+		});					
+	</script>
+
+</body>
+
+</html>

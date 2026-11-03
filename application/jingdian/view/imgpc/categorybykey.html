@@ -1,0 +1,82 @@
+{include file="public/imgpc/head_title" /}
+		<link rel="stylesheet" href="__IMGPC__/css/common.css" />
+		<link rel="stylesheet" href="__IMGPC__/css/animate.min.css" />
+		<style>
+			.nav nav ul li a.ahover {
+				border-bottom-color: #de342f;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div class="header">
+			{include file="public/imgpc/header_top" /}
+			<div class="head-bot">
+				<div class="nb">
+					
+					{include file="public/imgpc/header_search" /}
+					<div class="clearfix"></div>
+					{include file="public/imgpc/nav" /}
+					
+				</div>
+			</div>
+		</div>
+		
+		<div class="indbody pro-style">
+			<div class="nb recom-box">
+				{if condition="count($GoodsListAll) eq 0"}
+						<ul class="yourlike clearovermartb nobottompad">
+                                        	<div style="width: 100%; height: 100px;padding-top: 38px; background-color: #FFF;text-align: center;font-size: 16px;">
+                    		没有符合条件的商品，请尝试其他搜索条件。
+                    	</div>
+                    	</ul>
+				{else/}
+				<ul class="yourlike clearovermartb nobottompad">
+					{volist name="GoodsListAll" id="f"}
+					<li style="padding-bottom: 16px !important;">
+						<a href="{:url('jingdian/Index/goodsdetail',['mpid'=>$f['id']])}" class="picbox" target="_blank">
+							<img src="{$f['webimgurl']}" onerror="this.src='/static/admin/images/head_default.gif'" alt="">
+						</a>
+						<div class="elli">
+							<a href="{:url('jingdian/Index/goodsdetail',['mpid'=>$f['id']])}" target="_blank">{:strip_tags(htmlspecialchars_decode($f['mname']))}</a>
+						</div>
+						<a href="{:url('jingdian/Index/goodsdetail',['mpid'=>$f['id']])}" class="price" target="_blank">￥<span>{:number_format($f.mprice/100, 2)}</span></a>
+						<span style="color: #c0c0c0;float:right;font-size:13px;margin-right: 4px;margin-top: 2.5px;">已售{$f['sellercount']}件</span>
+					</li>
+					{/volist}
+
+				</ul>
+				{/if}
+				<div class="pages"></div>
+			</div>
+		</div>
+		
+		{include file="public/imgpc/footer" /}
+		
+		<script src="{:config('cdnpublic')}jquery/1.9.1/jquery.min.js" type="text/javascript"></script>
+		<script src="__IMGPC__/js/main.js" type="text/javascript"></script>
+		<script>
+			$(".ul-pro-box li").each(function() {
+				if($(this).index() % 4 == 3) {
+					$(this).css("margin-right", "4px");
+				}
+				if($(this).index() % 4 == 0) {
+					$(this).css("margin-left", "4px");
+				}
+			});
+			$(".pps li:last-child").css("border-bottom", "none");
+			$(".some-px a").each(function() {
+				$(this).click(function() {
+					$(this).addClass("red").siblings().removeClass("red");
+					if($(".some-px b").hasClass("down") || $(".some-px b").prop("class") == undefined) {
+						$(this).find("b").removeClass("down").addClass("up");
+					} else {
+						$(this).find("b").removeClass("up").addClass("down");
+					}
+				});
+			});
+			$('#word').val({$val});
+		</script>
+	</body>
+
+</html>

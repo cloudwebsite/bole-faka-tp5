@@ -1,0 +1,70 @@
+.qusition{ margin-top:14px;}
+.qusition strong{ display:block; background:url(headingplan.png) no-repeat; width:950px; height:78px; text-align:center; line-height:58px; color:#fff; font-size:26px; font-weight:normal}
+.qusition dl{ margin-top:14px; border:1px solid #babab9; background:#ffffff;border-radius: 6px; -moz-border-radius:6px;}
+.qusition dl dt{ line-height:36px; font-size:16px; padding:0 14px; border-bottom:1px solid #dddddd; color:#003366; font-weight:bold}
+.qusition dl dt:hover{ background:#eeeeee; cursor:pointer;border-radius: 6px 6px 0 0; -moz-border-radius:6px 6px 0 0;}
+.qusition dl ol{ line-height:36px; font-size:16px; padding:0 14px; border-bottom:1px solid #dddddd; color:#003366; font-weight:bold}
+.qusition dl ol:hover{ background:#eeeeee; cursor:pointer;border-radius: 6px 6px 0 0; -moz-border-radius:6px 6px 0 0;}
+.qusition dl dd{ padding:14px 40px; font-size:14px; line-height:28px}
+.pay { padding-left: 80px; background: url(pay.jpg) no-repeat 440px 20px;}
+.pay p{ height: 36px; font-size: 16px; overflow: hidden;}
+.pay span.STYLE1{ display: inline-block; width: 120px; text-align: right; margin-right: 14px;}
+.ipt-value{ border: 1px solid #ddd; padding: 4px; width: 40px;}
+.txt-price{ color: #f00; font-size: 20px;}
+.recharge-btn{ background: #9ACD32; border: 0; cursor: pointer; width: 160px; height: 42px;border-radius: 4px; -moz-border-radius:4px; font-size: 16px; font-family: "Microsoft YaHei","微软雅黑"; color: #ffffff;}
+.recharge-btn:hover{ background: #0652c1;}
+
+.down{
+	
+	width: 960px;
+    margin: 0 auto;
+    background: rgb(234, 113, 26);
+    color: #ffffff;
+    line-height: 35px;
+    text-align: center;
+    font-size: 20px;
+    border-radius: 60px;
+    margin-bottom: 15px;
+    float: left;
+    cursor: pointer;
+}
+
+.down a,.down a:hover{ color: #ffffff;}
+
+.down1{ margin-top: 14px; height: 60px; background: url(headingplan2.png); color: #ffffff; line-height: 60px; text-align: center; font-size: 20px;border-radius: 6px; -moz-border-radius:6px;}
+.down1 a,.down a:hover{ color: #ffffff;}
+
+
+.show{ width: 950px; overflow: hidden;}
+.show_box{ width: 980px;}
+.show_box dl{ width: 306px;   float: left; margin-top: 14px; margin-right: 16px;}
+.show_box dl dt{ height: 40px; background: url(headingplan.png); color: #ffffff;border-radius: 6px 6px 0 0; -moz-border-radius:6px 6px 0 0; overflow: hidden; line-height: 40px; text-align: center; font-size: 18px;}
+.show_box dl ol{ height: 40px; background: url(headingplan.gif); color: #ffffff;border-radius: 6px 6px 0 0; -moz-border-radius:6px 6px 0 0; overflow: hidden; line-height: 40px; text-align: center; font-size: 18px;}
+
+.show_box dl dd{border: 1px solid #babab9; padding:10px 14px;border-radius:0 0 6px 6px; -moz-border-radius:0 0 6px 6px;background: #ffffff; font-size: 14px; height: 180px;}
+.order{ margin: 20px 0;}
+.show_box p{ text-align: center; line-height: 24px; font-size: 16px;}
+.order_num{ border: 1px solid #CCCCCC; padding:7px 4px; width: 210px;}
+.order_num:focus{
+transition:border linear .2s,box-shadow linear .5s;
+-moz-transition:border linear .2s,-moz-box-shadow linear .5s;
+-webkit-transition:border linear .2s,-webkit-box-shadow linear .5s;
+outline:none;border-color:rgba(93,149,242,.75);
+box-shadow:0 0 15px rgba(93,149,242,.165);
+-moz-box-shadow:0 0 15px rgba(93,149,242,.5);
+-webkit-box-shadow:0 0 15px rgba(93,149,242,3);
+}
+
+
+.btns{ background:	#139720; border: 0; cursor: pointer; width: 140px; height: 42px;border-radius: 4px; -moz-border-radius:4px; font-size: 18px; font-family: "Microsoft YaHei","微软雅黑"; color: #ffffff;}
+.btns:hover{ background: #0652c1;}
+.btns1{ background: #139720; border: 0; cursor: pointer; width: 280px; height: 42px;border-radius: 4px; -moz-border-radius:4px; font-size: 18px; font-family: "Microsoft YaHei","微软雅黑"; color: 	#ffffff;}
+.btns1:hover{ background: #0652c1;}
+.btns2{ background: #0080FF; border: 0; cursor: pointer; width: 140px; height: 42px;border-radius: 4px; -moz-border-radius:4px; font-size: 18px; font-family: "Microsoft YaHei","微软雅黑"; color: #ffffff;}
+.btns2:hover{ background: #0652c1;}
+
+.footer{ background:url(footBg.png) repeat-x;}
+.footerBox{ width:960px; margin:0 auto;  height:60px; text-align:center}
+.footerBox p{ padding-top:50px; font-size:14px}
+.copyright{ width:960px; margin:0 auto; padding:16px 0; color:#fff; text-align:center; font-size:14px}
+.copyright a,.copyright a:hover{ color:#fff;}

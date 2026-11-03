@@ -1,0 +1,502 @@
+<!doctype html>
+
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0 user-scalable=no">
+		<script>
+			document.documentElement.style.fontSize = document.documentElement.clientWidth / 750 * 40 + "px";
+		</script>
+		<meta name="format-detection" content="telephone=no" />
+		<title>{:config('web_site_title')}</title>
+		<link rel="stylesheet" type="text/css" href="__IMGMOBILE__/css/foxui.min.css-v=0.2.css">
+		<link rel="stylesheet" type="text/css" href="__IMGMOBILE__/css/style.css-v=3.0.0.css">
+
+		<link rel="stylesheet" type="text/css" href="__IMGMOBILE__/css/iconfont.css-v=2017070719.css">
+		<!--<link rel="stylesheet" href="//at.alicdn.com/t/font_82607_e93d131lklr6n7b9.css">-->
+
+		<script type="text/javascript" src="{:config('cdnpublic')}jquery/1.8.2/jquery.min.js"></script>
+
+		<link rel="stylesheet" href="{:config('cdnpublic')}layer/3.1.1/mobile/need/layer.css" />
+		<script type="text/javascript" src="{:config('cdnpublic')}layer/3.1.1/mobile/layer.js"></script>
+		<style>
+			.aligncenter {
+				clear: both;
+				display: block;
+				margin: auto;
+			}
+			.header .name {
+			    height: 2.5rem;
+			    color: rgb(18, 115, 215);
+			    text-align: center;
+			    font-size: 1rem;
+			    line-height: 2.5rem;
+			}
+			.text {
+			    padding: 0 1.6rem;
+			    color: #888;
+			    font-size: 0.8rem;
+			    text-align: center;
+			    line-height: 3rem;
+			}
+			body {
+				position: absolute;
+				;
+				max-width: 750px;
+				margin: auto;
+			}
+			
+			.fui-navbar {
+				max-width: 750px;
+			}
+			
+			.fui-navbar,
+			.fui-footer {
+				max-width: 750px;
+			}
+			
+			.fui-page.fui-page-from-center-to-left,
+			.fui-page-group.fui-page-from-center-to-left,
+			.fui-page.fui-page-from-center-to-right,
+			.fui-page-group.fui-page-from-center-to-right,
+			.fui-page.fui-page-from-right-to-center,
+			.fui-page-group.fui-page-from-right-to-center,
+			.fui-page.fui-page-from-left-to-center,
+			.fui-page-group.fui-page-from-left-to-center {
+				-webkit-animation: pageFromCenterToRight 0ms forwards;
+				animation: pageFromCenterToRight 0ms forwards;
+			}
+		</style>
+
+	</head>
+
+	<body ontouchstart>
+
+		<div class='fui-page-group '>
+
+			<div class='fui-page fui-page-current  page-goods-detail' id='page-goods-detail-index' style="background-color: #fff">
+
+				<div class="fui-header">
+					<div class="fui-header-left">
+						<a class="back" id="btn-back" onclick="back();"></a>
+					</div>
+					<div class="title">
+						 重置密码</div>
+					<div class="fui-header-right"></div>
+				</div>
+				<div class="fui-content navbar order-list" style="top:1.9rem;">
+					<div class="fui-content-inner">
+						<div class="container" id='list-content'>
+							<div class="header">
+				            	<div class="name">{:config('m_title')}</div>
+				        	</div>	
+						
+						<form action="{:url('@mobile/user/resetpwd')}" method="post" id="doreg">
+						<div class="fui-cell-group">
+							
+							<div class="fui-cell">
+								<div class="fui-cell-icon">
+									<i class="icon icon-people"></i>
+								</div>
+								<div class="fui-cell-info">
+									<input type="text" placeholder="请输入帐号绑定的手机号" class="fui-input" maxlength="20" name="mobile" id="mobile" value="">
+								</div>
+							</div>
+							
+						
+							
+							{if condition="config('CODE_TYPE') eq 0"}
+							<div class="fui-cell">
+		                        <div class="fui-cell-icon">
+		                            <i class="icon icon-safe"></i>
+		                        </div>
+		                        <div class="fui-cell-info">
+		                            <input type="tel" placeholder="请输入图形验证码" class="fui-input" maxlength="4" name="code" id="veri">
+		                        </div>
+		                        <img class="fui-cell-remark noremark" id="veriimg" src="{:url('checkVerify')}" onclick="javascript:this.src='{:url('checkVerify')}?tm='+Math.random();" style="width: 5rem">
+		                    </div>
+		                     {else/}
+			                <div id="captcha" style="margin: 0 auto 16px;display: block;padding-left: 3%">
+					            <div id="text">
+					               	 行为验证™ 安全组件加载中
+					            </div>
+					            <div id="wait" class="show">
+						                <div class="loading">
+						                    <div class="loading-dot"></div>
+						                    <div class="loading-dot"></div>
+						                    <div class="loading-dot"></div>
+						                    <div class="loading-dot"></div>
+						                </div>
+						         </div>
+						    </div>
+			            	{/if}
+			            	<div class="fui-cell">
+			                    <div class="fui-cell-icon">
+			                        <i class="icon icon-email"></i>
+			                    </div>
+			                    <div class="fui-cell-info">
+			                        <input type="tel" placeholder="请输入6位短信验证码" class="fui-input" maxlength="6" name="smscode" id="smscode">
+			                    </div>
+			                    <a class="fui-cell-remark noremark" href="javascript:;" id="btnCode">获取验证码</a>
+			                </div>
+			                
+			                <div class="fui-cell">
+								<div class="fui-cell-icon">
+									<i class="icon icon-lock"></i>
+								</div>
+								<div class="fui-cell-info">
+									<input type="password" placeholder="请输入新密码" class="fui-input" name="password" id="password">
+								</div>
+							</div>
+							
+							<div style="text-align: center;"><button class="btn"  id="regbtn" type="submit" style="width: 80%;">立即重置</button></div>
+							<div class="text">
+					            <p>已有帐号? <a href="{:url('mobile/user/index')}">立即登录</a></p>
+					        </div>
+							
+						</div>
+						</form>				
+						
+							
+
+						</div>
+					</div>
+				</div>
+
+				<div id='comments-container'></div>
+
+				
+
+			</div>
+
+		</div>
+		<script type="text/javascript" src="{:config('cdnpublic')}jquery.form/3.51/jquery.form.min.js"></script>
+		<script type="text/javascript" src="/static/admin/js/lunhui.js"></script>
+		  <script type="text/javascript" src="__GT__/js/gt.js"></script> 
+		<script type="text/javascript">
+			{include file="public/common" /}
+	
+		
+		
+		
+		
+		$(function(){
+	        $('#doreg').ajaxForm({
+	            beforeSubmit: checkForm, // 此方法主要是提交前执行的方法，根据需要设置
+	            success: complete, // 这是提交后的方法
+	            dataType: 'json'
+	        });
+	        
+	        function checkForm(){
+	            var smscode=$("#smscode").val();
+				smscode=removeAllSpace(smscode);
+				if(smscode.length!=6){
+					layer.open({
+							content: '手机验证码不正确',
+							btn: '我知道了',
+							time: 30 //2秒后自动关闭
+						});										  	
+				    return false;
+				}
+				var password=$("#password").val();
+				password=removeAllSpace(password);
+				if(checkpassword(password)==false){
+					return false;
+				}
+				
+				
+				
+				{if condition="config('CODE_TYPE') eq 0"}
+				var veri=$("#veri").val();
+				veri=removeAllSpace(veri);
+				if(veri.length<4){
+					layer.open({
+							content: '验证码不正确',
+							btn: '我知道了',
+							time: 30 //2秒后自动关闭
+							});	
+					
+				  	
+				    return false;
+				}
+				{else/}
+				var result = publicObj.getValidate();
+	            if (!result) {
+	            	layer.open({
+							content: '请先完成验证',
+							btn: '我知道了',
+							time: 30 //2秒后自动关闭
+							});	
+	            
+	                return false;
+	            }
+	            
+	            {/if}
+				
+	            $('#regbtn').text('重置中...');
+	            $('#regbtn').attr('disabled',true);
+	            $('#regbtn').addClass("off");
+	        }
+	
+	
+	        function complete(data){
+	            if(data.code==1){
+	                lunhui.success_mobile(data.msg,data.url);
+	            }else{ 
+	                lunhui.error_mobile(data.msg);
+	                {if condition="config('CODE_TYPE') eq 0"}
+	                $('#veriimg').attr('src',"{:url('checkVerify')}");
+	                {else/}
+	                publicObj.reset();
+	                {/if}
+	      
+	                $('#regbtn').text('立即重置');
+	                $('#regbtn').attr('disabled',false);
+	                $('#regbtn').removeClass("off");
+	                return false;   
+	            }
+	        }
+	    });
+	    function removeAllSpace(str) {
+			return str.replace(/\s+/g, "");
+		}
+	    //判断手机
+		function isPoneAvailable(str) {
+            var myreg=/^[1][0-9]{10}$/;
+            if (!myreg.test(str)) {
+                return false;
+            } else {
+                return true;
+            }
+		}
+		function checkpassword(password){
+			var rupsw=["123456","a123456","123456a","5201314","111111","000000","qq123456","123123","qwe123"];
+			if(in_array(password,rupsw)){
+			    layer.open({
+							content: password+'此密码是弱密码不能使用!!',
+							btn: '我知道了',
+							time: 30 //2秒后自动关闭
+							});	
+			    
+			    return false;
+			}
+			if(password.length<6){
+				layer.open({
+							content: '密码长度不能小于6个字符串!!',
+							btn: '我知道了',
+							time: 30 //2秒后自动关闭
+							});	
+			    
+			  
+			  	
+			    return false;
+		  	}
+		  	if(password.length>20){
+			  	layer.open({
+							content: '密码长度不能大于20个字符串!!',
+							btn: '我知道了',
+							time: 30 //2秒后自动关闭
+							});	
+			  	
+			    return false;
+		  	}
+		  	if(password==''){
+		  		layer.open({
+							content: '密码不能为空!!',
+							btn: '我知道了',
+							time: 30 //2秒后自动关闭
+							});	
+		  		
+			    return false;
+		  	}
+		  	var reg = new RegExp("[\\u4E00-\\u9FFF]+","g");
+			if(reg.test(password)){
+				layer.open({
+							content: '密码不支持汉字，只支持字母、数字(6-20)位!!',
+							btn: '我知道了',
+							time: 30 //2秒后自动关闭
+							});	
+				
+			    return false;
+			}
+			return true;
+		}
+		function in_array(stringToSearch, arrayToSearch) {
+		     for (s = 0; s < arrayToSearch.length; s++) {
+		      thisEntry = arrayToSearch[s].toString();
+		      if (thisEntry == stringToSearch) {
+		       return true;
+		      }
+		     }
+		     return false;
+		}
+	    
+	    $(".fui-cell-group").delegate("#btnCode","click",function () {
+		   	var disabled=$(this).attr('disabled');
+		   	if(disabled=='disabled'){
+		   		return false;
+		   	}
+		   	var mobile=$("#mobile").val();
+		   	mobile=removeAllSpace(mobile);
+			
+			if(mobile==''){
+				layer.open({
+							content: '手机不能为空',
+							btn: '我知道了',
+							time: 30 //2秒后自动关闭
+						});			
+				return false;
+			}
+			if(isPoneAvailable(mobile)==false){
+				layer.open({
+							content: '请输入正确的联系手机',
+							btn: '我知道了',
+							time: 30 //2秒后自动关闭
+						});
+				
+				return false;
+			}
+			
+			{if condition="config('CODE_TYPE') eq 0"}
+			var veri=$("#veri").val();
+			veri=removeAllSpace(veri);
+			if(veri.length<4){
+				layer.open({
+							content: '请输入正确的验证码',
+							btn: '我知道了',
+							time: 30 //2秒后自动关闭
+						});
+				
+				return false;
+			}
+			var geetest_challenge;
+	        var geetest_validate;
+	        var geetest_seccode;
+			{else/}
+				var result = publicObj.getValidate();
+	            if (!result) {
+	            	layer.open({
+							content: '请先完成验证',
+							btn: '我知道了',
+							time: 30 //2秒后自动关闭
+						});
+	            	
+	                return false;
+	            }
+	            var geetest_challenge=result.geetest_challenge;
+	            var geetest_validate=result.geetest_validate;
+	            var geetest_seccode=result.geetest_seccode;
+	            var veri;
+	            
+	        {/if}
+			layer.open({type: 2});
+			
+			
+			
+			
+			
+			
+		   	$.when(sendsms(mobile,veri,geetest_challenge,geetest_validate,geetest_seccode)).done(function (res) {
+		   		if(res.code=="OK"){
+					oSend = $(".fui-cell-group #btnCode"),					
+					oSend.addClass('disabled');
+					oSend.attr('disabled','disabled');
+					num=60;
+					var timer = setInterval(function () {
+						var num2 = num-=1;
+					    oSend.text(num2+"秒后重发");
+						    if(num2==0){
+						        clearInterval(timer);
+						        oSend.text("重新发送验证码");
+							    oSend.removeClass('disabled');
+							    oSend.attr('disabled','');					        
+						    }
+				    },1000);
+				    layer.closeAll();
+		   		}else{
+		   			layer.closeAll();	
+		   			
+		   			layer.open({
+							content: res.msg,
+							btn: '我知道了',
+							time: 30 //2秒后自动关闭
+						});
+		   			{if condition="config('CODE_TYPE') eq 0"}
+	                $('#veriimg').attr('src',"{:url('checkVerify')}");
+	                {else/}
+	                publicObj.reset();
+	                {/if}
+		   		}
+		   	});
+		   	
+        });
+	    
+	   //发送短信
+		function sendsms(mobile,code='',geetest_challenge='',geetest_validate='',geetest_seccode=''){
+			var defer = $.Deferred();
+			$.ajax({
+				url: "{:url('@jingdian/User/sendMsgResetPwdDo')}",
+				type: 'get',
+				data: {'mobile': mobile,
+						'veri':code,
+						'geetest_challenge':geetest_challenge,
+						'geetest_validate':geetest_validate,
+						'geetest_seccode':geetest_seccode
+				},
+				async: true,
+				dataType: 'json',
+				success: function (data) {
+					defer.resolve(data);
+				}
+			});
+			return defer;
+		}    
+			    
+	    
+	    
+	    {if condition="config('CODE_TYPE') eq 1"}
+			var publicObj;
+			var handler = function (captchaObj) {
+		        captchaObj.appendTo('#captcha');
+		        captchaObj.onReady(function () {
+		            $("#wait").hide();
+		        });
+		        publicObj=captchaObj;
+      
+		        // 更多接口说明请参见：http://docs.geetest.com/install/client/web-front/
+		        window.gt = captchaObj;
+		    };
+		
+		
+		    $.ajax({
+		        url: "/jingdian/geetest/StartCaptchaServlet?t=" + (new Date()).getTime(), // 加随机数防止缓存
+		        type: "get",
+		        dataType: "json",
+		        success: function (data) {
+		        	$('#text').hide();
+		            $('#wait').show();
+		
+		            // 调用 initGeetest 进行初始化
+		            // 参数1：配置参数
+		            // 参数2：回调，回调的第一个参数验证码对象，之后可以使用它调用相应的接口
+		            initGeetest({
+		                // 以下 4 个配置参数为必须，不能缺少
+		                gt: data.gt,
+		                challenge: data.challenge,
+		                offline: !data.success, // 表示用户后台检测极验服务器是否宕机
+		                new_captcha: data.new_captcha, // 用于宕机时表示是新验证码的宕机
+		
+		                product: "float", // 产品形式，包括：float，popup
+		                width: '95%' 
+		                
+		                // 更多配置参数说明请参见：http://docs.geetest.com/install/client/web-front/
+		            }, handler);
+		        }
+		    });
+		    {/if}
+
+		</script>
+	</body>
+
+</html>

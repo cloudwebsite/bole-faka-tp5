@@ -1,0 +1,74 @@
+{include file="public/header" /}
+  <body ontouchstart>
+    <header class='demos-header' style="padding: 30px 0;padding-bottom: 0px;">
+      <h1 class="demos-title">确认订单信息</h1>
+    </header>
+    <form role="form" method="POST"  id="frm" action="">
+
+	 <div class="weui-cells weui-cells_form">
+		<input type="hidden" name="p3_Amt" value="{$param['p3_Amt']}"/>
+		<input type="hidden" name="p2_Order" value="{$param['p2_Order']}"/>
+		<input type="hidden" name="p5_Pid" value="{$param['p5_Pid']}"/>
+		
+		{if condition="session('useraccount.account') neq null"}
+		<input type="hidden" name="lianxi" value="{$param['lianxi']}"/>
+		{/if}
+		<input type="hidden" name="pa_MP" value="{$param['pa_MP']}"/>
+		<input type="hidden" name="pd_FrpId" value="{$param['pd_FrpId']}"/>
+	
+		<div class="weui-cell">
+			<div class="weui-cell__hd"><label class="weui-label">订单编号</label></div>
+			<div class="weui-cell__bd"><a href="{:url('mobile/Index/selectorder')}?key={$param['p2_Order']}" target="_blank">{$param['p2_Order']}</a></div>
+		</div>
+		<div class="weui-cell">
+			<div class="weui-cell__hd"><label class="weui-label">应付金额</label></div>
+			<div class="weui-cell__bd" style="padding-left: 0px;color:red;">{:number_format($param['p3_Amt'],2)}￥</div>
+		</div>
+		<div class="weui-cell">
+			<div class="weui-cell__hd"><label class="weui-label">购买产品</label></div>
+			<div class="weui-cell__bd">{$param['title']}</div>
+		</div>
+		<div class="weui-cell">
+			<div class="weui-cell__hd"><label class="weui-label">购买数量</label></div>
+			<div class="weui-cell__bd">{$param['buynum']}个</div>
+		</div>
+		{if condition="$param['lianxi'] neq ''"}
+		<div class="weui-cell">
+			<div class="weui-cell__hd"><label class="weui-label">联系方式</label></div>
+			<div class="weui-cell__bd">{$param['lianxi']}</div>
+		</div>
+		{/if}
+	</div>
+	<div class="weui-agree" style="font-size: 16px;font-weight: bold;padding: 20px 20px 0 20px;">
+		<span class="weui-agree__text">
+			<a href="./">取消订单</a>
+		</span>
+		<span class="weui-agree__text">
+		{if condition="($param['pd_FrpId'] eq 'wxwap')"}
+			<a href="{:url('mobile/Index/selectorder')}?key={$param['p2_Order']}" style="float: right; color:red;" target="_blank">付款之后没跳转请点击我</a>
+			{else/}
+			<a href="{:url('mobile/Index/selectorder')}?key={$param['p2_Order']}" style="float: right;" target="_blank">查询订单</a>
+			{/if}
+		</span>
+    </div>
+    <div class="weui-btn-area">
+      <a class="weui-btn weui-btn_primary" href="javascript:" id="mysubmit">确认支付</a>
+    </div>
+	</form>
+	{include file="public/footer" /}   
+  </body>
+  
+ 
+<script language='javascript'>  
+ $(function () {
+   
+  	 $("#frm").attr("action","{:url('pay/index/reqPay')}");
+		var issubmit = false;
+        $('#mysubmit').click(function () {  
+			document.forms[0].submit();
+    });
+    });
+</script>
+  
+
+</html>
