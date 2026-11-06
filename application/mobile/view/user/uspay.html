@@ -1,0 +1,428 @@
+{include file="public/imgmobile_header" /}
+
+</head>
+
+<body ontouchstart="">
+
+	<div class="fui-page-group statusbar">
+		<style>
+			.fui-according-header {
+				font-size: .7rem;
+			}
+			
+			.fui-according-header .text {
+				color: #666666;
+				font-size: .65rem;
+				text-align: right;
+			}
+			
+			.fui-cell-group.recharge {
+				padding: .6rem 0;
+			}
+			
+			.fui-cell-group.recharge .fui-cell {
+				padding: 0;
+				font-size: .6rem;
+				height: 1rem;
+				line-height: 1rem;
+			}
+			
+			.fui-cell-group.recharge .fui-cell .fui-cell-text {
+				color: #666;
+			}
+			
+			.fui-cell-group.recharge .fui-cell:before {
+				display: none
+			}
+			
+			.fui-cell-group.recharge:before {
+				content: " ";
+				position: absolute;
+				left: 0;
+				right: 0;
+				top: 0;
+				height: 1px;
+				border-top: 1px solid #ebebeb;
+				color: #D9D9D9;
+				-webkit-transform-origin: 0 0;
+				-ms-transform-origin: 0 0;
+				transform-origin: 0 0;
+				-webkit-transform: scaleY(0.5);
+				-ms-transform: scaleY(0.5);
+				transform: scaleY(0.5);
+			}
+			
+			.fui-according.expanded .fui-according-header .text {
+				filter: alpha(opacity=0);
+				-moz-opacity: 0;
+				-khtml-opacity: 0;
+				opacity: 0;
+			}
+			
+			.fui-cell-group .fui-cell .fui-cell-icon {
+				width: auto;
+				margin-right: .75rem;
+			}
+			
+			.fui-cell-group .fui-cell .fui-cell-icon img {
+				width: 1.7rem;
+				height: 1.7rem;
+			}
+			
+			.fui-cell-info .title {
+				position: relative;
+				font-size: 0.7rem;
+				color: #000;
+				white-space: nowrap;
+				text-overflow: ellipsis;
+				overflow: hidden;
+				height: 1rem;
+				line-height: 1rem;
+			}
+			
+			.fui-cell.applyradio {
+				display: none;
+				height: 3.25rem;
+				padding: .4rem .6rem;
+			}
+			
+			.fui-cell.applyradio .fui-cell-info {
+				display: -webkit-box;
+				display: -webkit-flex;
+				display: -ms-flexbox;
+				display: flex;
+				height: 100%;
+				-webkit-box-orient: vertical;
+				-webkit-flex-direction: column;
+				-ms-flex-direction: column;
+				flex-direction: column;
+				-webkit-box-pack: justify;
+				-ms-flex-pack: justify;
+				-webkit-justify-content: space-around;
+				justify-content: space-around;
+			}
+			body {
+				position: absolute;
+				;
+				max-width: 750px;
+				margin: auto;
+			}
+			
+			.fui-navbar {
+				max-width: 750px;
+			}
+			
+			.fui-navbar,
+			.fui-footer {
+				max-width: 750px;
+			}
+			
+			.fui-page.fui-page-from-center-to-left,
+			.fui-page-group.fui-page-from-center-to-left,
+			.fui-page.fui-page-from-center-to-right,
+			.fui-page-group.fui-page-from-center-to-right,
+			.fui-page.fui-page-from-right-to-center,
+			.fui-page-group.fui-page-from-right-to-center,
+			.fui-page.fui-page-from-left-to-center,
+			.fui-page-group.fui-page-from-left-to-center {
+				-webkit-animation: pageFromCenterToRight 0ms forwards;
+				animation: pageFromCenterToRight 0ms forwards;
+			}
+		</style>
+
+		<div class="fui-page  fui-page-current order-pay-page" id="fui-page-1523806347935">
+			<div class="fui-header">
+				<div class="fui-header-left">
+					<a class="back" onclick="back();"></a>
+				</div>
+				<div class="title">账户充值</div>
+				<div class="fui-header-right">
+
+				</div>
+			</div>
+			<div class="fui-content navbar">
+				<div class="fui-cell-group">
+					<div class="fui-cell">
+						<div class="fui-cell-label">当前余额</div>
+						<div class="fui-cell-info c000">￥{:session('useraccount.money')}</div>
+					</div>
+				</div>
+
+				{if condition="config('recharge_kami_open') neq 0 && config('recharge_kami_open') neq '0'"}
+				<div class="fui-cell-group">
+					<div class="fui-cell">
+						<div class="fui-cell-label">卡密兑换</div>
+						<div class="fui-cell-info c000">
+							<input type="text" class="fui-input" id="kami_code" placeholder="请输入充值卡密" style="width:100%;"/>
+						</div>
+					</div>
+					<a id="btn_redeem_kami" class="btn btn-danger block" style="margin:.5rem .6rem;">立即兑换</a>
+				</div>
+				{/if}
+
+				{if condition="config('recharge_kami_only') neq 1 && config('recharge_kami_only') neq '1'"}
+				<form method="post"  action="" id="formreq">
+
+				<div class="fui-cell-group">
+					<div class="fui-cell">
+						<div class="fui-cell-label">充值金额</div>
+						<div class="fui-cell-info c000" style="display: -webkit-box;display: -webkit-flex;display: -ms-flexbox;display: flex;-webkit-box-align: center;-webkit-align-items: center;-ms-flex-align: center;align-items: center;">￥<input type="tel" class="fui-input" id="pay_money" min="1" value="" name="p3_Amt"></div>
+					</div>
+				</div>
+				<input type="hidden" name="p2_Order" id="p2_Order">
+				<input type="hidden" name="p5_Pid" id="p5_Pid">
+				<input type="hidden" name="pd_FrpId" id="pd_FrpId" >
+        
+				<div class="fui-cell-group">
+            
+				{if condition="config('blfk_pay_alipay') neq '0'"}
+					<div class="fui-cell applyradio " id="btn-alipay1" style="display: flex;" for="applytype">
+						<div class="fui-cell-icon"><img src="__IMGMOBILE__/img/zfb.png" alt=""></div>
+						<div class="fui-cell-info" style="height: 100%">
+							<div class="title">支付宝充值</div>
+							<div class="subtitle" style="color: #999999;font-size: .65rem">支付宝安全支付</div>
+						</div>
+						<div class="fui-cell-remark noremark"><input name="applytype" type="radio" class="fui-radio fui-radio-danger" id="applytype" data-type="alipay"></div>
+
+					</div>
+				{/if}
+				{if condition="config('blfk_pay_wxpay') neq '0'"}
+					<div class="fui-cell applyradio " id="btn-wx" style="display: flex;">
+						<div class="fui-cell-icon"><img src="__IMGMOBILE__/img/wx.png" alt=""></div>
+						<div class="fui-cell-info" style="height: 100%">
+							<div class="title">微信充值</div>
+							<div class="subtitle" style="color: #999999;font-size: .65rem">微信安全支付</div>
+						</div>
+						<div class="fui-cell-remark noremark"><input name="applytype" type="radio" class="fui-radio fui-radio-danger" id="wxtype" data-type="wxpay"></div>
+					</div>				
+					{/if}
+				{if condition="config('blfk_pay_usdtpay') neq '0'"}
+					<div class="fui-cell applyradio " id="btn-alipay1" style="display: flex;" for="applytype">
+						<div class="fui-cell-icon"><img src="__IMGMOBILE__/img/usdt.png" alt=""></div>
+						<div class="fui-cell-info" style="height: 100%">
+							<div class="title">USDT充值</div>
+							<div class="subtitle" style="color: #999999;font-size: .65rem">TRC20USDT支付</div>
+						</div>
+						<div class="fui-cell-remark noremark"><input name="applytype" type="radio" class="fui-radio fui-radio-danger" id="applytype" data-type="usdtpay"></div>
+
+					</div>
+				{/if}
+				{if condition="config('blfk_pay_unionpay') neq '0'"}
+					<div class="fui-cell applyradio " id="btn-wx" style="display: flex;">
+						<div class="fui-cell-icon"><img src="__IMGMOBILE__/img/unionPay.png" alt=""></div>
+						<div class="fui-cell-info" style="height: 100%">
+							<div class="title">聚合支付</div>
+							<div class="subtitle" style="color: #999999;font-size: .65rem">聚合支付</div>
+						</div>
+						<div class="fui-cell-remark noremark"><input name="applytype" type="radio" class="fui-radio fui-radio-danger" id="qqtype" data-type="unionPay"></div>
+					</div>
+					{/if}
+				{if condition="config('blfk_pay_qqpay') neq '0'"}
+					<div class="fui-cell applyradio " id="btn-wx" style="display: flex;">
+						<div class="fui-cell-icon"><img src="__IMGMOBILE__/img/qqpay.png" alt=""></div>
+						<div class="fui-cell-info" style="height: 100%">
+							<div class="title">QQ钱包</div>
+							<div class="subtitle" style="color: #999999;font-size: .65rem">QQ支付</div>
+						</div>
+						<div class="fui-cell-remark noremark"><input name="applytype" type="radio" class="fui-radio fui-radio-danger" id="qqtype" data-type="qqpay"></div>
+					</div>
+					{/if}
+				{if condition="config('blfk_pay_tenpay') neq '0'"}
+					<div class="fui-cell applyradio " id="btn-wx" style="display: flex;">
+						<div class="fui-cell-icon"><img src="__IMGMOBILE__/img/qqpay.png" alt=""></div>
+						<div class="fui-cell-info" style="height: 100%">
+							<div class="title">财付通</div>
+							<div class="subtitle" style="color: #999999;font-size: .65rem">财付通支付</div>
+						</div>
+						<div class="fui-cell-remark noremark"><input name="applytype" type="radio" class="fui-radio fui-radio-danger" id="qqtype" data-type="tenpay"></div>
+					</div>
+					{/if}
+				
+					
+
+				</div>
+
+				<a id="btn-alipay" class="btn btn-danger mtop  block btn-pay" style="">确认支付</a>
+				</form>
+				{if condition="count($givelist) neq 0"}
+                    <div class="fui-cell-group">
+                    {volist name="$givelist" id="v"}
+                    <div class="fui-cell">
+						<div class="fui-cell-label" style="font-size: 0.6rem;">充值金额</div>
+						<div class="fui-cell-info c000" style="font-size: 0.6rem;">≥￥{$v.paymoney}</div>
+						
+						{if condition="$v.paytype eq 0"}
+                        <div class="fui-cell-info c000" style="font-size: 0.6rem;">单笔赠送：{$v.givemoney}元</div>                      
+                        {else/}
+                        <div class="fui-cell-info c000" style="font-size: 0.6rem;">赠送单笔金额的：{$v.givemoney}%</div>  
+                       
+                        {/if}
+					</div>
+					{/volist}                  
+                    </div>
+                    {/if}
+				{else/}
+				<div class="fui-cell-group">
+					<div class="fui-cell">
+						<div class="fui-cell-info" style="color:#c00;font-size:.65rem;">当前已开启「充值仅卡密」，请使用上方卡密兑换。</div>
+					</div>
+				</div>
+				{/if}
+
+			</div>
+			
+
+		</div>
+
+	</div>
+
+	<script type="text/javascript">
+		{include file="public/common" /}
+		$(function() {
+			 function randomNum(n) {
+				var t = '';
+				for(var i = 0; i < n; i++) {
+					t += Math.floor(Math.random() * 10);
+				}
+				return t;
+			}
+
+			$('#btn_redeem_kami').click(function(){
+				var code = $.trim($('#kami_code').val());
+				if(!code){
+					layer.open({content:'请输入卡密',btn:'我知道了',time:30});
+					return;
+				}
+				layer.open({type:2});
+				$.post("{:url('user/redeemKami')}", {code: code}, function(res){
+					layer.closeAll();
+					layer.open({
+						content: res.msg,
+						btn: '我知道了',
+						yes: function(index){
+							layer.close(index);
+							if(res.code==1){ location.reload(); }
+						}
+					});
+				}, 'json');
+			});
+
+			$(".applyradio").click(function() {
+				$(this).find(".fui-radio").prop("checked", "true");
+			});
+			$("#pay_money").on("input propertychange", function() {
+				console.log($(this).val().indexOf("."))
+				if($(this).val().indexOf(".") != "-1") {
+					var val = $(this).val().split(".")[0];
+					$(this).val(val);
+				}
+			});
+			$('#btn-alipay').click(function() {
+
+				var pay_money = $.trim($('#pay_money').val());
+
+				//设定时间格式化函数
+				Date.prototype.format = function(format) {
+					var args = {
+						"M+": this.getMonth() + 1,
+						"d+": this.getDate(),
+						"h+": this.getHours(),
+						"m+": this.getMinutes(),
+						"s+": this.getSeconds(),
+					};
+					if(/(y+)/.test(format))
+						format = format.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+					for(var i in args) {
+						var n = args[i];
+						if(new RegExp("(" + i + ")").test(format))
+							format = format.replace(RegExp.$1, RegExp.$1.length == 1 ? n : ("00" + n).substr(("" + n).length));
+					}
+					return format;
+				};
+
+				var order = new Date().format("yyyyMMddhhmmss") + randomNum(10);
+				$("#p2_Order").val(order);
+				$("#p5_Pid").val("{:session('useraccount.id')}");
+
+				if(pay_money < 0.01) {
+						layer.open({
+							content: '请输入充值金额充值金额不能小于1元',
+							btn: '我知道了',
+							time: 30 //2秒后自动关闭						
+							});	
+					
+					return false;
+				}
+
+				var nowType = $("input[name='applytype']:checked").attr("data-type");
+				if(typeof(nowType) == "undefined"){
+          layer.open({
+							content: '请选择支付方式',
+							btn: '我知道了',
+							time: 30 //2秒后自动关闭						
+							});	
+					
+					return false;
+				}
+				$("#pd_FrpId").val(nowType);
+				
+                var pd_FrpId = nowType;
+				var maddtype=5;
+				if(pd_FrpId=='alipay'){
+					maddtype=2;
+				}else if(pd_FrpId=='wxpay'){
+					maddtype=3;	
+				}else if(pd_FrpId=='unionPay'){
+					maddtype=4;			
+				}else if(pd_FrpId=='qqpay'){
+					maddtype=6;	
+				}else if(pd_FrpId=='tenpay'){
+					maddtype=7;			
+				}else{ 			
+					maddtype=5;	      			
+				}
+
+			  
+				 $("#formreq").attr("action","{:url('@pay/index/reqPay')}");
+		
+				var order_cash = pay_money;
+				var order_descr = "充值" + order_cash + "元";
+				var order_type = "1"; //1表示充值
+				 layer.open({type: 2});
+				$.when(AddPayOrder(order, maddtype, order_cash)).done(function(res) {
+					if(res.code == 1) {
+						$("#formreq").submit();
+						layer.closeAll();
+					} else {
+						layer.closeAll();
+						layer.alert('数据异常', function(index) {
+							location.reload(false);
+						});
+					}
+				});
+			});
+
+		});
+		//上传充值订单
+		function AddPayOrder(order, maddtype, order_cash) {
+			var defer = $.Deferred();
+			$.ajax({
+				url: "{:url('jingdian/api/AddPayOrder')}",
+				type: 'post',
+				dataType: 'json',
+				async: true,
+				data: {
+					order: order,
+					paytype: maddtype,
+					money: order_cash
+				},
+				success: function(data) {
+					defer.resolve(data);
+				},
+			});
+			return defer;
+		}
+	</script>
+</body>
+
+</html>

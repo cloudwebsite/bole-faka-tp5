@@ -1,0 +1,155 @@
+{include file="public/header"/}
+<body class="gray-bg">
+<div class="wrapper wrapper-content">
+    {notempty name="info.noti"}
+    <div class="alert alert-danger"><i class="fa fa-exclamation-triangle"></i>{$info.noti}
+    </div>
+{/notempty}
+    <!-- 上方tab -->
+    <div class="row">
+        <div class="col-sm-3">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                   
+                    <h5>今日收益</h5>
+                </div>
+                <div class="ibox-content">
+                    <h1 class="no-margins">{:number_format($info_jinri[0]['jinri'],2)}</h1>
+                    <small>今日收益</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                   
+                    <h5>昨日收益</h5>
+                </div>
+                <div class="ibox-content">
+                    <h1 class="no-margins">{:number_format($info_zuori[0]['zuori'],2)}</h1>
+                    <small>昨日收益</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                   
+                    <h5>商品数目</h5>
+                </div>
+                <div class="ibox-content">
+                    <h1 class="no-margins">{$info_fl[0]['flnum']}</h1>
+                    <small>商品数目</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                   
+                    <h5>订单数目</h5>
+                </div>
+                <div class="ibox-content">
+                    <h1 class="no-margins">{$info_info[0]['infonum']}</h1>
+                    <small>订单数目</small>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-sm-3">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>本月收益</h5>
+                </div>
+                <div class="ibox-content">
+                    <h1 class="no-margins">{$info.ben}</h1>
+                    <small>本月收益</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                   
+                    <h5>上月收益</h5>
+                </div>
+                <div class="ibox-content">
+                    <h1 class="no-margins">{$info.shang}</h1>
+                    <small>上月收益</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>今日余额支付</h5>
+                </div>
+                <div class="ibox-content">
+                    <h1 class="no-margins">{$info.benyue}</h1>
+                    <small>今日余额支付</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>昨日余额支付</h5>
+                </div>
+                <div class="ibox-content">
+                    <h1 class="no-margins">{$info.shangyue}</h1>
+                    <small>昨日余额支付</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 中间折线 -->
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="col-sm-12">
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <i class="fa fa-cogs"></i> 系统信息
+                    </div>
+                    <div class="panel-body">
+                        <p><i class="fa fa-sitemap"></i> 框架版本：ThinkPHP{$info.think_v}
+                        </p>
+                        <p><i class="fa fa-windows"></i> 服务环境：{$info.web_server}
+                        </p>
+                        <p><i class="fa fa-warning"></i> 上传附件限制：{$info.onload}
+                        </p>
+                        <p>
+                        	<i class="fa fa-credit-card"></i> PHP 版本：{$info.phpversion}
+                        </p>
+                        
+                    </div>
+                </div>
+            </div>           
+        </div>
+        <div class="col-sm-12">
+            <div class="col-sm-12">
+                <div class="panel panel-success">
+                    <div class="panel-heading">
+                        <i class="fa fa-bullhorn"></i> 网站信息
+                    </div>
+                    <div class="panel-body">
+                        <p>
+                        	<i class="fa fa-star"></i>当前系统版本:V{:config('version')}
+                        </p>
+                         <p><i class="fa fa-wikipedia-w"></i> 当前域名:{$_SERVER['SERVER_NAME']}
+                        </p>
+                        <p class="btn-danger">
+                        	<i class="fa fa-credit-card"></i> 
+                        	 声明：禁止发布任何违法、违规内容!  所有法律责任由架设与运营本网站的人承担与（程序作者）无关！法网恢恢 疏而不漏！请自觉遵守法律法规。
+                        </p>
+                    </div>
+                </div>
+            </div>           
+        </div>
+    </div>
+
+</div>
+
+{include file="public/footer" /}
+</body>
+</html>

@@ -1,0 +1,109 @@
+{include file="public/header" /}
+
+	<body ontouchstart>
+
+		<div class='fui-page-group '>
+			
+			<script type="text/javascript" src="https://unpkg.com/jquery-form@3.50.0/jquery.form.js"></script>
+			<script type="text/javascript" src="/static/admin/js/lunhui.js"></script>
+			<link href="__CSS__/style20170419.css" rel="stylesheet" type="text/css" />
+			
+			<div class='fui-page fui-page-current'>
+				<form method="post" action="{:url('addkami')}" id="addkamiform">
+				<input type="hidden" name='goodid' value="{$shopdetail['id']}">
+				<div class="fui-header fui-header-success">
+					<div class="fui-header-left">
+						<a class="back"></a>
+					</div>
+					<div class="title">{$shopdetail['mnamebie']}</div>
+					<div class="fui-header-right"></div>
+				</div>
+				<div class='fui-content navbar'>
+
+				
+					<div class="fui-title">卡密内容</div>
+					
+
+					<div class="fui-cell-group">						
+						<div class="fui-cell fui-cell-textarea" style="height: 100%;">
+							
+							<div class="fui-cell-info">
+								<textarea rows="20" placeholder="卡密内容（一行一个，最多1000个）" id="shopdesc" name="kami"></textarea>
+							</div>
+						</div>
+					</div>
+					
+
+					
+
+					<button class="btn btn-success block" type="submit" style="width: 95%;" >提交补货</button>
+				</div>
+				</form>
+				
+			</div>
+			{include file="public/navbar" /}
+
+
+			
+
+			
+
+			
+			
+
+			<a class="diy-gotop external" style=" position: fixed; overflow: hidden; z-index: 999; bottom: 136px; right: 10px; text-align: left; display:none;" id="gotop">
+				<div style="background: #000000; opacity: 0.5; line-height: 32px; text-align: center; border-radius: 30px; height: 30px; width: 30px;">
+					<i class="icon icon-top1" style="color: #ffffff; font-size: 20px;"></i>
+				</div>
+			</a>
+
+			<script>
+				$(function() {
+					$(".fui-content").bind('scroll resize', function() {
+						var scrolltop = $(".fui-content").scrollTop();
+						if(scrolltop > "300") {
+							$("#gotop").fadeIn(100)
+						} else {
+							$("#gotop").fadeOut(100)
+						}
+					});
+					$("#gotop").unbind('click').click(function() {
+						$(".fui-content").animate({
+							scrollTop: "0px"
+						}, 1000)
+					});
+					$('#addkamiform').ajaxForm({
+			            beforeSubmit: checkForm, // 此方法主要是提交前执行的方法，根据需要设置
+			            success: complete, // 这是提交后的方法
+			            dataType: 'json'
+			        });
+			        var loadindex;
+			        function checkForm(){
+			        	loadindex=layer.open({type: 2});
+			        	var kami=$('#shopdesc').val();
+			        	if(kami==''){
+			        		 layer.open({
+							    content: '卡密不能为空'
+							    ,btn: '我知道了'
+							  });
+						layer.close(loadindex);	  
+						return false;	  
+			        	}			        	
+			        	
+			        }
+			        function complete(data){
+			        	layer.close(loadindex);
+			            if(data.code==1){
+			                lunhui.success_mobile(data.msg,data.url);
+			            }else{ 
+			                lunhui.error_mobile(data.msg);			                 
+			            }
+			        }
+				});
+			</script>
+
+			<span style="display:none"></span>
+			
+	</body>
+
+</html>

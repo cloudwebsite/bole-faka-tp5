@@ -1,0 +1,89 @@
+{include file="public/header" /}
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title"><h5>生成充值卡密</h5></div>
+                <div class="ibox-content">
+                    <form class="form-horizontal" id="genForm">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">面额（元）</label>
+                            <div class="col-sm-4">
+                                <input type="number" step="0.01" min="0.01" name="money" id="gen_money" class="form-control" placeholder="如 100"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">生成数量</label>
+                            <div class="col-sm-4">
+                                <input type="number" min="1" max="2000" name="num" id="gen_num" class="form-control" value="10"/>
+                                <span class="help-block m-b-none">单次最多 2000 张</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-4 col-sm-offset-2">
+                                <button class="btn btn-primary" type="button" onclick="doGenerate()">立即生成</button>
+                                <a class="btn btn-white" href="{:url('index')}">返回列表</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="ibox float-e-margins">
+                <div class="ibox-title"><h5>导入充值卡密</h5></div>
+                <div class="ibox-content">
+                    <form class="form-horizontal" id="impForm">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">统一面额</label>
+                            <div class="col-sm-4">
+                                <input type="number" step="0.01" min="0" name="money" id="imp_money" class="form-control" placeholder="行内无面额时使用"/>
+                                <span class="help-block m-b-none">每行一张；支持 <code>卡密</code> 或 <code>卡密|面额</code></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">卡密内容</label>
+                            <div class="col-sm-6">
+                                <textarea class="form-control" rows="15" name="values" id="imp_values" placeholder="一行一个&#10;ABC123&#10;DEF456|50"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-4 col-sm-offset-2">
+                                <button class="btn btn-success" type="button" onclick="doImport()">提交导入</button>
+                                <a class="btn btn-white" href="{:url('index')}">返回列表</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{include file="public/footer" /}
+<script>
+function doGenerate(){
+    var money = $('#gen_money').val();
+    var num = $('#gen_num').val();
+    if(!money || money<=0){ layer.msg('请填写面额',{icon:2}); return; }
+    if(!num || num<1){ layer.msg('请填写数量',{icon:2}); return; }
+    var load = layer.load(1);
+    $.post('{:url("generate")}', {money:money, num:num}, function(res){
+        layer.close(load);
+        layer.msg(res.msg,{icon:res.code==1?1:2,time:2000}, function(){
+            if(res.code==1 && res.url){ location.href = res.url; }
+        });
+    },'json');
+}
+function doImport(){
+    var money = $('#imp_money').val();
+    var values = $('#imp_values').val();
+    if(!values){ layer.msg('请填写卡密',{icon:2}); return; }
+    var load = layer.load(1);
+    $.post('{:url("import")}', {money:money, values:values}, function(res){
+        layer.close(load);
+        layer.msg(res.msg,{icon:res.code==1?1:2,time:2000}, function(){
+            if(res.code==1 && res.url){ location.href = res.url; }
+        });
+    },'json');
+}
+</script>

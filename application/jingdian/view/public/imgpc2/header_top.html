@@ -1,0 +1,47 @@
+<div class="head-top">
+	<div class="nb">
+		<div style="width:300px; margin-left:300px;color:#e01;float:left;font-size:16px;line-height: 15px;">
+
+		</div>
+		<div class="rside" style='float:right'>
+			<ul class="head-ul">
+				{if condition="config('web_reg_type') neq 0"}
+				{if condition="session('useraccount.account') eq null"}
+					
+				<li>
+					<a href="{:url('@jingdian/User/index')}">
+						<font color="white">登录</font>
+					</a>
+				</li>
+				<li>
+					<a href="{:url('@jingdian/User/reg')}"><font color="white">注册</font></a>
+				</li>
+				{else/}
+				<li>
+					<font color="white">欢迎您，</font><a href="{:url('@jingdian/User/usCenter')}"><font color="white">{:session('useraccount.account')}</font></a>
+				</li>
+				<li>
+					<a href="{:url('@jingdian/User/loginOut')}"><font color="white">退出</font></a>
+				</li>
+				{/if}
+				{/if}
+				{if condition="session('useraccount.account') eq null"}
+				<li>
+					<a href="{:url('Index/selectorder')}"><font color="white">我的订单</font></a>
+				</li>
+				{else/}
+				<li>
+					<a href="{:url('user/usorder')}"><font color="white">我的订单</font></a>
+				</li>
+				{/if}
+				<li>
+					<a href="{:url('@jingdian/Detail/getAll')}"><font color="white">常见问题</font></a>
+				</li>
+				<li>
+					<a href="https://wpa.qq.com/msgrd?v=3&amp;uin={:config('WEB_QQ')}&amp;site=qq&amp;menu=yes"><font color="white">联系客服</font></a>
+				</li>
+
+			</ul>
+		</div>
+	</div>
+</div>

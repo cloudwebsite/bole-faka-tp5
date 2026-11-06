@@ -1,0 +1,107 @@
+<div class="header">
+      <div class="top_box">
+        <div class="main">
+          <div class="top">
+           <ul class="left">
+            	 <li class="not">
+                      您好，欢迎来到{:config('shop_name')}的购物商城！       
+              </li>
+            </ul>  
+            <ul class="right">
+            	 <li class="not">
+                	欢迎您，
+                  <span class="logined_name">
+                    <a href="{:url('@jingdian/User/usCenter')}">{:session('useraccount.account')}</a>
+                  </span>
+                              
+              </li>
+              <li class="not">
+                <a href="{:url('@jingdian/User/loginOut')}" class="js_close">退出</a>  
+              
+             
+              <li class="not">
+                <a href="{:url('@jingdian/Detail/getAll')}" class="T_a" target="_blank">帮助中心</a></li>
+              <li class="arrow">
+                <a href="" class="T_a">管理中心
+                  <em class="arrow"></em></a>
+                <div class="change_div top_manage r">
+                  <div class="clearfix">
+                    <dl>
+                      <dt>我是买家</dt>
+                      <dd>
+                        <a href="/">网站首页</a>
+              					<a href="{:url('user/uscenter')}">会员中心</a>
+                        <a rel="nofollow" href="{:url('user/usorder')}" >我的订单</a></dd>
+                    </dl>
+                    <dl>
+                      <dt>财务管理</dt>
+                      <dd>
+                        <a rel="nofollow" href="{:url('user/uspay')}">
+                          	在线充值</a>
+                        <a rel="nofollow" href="{:url('user/usPaylog')}">
+                          	财务明细</a>
+                        
+                        <a rel="nofollow" href="{:url('user/usIntegrallog')}">
+                         	 积分明细</a>
+                        </dd>
+                    </dl>
+                    
+                    
+                  </div>
+                  <div class="clearfix">
+                    
+                    
+                    <dl>
+                      <dt>账户安全</dt>
+                      <dd>
+                       
+                        <a rel="nofollow" href="{:url('user/usUpdatePassWord')}">修改密码</a>
+                       
+                    </dl>
+                  </div>
+                  <!--[if IE 6]>
+                    <div style="position:absolute;z-index:-1;left:0;top:0;width:518px;height:510px">
+                      <iframe style="width:100%;height:100%;filter:alpha(opacity=0);-moz-opacity:0"></iframe>
+                    </div>
+                  <![endif]--></div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="general">
+        <div class="main">
+          <li class="logo">
+            <a href="/">
+              <img src="/uploads/images/{:config('WEB_logo')}" width="300" height="53" alt="Logo尺寸 300*53"/></a>
+          </li>
+          <li class="search">
+            <i>
+            </i>
+            <input name="" class="searchval" type="text" placeholder="请输入要商品关键词" />
+            <input type="button" class="searchbtn" value="搜索" /></li>
+        </div>
+        
+      </div>
+      
+    </div>
+    <script type="application/javascript">
+    	$(".searchbtn").click(function(){
+				var input=$(".searchval");
+				if(input.val().replace(/\s/,"")==""){
+					layer.alert("请输入搜索关键词",{icon:0}, function(index){input.focus();layer.close(index);});
+					return false
+				}
+				var type = $('.searchlist .cur').attr("data"); 
+				{if condition="config('moban_index') eq 1"}
+				window.location.href="{:config('is_https')}://"+window.location.host+"/jingdian/index/henggoodbyname.html?key="+input.val();
+				{elseif condition="config('moban_index') eq 2"/}
+				window.location.href="{:config('is_https')}://"+window.location.host+"/jingdian/index/henggoodbyname.html?key="+input.val();
+				{elseif condition="config('moban_index') eq 3"/}
+				window.location.href="{:config('is_https')}://"+window.location.host+"/jingdian/index/henggoodbyname.html?key="+input.val();
+				{elseif condition="config('moban_index') eq 4"/}
+				window.location.href="{:config('is_https')}://"+window.location.host+"/jingdian/index/goodscategorybyname.html?key="+input.val();
+				{/if}
+				
+			});
+    </script>

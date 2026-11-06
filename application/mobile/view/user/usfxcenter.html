@@ -1,0 +1,210 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0 user-scalable=no">
+		<script>
+			document.documentElement.style.fontSize = document.documentElement.clientWidth / 750 * 40 + "px";
+		</script>
+		<meta name="format-detection" content="telephone=no" />
+		<title>{:config('web_site_title')}</title>
+		<link rel="stylesheet" type="text/css" href="__IMGMOBILE__/css/foxui.min_1.css">
+		
+		<script type="text/javascript" src="{:config('cdnpublic')}qrcodejs/1.0.0/qrcode.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="__IMGMOBILE__/css/iconfont.css-v=2017070719.css">
+		<link rel="stylesheet" href="__IMGMOBILE__/css/style_2.css">
+
+		<script type="text/javascript" src="{:config('cdnpublic')}jquery/1.8.2/jquery.min.js"></script>
+		<script type="text/javascript" src="__IMGMOBILE__/js/font.js"></script>
+
+		<link rel="stylesheet" href="{:config('cdnpublic')}layer/3.1.1/mobile/need/layer.css" />
+		<script type="text/javascript" src="{:config('cdnpublic')}layer/3.1.1/mobile/layer.js"></script>
+
+		<style type="text/css">
+			body {
+				position: absolute;
+				;
+				max-width: 750px;
+				margin: auto;
+			}
+			
+			.fui-navbar {
+				max-width: 750px;
+			}
+			
+			.fui-navbar,
+			.fui-footer {
+				max-width: 750px;
+			}
+			
+			.fui-page.fui-page-from-center-to-left,
+			.fui-page-group.fui-page-from-center-to-left,
+			.fui-page.fui-page-from-center-to-right,
+			.fui-page-group.fui-page-from-center-to-right,
+			.fui-page.fui-page-from-right-to-center,
+			.fui-page-group.fui-page-from-right-to-center,
+			.fui-page.fui-page-from-left-to-center,
+			.fui-page-group.fui-page-from-left-to-center {
+				-webkit-animation: pageFromCenterToRight 0ms forwards;
+				animation: pageFromCenterToRight 0ms forwards;
+			}
+		</style>
+
+	</head>
+
+	<body ontouchstart>
+
+		<div class='fui-page-group '>
+			<script>
+				document.title = "分销中心";
+			</script>
+			<script>
+				document.documentElement.style.fontSize = document.documentElement.clientWidth / 750 * 40 + "px";
+			</script>
+
+			<style type="text/css">
+				.icon1 {
+					width: .8rem;
+					height: .8rem;
+					vertical-align: -0.15em;
+					fill: currentColor;
+					overflow: hidden;
+				}
+			</style>
+			<link href="__IMGMOBILE__/css/style_3.css" rel="stylesheet">
+			<div class="fui-page fui-page-current page-commission-index ">
+				<div class="fui-header">
+					<div class="fui-header-left">
+						<a class="back" href="{:url('mobile/user/uscenter')}">会员中心</a>
+					</div>
+					<div class="title">分销中心</div>
+					<div class="fui-header-right"></div>
+				</div>
+				<div class='fui-content navbar'>
+					<div class="headinfo">
+						<div class="userinfo" style="height: auto;">
+							<div class='fui-list'>
+								
+								<div class='fui-list-info' style="margin: 0 auto;text-align: center;" id="tg-qrcode">
+								我的专属推广二维码	
+								</div>
+							</div>
+							
+						</div>
+					</div>
+
+					<div class="fui-cell-group">
+						<div class="fui-cell" style="    height: 2.85rem;">
+							<div class="fui-cell-icon">
+								<svg class="icon1" aria-hidden="true">
+									<use xlink:href="#icon-yaoqingma"></use>
+								</svg>
+							</div>
+							<div class="fui-cell-text">我的推广链接：{:config('is_https')}://{$host}/?pid={:session('useraccount.id')} </div>
+						</div>
+					</div>
+
+					<div class="userblock">
+						<div class="line total new">
+							<div class="num">{$total['txmoney']}</div>
+							<div class="title">成功提现佣金(元)</div>
+						</div>
+						<div class="line usable new">
+
+							<div class="text">
+								<div class="num">{$hasUser['tg_money']}</div>
+								<div class="title">可提现佣金(元)</div>
+							</div>
+							<a href="{:url('user/tixian')}"><div class="btn btn-warning">佣金提现</div></a>
+						</div>
+					</div>
+					<div class="fui-block-group new col-2" style='overflow: hidden;'>
+						<a class="fui-block-child new  external" href="#">
+							<div class="icon " style="color: #ff4357;"><i class="icon icon-qian"></i></div>
+							<div class="text new">
+								<div class="title">分销佣金</div>
+								<div class=""><span>{$total['yjmoney']}</span> 元</div>
+							</div>
+						</a>
+						<a class="fui-block-child new external" href="{:url('user/ustgmoneylog')}">
+							<div class="icon" style="color: #9ec9f4;"><i class="icon icon-dingdan2"></i></div>
+							<div class="text new">
+								<div class="title">佣金明细</div>
+								<div class=""><span>{$yjcount}</span> 笔</div>
+							</div>
+						</a>
+						<a class="fui-block-child new  external" href="{:url('user/ustixianlog')}">
+							<div class="icon" style="color: #ffbe2e;"><i class="icon icon-tixian1"></i></div>
+							<div class="text new">
+								<div class="title">提现明细</div>
+								<div class=""><span>{$txcount}</span> 笔</div>
+							</div>
+						</a>
+						<a class="fui-block-child new  external" href="{:url('user/uslowermember')}">
+							<div class="icon " style="color: #ff6e02;"><i class="icon icon-heilongjiangtubiao11"></i></div>
+							<div class="text new">
+								<div class="title">我的下线</div>
+								<div class=""><span>{$xxcount}</span>人</div>
+							</div>
+						</a>
+
+						
+
+					</div>
+					
+					
+				</div>
+
+				<div class="fui-navbar">
+					<a href="{:url('mobile/user/usfxcenter')}" class="external nav-item active">
+						<span class="icon icon-home"></span>
+						<span class="label">分销中心</span>
+
+					</a>
+					
+					<a href="{:url('user/ustgmoneylog')}" class="external nav-item ">
+						<span class="icon icon-list"></span>
+						<span class="label">佣金明细</span>
+					</a>
+
+					<a href="{:url('user/uslowermember')}" class="external nav-item ">
+						<span class="icon icon-group"></span>
+						<span class="label">我的下线</span>
+					</a>
+					
+				</div>
+
+			</div>
+
+			<script language='javascript'>
+				{include file="public/common"/}
+				var qrcode = new QRCode(document.getElementById("tg-qrcode"),{width:200,height:200}).makeCode("{:config('is_https')}://{$host}/?pid={:session('useraccount.id')}");
+				var width = window.screen.width * window.devicePixelRatio;
+
+				var height = window.screen.height * window.devicePixelRatio;
+
+				var h = document.body.offsetHeight * window.devicePixelRatio;
+
+				if(height == 2436 && width == 1125) {
+
+					$(".fui-navbar,.cart-list,.fui-footer,.fui-content.navbar").addClass('iphonex')
+
+				}
+
+				if(h == 1923) {
+
+					$(".fui-navbar,.cart-list,.fui-footer,.fui-content.navbar").removeClass('iphonex');
+
+				}
+			</script>
+
+			<div class="wap-qrcode-container">
+				<p class="example1">{:config('m_title')}</p>
+				<div class="wap-qrcode-image" id="wap-qrcode"></div>
+				<p class="example1">微信“扫一扫”浏览</p>
+			</div>
+			<span style="display:none"></span>
+	</body>
+
+</html>

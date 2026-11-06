@@ -1,0 +1,85 @@
+ <header> 
+   <!--            放假通知--> 
+   <div class="header-top"> 
+    <div class="content"> 
+     <div class="rows"> 
+      <ul class="pull-left col-md-6"> 
+       <li class="">您好，欢迎来到{:config('shop_name')}！</li> 
+      </ul> 
+      <ul class="pull-left topnav-r col-md-6" style="padding-right: 0;">  
+       <li class="">
+       	<span>
+       		<a href="{:url('jingdian/user/usjfOrder')}" target="_parent">兑换记录&nbsp;|&nbsp;</a>
+       		<a href="{:url('@jingdian/User/usCenter')}" target="_parent">个人中心</a>
+       	</span>
+       </li> 
+       <li class="">
+       		{if condition="session('useraccount.account') neq null"}
+       		<a href="{:url('@jingdian/User/usCenter')}" target="_parent" >用户名: <span style="color: #8a9795;text-decoration: underline;">{:session('useraccount.account')}</span></a>&nbsp;&nbsp;|&nbsp;&nbsp;积分: <span style="color: red;">{:session('useraccount.integral')}</span>
+       		|&nbsp;&nbsp;<a href="{:url('@jingdian/User/loginOut')}" class="mr10" >退出</a>
+       		{else/}
+       		<a href="{:url('@jingdian/User/index')}" class="mr10 theme-col">请登录</a>
+       		<a target="_blank" href="{:url('@jingdian/User/reg')}" class="mr10 theme-col">注册</a>
+       		{/if}
+       		
+       		
+       </li> 
+      </ul> 
+     </div> 
+    </div> 
+   </div> 
+   <div class="content header-center "> 
+    <div class="rows"> 
+     <div class="pull-left logo col-md-2">
+      <a target="_parent" href="{:url('jingdian/integral/index')}"> <img src="/uploads/images/{:config('jifen_logo')}" width="200" height="80"/> </a>
+     </div> 
+     <div class="hd-cart pull-right col-md-2" style="padding: 0;margin-top: 11px;"> 
+      
+     </div> 
+     <div class="hd-search pull-right col-md-8" id="form-search"> 
+      <div class="search-form"> 
+       <input id="key" type="text" class="search-input pull-left bd-focus" placeholder="搜索您想找的商品" value="{$val|default=''}"/> 
+       <span class="pull-left"><button class="btn btn-search theme-bg colorfff" type="button" style="outline: none;" id="action-search" >搜索</button></span> 
+      </div> 
+     </div> 
+    </div> 
+   </div> 
+   <div class="header-nav mb20 bb"> 
+    <div class="content"> 
+     <nav> 
+      <ul class="nav nav-pills" role="tablist"> 
+        <li role="presentation" class="index-on"> <a href="{:url('jingdian/integral/index')}" target="_parent">商城首页</a> </li> 
+        <li role="presentation"> <a href="{:url('jingdian/integral/goodsByName')}" class="col-hover bd-hover">全部礼品</a> </li> 
+        {volist name="jfnav" id="v"}
+	    <li role="presentation">
+			<a href="{$v['text']}" {if condition="$v['opentype'] eq 1"}target="_blank"{/if}>{$v['name']}</a>
+		</li>
+		{/volist}
+       
+      </ul> 
+     </nav> 
+    </div> 
+   </div> 
+  </header>
+ <script>
+	function Search() {
+		var keys = $.trim($("#key").val());
+		window.location.href = "{:url('jingdian/integral/goodsByName')}"+"?key="+keys;	
+	}
+	$(function() {		
+		document.onkeydown = function(e) {
+	        var ev = document.all ? window.event : e;
+	        var act = document.activeElement.id;
+	        if (ev.keyCode == 13) {
+	            if (act == "key") {
+	                Search();
+	            } else {
+	                
+	            }
+	        }
+        }
+		$("#action-search").click(function() {
+			Search();
+		});
+	})
+</script>

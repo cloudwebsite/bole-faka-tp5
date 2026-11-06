@@ -1,0 +1,36 @@
+  <div class="main-footer"> 
+   <div class="content"> 
+    <div class="rows"> 
+     <div class="foot-contact clear"> 
+      <div class="foot-hotline span12"> 
+       <div class="foot-c-icon foot-c-icon1 pull-left"></div> 
+       <div class="foot-c-info color333"> 
+        <div class="f-htl-num f26px fn">
+         {:config('WEB_MOBILE')} 
+        </div> 
+        <div class="f-htl-time"> 
+         <p class="f12px">工作时间 08：00-20：00</p> 
+        </div> 
+        <div class="copyright f12px">
+         <a href="https://beian.miit.gov.cn/">{:config('web_site_icp')}</a> {:config('web_site_copy')} {:config('web_site_cnzz')}
+        </div> 
+       </div> 
+      </div> 
+      <div class="foot-email span4 qr pull-right"> 
+       <div class="foot-c-info" style="font-size: 14px;color: #333; margin-top: 4px;"> 
+        <p style="margin-top: 10px;">WAP版积分商城</p> 
+        <p>扫码可直接预览</p> 
+       </div> 
+       <div class="foot-c-icon2" id="">
+       	<div id="wap-qrcode" style="margin-left: 10px;"></div>
+       </div> 
+       <script src="{:config('cdnpublic')}qrcodejs/1.0.0/qrcode.min.js" type="text/javascript"></script> 
+        
+        <script type="text/javascript">
+        	var qrcode = new QRCode(document.getElementById("wap-qrcode"),{width:155,height:170}).makeCode(window.location.protocol+"//"+window.location.host+"{:url('mobile/integral/index')}");
+        </script>
+      </div> 
+     </div> 
+    </div> 
+   </div> 
+  </div>  

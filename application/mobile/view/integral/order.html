@@ -1,0 +1,178 @@
+{include file="public/imgmobile_header" /}	
+	</head>
+
+	<body ontouchstart="">
+		<style>
+			.mjf{
+				font-size: 0.6rem;
+			    color: #C0C0C0;
+			    padding-left: 0.2rem;
+			    font-weight: normal;
+			}
+		</style>
+		<div class="fui-page-group statusbar">
+			<style>
+
+			</style>
+			<div class="fui-page  fui-page-current order-pay-page" id="fui-page-1523806347935">
+				<div class="fui-header">
+					<div class="fui-header-left">
+						<a class="back" onclick="back();"></a>
+					</div>
+					<div class="title">收银台</div>
+					<div class="fui-header-right">
+						
+					</div>
+				</div>
+				<div class="fui-content ">
+					<div class="fui-cell-group" style="margin-top: 0">
+						<div class="fui-cell">
+							<div class="fui-cell-label">商品名称</div>
+							<div class="fui-cell-info"></div>
+							<div class="fui-cell-remark noremark" style="overflow: hidden;text-overflow:ellipsis;white-space: nowrap;">{:htmlspecialchars_decode($integral['mnamebie'])}
+							</div>
+						</div>
+						<div class="fui-cell">
+							<div class="fui-cell-label">订单编号</div>
+							<div class="fui-cell-info"></div>
+							<div class="fui-cell-remark noremark">{$order['orderno']}</div>
+						</div>
+          
+						<div class="fui-cell">
+							<div class="fui-cell-label">购买数量</div>
+							<div class="fui-cell-info"></div>
+							<div class="fui-cell-remark noremark">{$order['buynum']}
+							</div>
+						</div>
+            
+            <div class="fui-cell">
+							<div class="fui-cell-label">商品单价</div>
+							<div class="fui-cell-info"></div>
+							<div class="fui-cell-remark noremark"><span class="text-danger bigprice">{$integral['mprice']/100}</span><span  class="mjf">积分</span>
+							</div>
+						</div>
+						
+						<div class="fui-cell">
+							<div class="fui-cell-label">消耗积分</div>
+							<div class="fui-cell-info"></div>
+							<div class="fui-cell-remark noremark"><span class="text-danger bigprice">{$order['money']}</span><span  class="mjf">积分</span>
+							</div>
+						</div>
+					</div>
+					<form id="form1" method="post" action="{:url('Payintegral')}">
+					<div class="fui-cell-group diyform-container">
+						{foreach name="$attach" item="vo"}
+						<div class="fui-cell must" data-must="1" data-type="0" data-name="" data-name2="" data-isdefault="0" data-itemid="field_data0" data-key="">
+						    <div class="fui-cell-label" style="padding-right: 15px;">
+						    {$vo.title}            
+						    </div>
+							<div class="fui-cell-info">
+							<input type="text" class="fui-input" id="attach{$vo.id}" name="attach[{$vo.id}]" placeholder="{$vo['tip']}" value="">
+							</div>
+						</div>
+						{/foreach}
+					</div>
+					<div class="fui-list-group" style="margin-top:10px;">
+						
+						<input type="hidden" name="orderno" value="{$order['orderno']}">
+
+						
+						<div class="fui-list pay-btn" data-type="credit" onclick="convert();">
+			                <div class="fui-list-media">
+			                    <!--<i class='icon icon-money credit'></i>-->
+			                    <img src="__IMGMOBILE__/img/ye.png" alt="">
+			                </div>
+			                <div class="fui-list-inner">
+			                    <div class="title">积分支付</div>
+			                    <div class="subtitle c999 f24">当前积分: <span class="text-danger">￥{:session('useraccount.integral')}</span>
+			                    </div>
+			                </div>
+			                <div class="fui-list-angle">
+					    <span class="angle">
+			
+					    </span>
+			                </div>
+			            </div>
+
+						
+					</div>
+				</form>	
+				</div>
+
+			</div>
+
+			
+		</div>
+		
+
+		
+		<script type="text/javascript">
+		function convert(){
+			var index=layer.open({
+								type: 2
+								,content: '加载中'
+								,shade: 'background-color: rgba(0,0,0,.2)'
+								,shadeClose:false
+								});
+			{if condition="count($attach) neq 0"}		
+				{foreach name="$attach" item="vo"}	
+				if(''==$.trim($("#attach{$vo.id}").val())){
+					layer.open({
+								content: "{$vo.title}不能为空",
+								btn: '我知道了',
+								time: 30 //2秒后自动关闭
+								});
+					$("#attach{$vo.id}").focus();
+					layer.close(index);
+					return false;
+				}
+				{/foreach}
+				//*******************上传附加信息头
+				var i=0;
+			    var attachcount="{:count($attach)}";
+			    var orderno="{$order['orderno']}";
+			    ordernoS=orderno.toString();
+			    console.log(ordernoS);
+				{foreach name="$attach" item="vo"}
+				$.when(AddOrderAttach(ordernoS,{$vo.id},$.trim($("#attach{$vo.id}").val()))).done(function (res) {
+					if(res.code!=1){
+						layer.open({
+								content: "异常错误，请重新提交attach",
+								btn: '我知道了',
+								time: 30 //2秒后自动关闭
+							});					
+						layer.closeAll('loading');
+						return false;		
+					}
+				});
+						
+				{/foreach}	
+			{/if}
+			
+			$('#form1').submit();
+		}
+		
+		
+		//上传附加选项
+		function AddOrderAttach(orderno,attachid,text){
+			var defer = $.Deferred();
+			$.ajax({
+				url: "{:url('@jingdian/Api/AddOrderAttach')}",
+				type: 'post',
+				data: { 'orderno': orderno,
+						'attachid': attachid,
+						'text':text
+										},
+				async: true,
+				dataType: 'json',
+				success: function (data) {
+					defer.resolve(data);
+				}
+			});
+			return defer;
+			}
+
+		</script>
+	</body>
+
+</html>

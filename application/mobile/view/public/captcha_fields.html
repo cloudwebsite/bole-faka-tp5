@@ -1,0 +1,35 @@
+{if condition="config('CODE_TYPE') eq 0"}
+<div class="fui-cell">
+    <div class="fui-cell-icon"><i class="icon icon-safe"></i></div>
+    <div class="fui-cell-info">
+        <input type="tel" placeholder="请输入图形验证码" class="fui-input" maxlength="4" name="code" id="veri">
+    </div>
+    <img class="fui-cell-remark noremark" id="veriimg" src="{:url('checkVerify')}" onclick="javascript:this.src='{:url('checkVerify')}?tm='+Math.random();" style="width: 5rem">
+</div>
+{elseif condition="config('CODE_TYPE') eq 1"}
+<div class="fui-cell" style="margin-bottom: -8px;">
+    <div id="captcha" style="width: 100%;">
+        <div id="text">行为验证™ 安全组件加载中</div>
+        <div id="wait" class="show">
+            <div class="loading">
+                <div class="loading-dot"></div>
+                <div class="loading-dot"></div>
+                <div class="loading-dot"></div>
+                <div class="loading-dot"></div>
+            </div>
+        </div>
+    </div>
+</div>
+{elseif condition="config('CODE_TYPE') eq 2"}
+<input type="hidden" name="captcha_mode" id="captcha_mode" value="turnstile">
+<div class="fui-cell" style="display:block;padding:0.6rem 0.6rem;">
+    <div id="cf-turnstile"></div>
+</div>
+<div class="fui-cell" id="turnstile-image-fallback" style="display:none;">
+    <div class="fui-cell-icon"><i class="icon icon-safe"></i></div>
+    <div class="fui-cell-info">
+        <input type="tel" placeholder="请输入图形验证码" class="fui-input" maxlength="4" name="code" id="veri">
+    </div>
+    <img class="fui-cell-remark noremark" id="veriimg" data-src="{:url('checkVerify')}" src="{:url('checkVerify')}" onclick="javascript:this.src='{:url('checkVerify')}?tm='+Math.random();" style="width: 5rem">
+</div>
+{/if}

@@ -1,0 +1,28 @@
+{if condition="config('CODE_TYPE') eq 0"}
+<p class="p-input pos code">
+    <label for="veri">请输入验证码</label>
+    <input type="text" id="veri" name="code">
+    <img id="veriimg" src="{:url('checkVerify')}" onclick="javascript:this.src='{:url('checkVerify')}?tm='+Math.random();">
+    <span class="tel-warn img-err hide"><em></em><i class="icon-warn"></i></span>
+</p>
+{elseif condition="config('CODE_TYPE') eq 1"}
+<div id="captcha" style="margin: 0 auto 16px;display: block;padding-left: 55px;">
+    <div id="text">行为验证™ 安全组件加载中</div>
+    <div id="wait" class="show">
+        <div class="loading">
+            <div class="loading-dot"></div>
+            <div class="loading-dot"></div>
+            <div class="loading-dot"></div>
+            <div class="loading-dot"></div>
+        </div>
+    </div>
+</div>
+{elseif condition="config('CODE_TYPE') eq 2"}
+<input type="hidden" name="captcha_mode" id="captcha_mode" value="turnstile">
+<div id="cf-turnstile" style="margin: 0 auto 16px;display: block;padding-left: 55px;"></div>
+<p class="p-input pos code" id="turnstile-image-fallback" style="display:none;">
+    <label for="veri">请输入验证码</label>
+    <input type="text" id="veri" name="code">
+    <img id="veriimg" data-src="{:url('checkVerify')}" src="{:url('checkVerify')}" onclick="javascript:this.src='{:url('checkVerify')}?tm='+Math.random();">
+</p>
+{/if}

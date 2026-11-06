@@ -1,0 +1,44 @@
+<div class="nav">
+						<div class="nav-classify">
+							<h3 class="nav-all-btn">全部分类</h3>
+							<ul class="menu-mainnav" style="height: 450px;">
+								{volist name="GoodsLmShop" id="vo" key='lmkey'}
+								{if condition="count($vo['hehe']) neq 0"}
+								{if condition="$lmkey elt 12"}
+								<li>
+									<div class="sortmaintitle">
+										<a href="{:url('jingdian/Index/goodscategory',['lmid'=>$vo['id']])}" target="_blank"><img src="{$vo['imgurl']}" onerror="this.src='/static/admin/images/head_default.gif'" width="30" height="30" style="margin-right:10px">{$vo['name']}</a>
+									</div>
+									<div class="navsonbox">
+										<div class="nr">
+											<div class="navson-classify">
+												{volist name="vo['hehe']" id="f"}
+												<div class="navson-classify-box">
+													
+													<a href="{:url('jingdian/Index/goodsdetail',['mpid'=>$f['id']])}" target="_blank"><img src="{$f['webimgurl']}" onerror="this.src='/static/admin/images/head_default.gif'" width="60" height="60" style="margin-right:10px">{:strip_tags(htmlspecialchars_decode($f['mname']))}<span>&gt;</span></a>
+													
+												</div>
+												{/volist}
+												
+											</div>
+										</div>
+									</div>
+								</li>
+								{/if}
+								{/if}
+								{/volist}											
+							</ul>
+						</div>
+						<ul class="nav-othder">
+							<li>
+								<a href="/">首页</a>
+							</li>
+							{volist name="navigation" id="v"}
+							<li>
+								<a href="{$v['text']}" {if condition="$v['opentype'] eq 1"}target="_blank"{/if}>{$v['name']}</a>
+							</li>
+							{/volist}
+							
+
+						</ul>
+</div>

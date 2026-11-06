@@ -1,0 +1,305 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset=utf-8 "utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0 user-scalable=no">
+
+		<meta name="format-detection" content="telephone=no" />
+		<title>{:config('web_site_title')}</title>
+		<link rel="stylesheet" type="text/css" href="__IMGMOBILE__/css/foxui.min.css-v=0.2.css">
+		<link rel="stylesheet" type="text/css" href="__IMGMOBILE__/css/style.css-v=3.0.0.css">
+		<link rel="stylesheet" href="{:config('cdnpublic')}Swiper/4.2.6/css/swiper.min.css" />
+		<script type="text/javascript" src="{:config('cdnpublic')}Swiper/4.2.6/js/swiper.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="__IMGMOBILE__/css/foxui.diy.css-v=201705261600.css">
+		<link rel="stylesheet" type="text/css" href="__IMGMOBILE__/css/iconfont.css-v=2017070719.css">
+		<!--<link rel="stylesheet" href="//at.alicdn.com/t/font_82607_e93d131lklr6n7b9.css">-->
+		<script type="text/javascript" src="{:config('cdnpublic')}jquery/1.8.2/jquery.min.js"></script>
+		<link rel="stylesheet" href="{:config('cdnpublic')}layer/3.1.1/mobile/need/layer.css" />
+		<script type="text/javascript" src="{:config('cdnpublic')}qrcodejs/1.0.0/qrcode.min.js"></script>
+		<script type="text/javascript" src="{:config('cdnpublic')}layer/3.1.1/mobile/layer.js"></script>
+		<style type="text/css">
+			body {
+				position: absolute;
+				;
+				max-width: 750px;
+				margin: auto;
+			}
+			
+			.fui-navbar {
+				max-width: 750px;
+			}
+			
+			.fui-navbar,
+			.fui-footer {
+				max-width: 750px;
+			}
+			
+			.fui-page.fui-page-from-center-to-left,
+			.fui-page-group.fui-page-from-center-to-left,
+			.fui-page.fui-page-from-center-to-right,
+			.fui-page-group.fui-page-from-center-to-right,
+			.fui-page.fui-page-from-right-to-center,
+			.fui-page-group.fui-page-from-right-to-center,
+			.fui-page.fui-page-from-left-to-center,
+			.fui-page-group.fui-page-from-left-to-center {
+				-webkit-animation: pageFromCenterToRight 0ms forwards;
+				animation: pageFromCenterToRight 0ms forwards;
+			}
+			.imagezdy{
+				height: 4rem;
+			    width: 4rem;
+			    float: left;
+			    background-size: 100%;
+			    background-repeat: no-repeat;
+			    background-position: center center;
+			    overflow: hidden;
+			    position: relative;
+			}
+			.imagezdy.triangle:before{
+				content: attr(data-text);
+			    position: absolute;
+			    width: 3.39rem;
+			    height: 2.4rem;
+			    background: #ff5555;
+			    z-index: 10;
+			    transform-origin: left bottom;
+			    transform: rotate(-45deg);
+			    -ms-transform: rotate(-45deg);
+			    -moz-transform: rotate(-45deg);
+			    -webkit-transform: rotate(-45deg);
+			    -o-transform: rotate(-45deg);
+			    color: #fff;
+			    line-height: 3.7rem;
+			    font-size: 0.6rem;
+			    text-align: center;
+			}
+		</style>
+	</head>
+
+	<body>
+
+		<div class='fui-page-group '>
+
+
+		
+
+			<div class='fui-page  fui-page-current ' style="top: 0; background-color: #fafafa; ">
+
+				<div class="fui-header">
+
+					<div class="fui-header-left">
+
+					</div>
+
+					<div class="title"> {:config('m_title')}</div>
+
+					<div class="fui-header-right"></div>
+
+				</div>
+
+				<div class="fui-content navbar" id="container" style="background-color: #fafafa; padding-bottom: 0;">
+					
+					
+					
+					<div class="fui-searchbar bar" style="z-index: 0;">
+					    <div class="searchbar" style="background: #f1f1f2; padding: 10px 10px;">
+					            <form action="{:url('Index/goodsseach')}" method="post" style="position: relative;left:0;top:0;">
+					                <input type="submit" class="searchbar-cancel searchbtn" value="搜索" style="top: 0; right: 0">
+					                <div class="search-input radius" style="background: #ffffff;">
+					                    <i class="icon icon-search" style="color: #b4b4b4;"></i>
+					                    <input type="search" placeholder="请输入关键字进行搜索" class="search" name="key" style="text-align: left; color: #999999; background: none;">
+					                </div>
+					            </form>
+					    </div>
+					</div>
+										
+					<div class="fui-notice" style="background: #ffffff; border-color: ; margin-bottom: 0px;" data-speed="4" onclick="gg();">
+	                
+	                <div class="icon"><i class="icon icon-notification1" style="font-size: 0.7rem; color: #fd5454;"></i></div>
+				        <div class="text" style="color: #666666;">
+				            <ul>
+				                                                            <li><a href="javascript:;" style="color: #666666;" data-nocache="true">{:strip_tags(htmlspecialchars_decode($GongGao[0]['title']))}</a></li>
+				                                                </ul>
+				        </div>
+				    </div>
+				    
+				   
+						    
+							
+					
+
+					{volist name="GoodsListAll" id="vo"} {if condition="count($vo['hehe']) neq 0"}
+					<div class="fui-title" style="background: #4678b4; color: #ffffff; font-size: 15px; text-align: center; padding: 5px 5px; margin: 0;">
+						<a href="" style="color: #ffffff" data-nocache="true">
+							{$vo['loucengname']} </a>
+					</div>
+					<div class="fui-goods-group block three" style="background: ;">
+					{volist name="vo['hehe']" id="v"}
+					{if condition="$vo['css'] eq 0"}	
+	                    {if condition="config('wap_moban3_css') eq 0"}
+	                    <a class="fui-goods-item" data-goodsid="198"  onclick="goodsdetail({$v['id']});" style="position: relative;">
+	                    	{if condition="$v['tuijian'] neq 0"}
+							<div class="image triangle" data-text="推荐" data-lazyloaded="true" style="background-image: url(&quot;{$v['webimgurl']}&quot;);">
+							</div>
+							{else/}
+							<div class="image" data-text="推荐" data-lazyloaded="true" style="background-image: url(&quot;{$v['webimgurl']}&quot;);">
+							</div>
+							{/if}
+	                    {/if}
+	                    {if condition="config('wap_moban3_css') eq 1"}
+	                    <a class="fui-goods-item" data-goodsid="198"  onclick="goodsdetail({$v['id']});" style="position: relative;width:50%">
+	                    	{if condition="$v['tuijian'] neq 0"}
+							<div class="image triangle" data-text="推荐" data-lazyloaded="true" style="background-image: url(&quot;{$v['webimgurl']}&quot;);">
+							</div>
+							{else/}
+							<div class="image" data-text="推荐" data-lazyloaded="true" style="background-image: url(&quot;{$v['webimgurl']}&quot;);">
+							</div>
+							{/if}
+	                    {/if}
+	                    {if condition="config('wap_moban3_css') eq 2"}
+	                    <a class="fui-goods-item" data-goodsid="198"  onclick="goodsdetail({$v['id']});" style="position: relative;width:100%">
+	                    	{if condition="$v['tuijian'] neq 0"}
+							<div class="image triangle" data-text="推荐" data-lazyloaded="true" style="background-image: url(&quot;{$v['webimgurl']}&quot;);">
+							</div>
+							{else/}
+							<div class="image" data-text="推荐" data-lazyloaded="true" style="background-image: url(&quot;{$v['webimgurl']}&quot;);">
+							</div>
+							{/if}
+	                    {/if}
+	                    {if condition="config('wap_moban3_css') eq 3"}
+	                    <a class="fui-goods-item" data-goodsid="198"  onclick="goodsdetail({$v['id']});" style="position: relative;width:100%">
+	                    	{if condition="$v['tuijian'] neq 0"}
+							<div class="imagezdy triangle" data-text="推荐" data-lazyloaded="true" style="background-image: url(&quot;{$v['webimgurl']}&quot;);">
+							</div>
+							{else/}
+							<div class="imagezdy" data-text="推荐" data-lazyloaded="true" style="background-image: url(&quot;{$v['webimgurl']}&quot;);">
+							</div>
+							{/if}
+	                    {/if}
+	                {elseif condition="$vo['css'] eq 1" /}    
+	                <a class="fui-goods-item" data-goodsid="198"  onclick="goodsdetail({$v['id']});" style="position: relative;">
+	                		{if condition="$v['tuijian'] neq 0"}
+							<div class="image triangle" data-text="推荐" data-lazyloaded="true" style="background-image: url(&quot;{$v['webimgurl']}&quot;);">
+							</div>
+							{else/}
+							<div class="image" data-text="推荐" data-lazyloaded="true" style="background-image: url(&quot;{$v['webimgurl']}&quot;);">
+							</div>
+							{/if}
+                    {elseif condition="$vo['css'] eq 2" /}
+                    	<a class="fui-goods-item" data-goodsid="198"  onclick="goodsdetail({$v['id']});" style="position: relative;width:50%">
+                    		{if condition="$v['tuijian'] neq 0"}
+							<div class="image triangle" data-text="推荐" data-lazyloaded="true" style="background-image: url(&quot;{$v['webimgurl']}&quot;);">
+							</div>
+							{else/}
+							<div class="image" data-text="推荐" data-lazyloaded="true" style="background-image: url(&quot;{$v['webimgurl']}&quot;);">
+							</div>
+							{/if}
+					{elseif condition="$vo['css'] eq 3" /}	
+						<a class="fui-goods-item" data-goodsid="198"  onclick="goodsdetail({$v['id']});" style="position: relative;width:100%">
+							{if condition="$v['tuijian'] neq 0"}
+							<div class="image triangle" data-text="推荐" data-lazyloaded="true" style="background-image: url(&quot;{$v['webimgurl']}&quot;);">
+							</div>
+							{else/}
+							<div class="image" data-text="推荐" data-lazyloaded="true" style="background-image: url(&quot;{$v['webimgurl']}&quot;);">
+							</div>
+							{/if}
+					
+					{elseif condition="$vo['css'] eq 4" /}	
+						<a class="fui-goods-item" data-goodsid="198"  onclick="goodsdetail({$v['id']});" style="position: relative;width:100%">
+							{if condition="$v['tuijian'] neq 0"}
+							<div class="imagezdy triangle" data-text="推荐" data-lazyloaded="true" style="background-image: url(&quot;{$v['webimgurl']}&quot;);">
+							</div>
+							{else/}
+							<div class="imagezdy" data-text="推荐" data-lazyloaded="true" style="background-image: url(&quot;{$v['webimgurl']}&quot;);">
+							</div>
+							{/if}
+					{/if}
+
+                    
+							<div class="detail">
+								<div class="name" style="color: #262626;">
+									{:htmlspecialchars_decode($v['mname'])} </div>
+								<p class="productprice noheight">
+
+								</p>
+								<div class="price">
+
+									<span class="text" style="color: #ed2822;">
+	                                    <p class="minprice">&yen;
+	                                    	{if condition="$v.mprice lt 1"}
+	                                    	{:number_format($v.mprice/100, 4)}
+	                                    	{else/}
+	                                    	{:number_format($v.mprice/100, 2)}
+	                                    	{/if}
+	                                    </p>
+	                                        
+	                                </span>
+									<span class="buy buybtn-3" style="background-color: #fe5455;"><i class="icon icon-cartfill"></i></span>
+								</div>
+							</div>
+						</a>
+						{/volist}
+					</div>
+					{/if} {/volist}
+
+					
+			
+				
+
+				
+
+
+					
+
+				</div>
+						{include file="public/imgmobile_navbar" /}	
+          <a class="diy-gotop external" style="position: fixed; overflow: hidden; z-index: 999; bottom: 20px; right: 10px; text-align: left;display: none;" id="gotop">
+						<div style="background: #000000; opacity: 0.5; line-height: 32px; text-align: center; border-radius: 30px; height: 30px; width: 30px;">
+							<i class="icon icon-top1" style="color: #ffffff; font-size: 20px;"></i>
+						</div>
+					</a>
+				<div class="wap-qrcode-container">
+					<p class="example1">{:config('shop_name')}</p>
+					<div class="wap-qrcode-image" id="wap-qrcode"></div>
+					<p class="example1">微信“扫一扫”浏览</p>
+				</div>
+<script type="text/javascript">
+	var qrcode = new QRCode(document.getElementById("wap-qrcode"),{width:155,height:170}).makeCode(window.location.href);	
+	//$('.fui-navbar').find('a').eq(0).addClass("active");
+	$(function() {
+							$("#container").bind('scroll resize', function() {
+								var scrolltop = $(".fui-content").scrollTop();
+								if(scrolltop > "300") {
+									$("#gotop").fadeIn(100)
+								} else {
+									$("#gotop").fadeOut(100)
+								}
+							});
+							$("#gotop").unbind('click').click(function() {
+								$(".fui-content").animate({
+									scrollTop: "0px"
+								}, 1000)
+							});
+						});
+	function gg() {
+	   var content="<?php echo addslashes(strip_tags(htmlspecialchars_decode((string)config('tangg_content')))); ?>";
+	   
+	   if(content){
+	   	layer.open({
+				content: content,
+				btn: '我知道了',
+				time: 30 //2秒后自动关闭
+			});
+	
+	   }
+    }
+	
+{include file="public/common" /}
+
+</script>
+
+
+</body>
+
+</html>

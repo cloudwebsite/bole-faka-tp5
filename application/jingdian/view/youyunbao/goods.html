@@ -1,0 +1,253 @@
+<!DOCTYPE html> 
+<html> 
+<head> 
+<meta charset="utf-8" /> 
+<title>{:config('web_site_title')}</title>
+<meta name="keywords" content="{:config('web_site_keyword')}" />
+<meta charset="UTF-8" name="description" content="{:config('web_site_description')}" />
+<script type="text/javascript" src="https:{:config('cdnpublic')}jquery/1.8.3/jquery.min.js"></script>
+<link href="__YOUYUNBAO__/css/css7.css" rel="stylesheet" type="text/css" /> 
+<link href="__YOUYUNBAO__/css/zzsc.css" rel="stylesheet" type="text/css" />
+<link href="__YOUYUNBAO__/css/buttons.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="http://apps.bdimg.com/libs/validform/5.3.2/validform.js"></script>
+<script type="text/javascript" src="https:{:config('cdnpublic')}layer/2.3/layer.js"></script>
+
+<style type="text/css">
+.info.denglu {
+	line-height: 55px;
+}
+#head .top .logo_img {
+	float: left;
+	height: 80px;
+	width: 400px;
+	margin-top: 10px;
+}
+</style>
+</head> 
+
+<body> 
+
+    <div id="head">
+
+   	  <div class="top">
+        <div class="logo_img"><a href="/"><img src="/uploads/images/{:config('WEB_logo')}" width="400" height="80"></a></div>
+		{if condition="config('web_reg_type') neq 0"}
+				{if condition="session('useraccount.account') eq null"}
+              <div class="info denglu">
+			   			   <a class="button button-3d button-primary button-small" href="{:url('@jingdian/User/index')}">登陆</a>
+						   <a class="button button-3d button-caution button-small" href="{:url('@jingdian/User/reg')}"><i class="fa fa-tag"></i>注册</a>&nbsp;&nbsp;			
+			   </div>
+				{else/}		
+					<div class="info">
+					<span class="welcome">尊敬的：<span class="lv"><b>{:session('useraccount.account')} </b></span>欢迎您！&nbsp;<span></span><br>
+					<a href="{:url('@jingdian/User/usCenter')}" class="button button-primary button-rounded button-small">会员中心</a>  
+					<a href="{:url('@jingdian/User/loginOut')}" class="button button-giant button-rounded button-small" onclick="return confirm('确定要退出吗？')">安全退出</a>
+				  </span></div>
+				{/if}
+				{/if}		
+      </div>
+
+      <div class="dh">
+
+        <ul id="nav"> 
+			<li>
+				<a href="/">首页</a>
+			</li>
+			{volist name="navigation" id="v"}
+			<li>
+				<a href="{$v['text']}" {if condition="$v['opentype'] eq 1"}target="_blank"{/if}>{$v['name']}</a>
+			</li>
+			{/volist}	
+            
+			{if condition="session('useraccount.account') eq null"}
+				<li>
+					<a href="{:url('Index/selectorder')}">订单查询</a>
+				</li>
+				{else/}
+				<li>
+					<a href="{:url('user/usorder')}">订单查询</a>
+				</li>
+				{/if}
+
+        </ul> 
+
+        </div>
+
+  
+    </div>
+	
+
+<style type="text/css">
+
+</style>
+<br/>
+<div id="body">
+
+<div class="bobo">
+
+<div class="left">
+
+<div class="top">
+
+<div class="tou"><img src="{$param['data_fl'][0]['imgurl']}" width="150" height="150" alt="{:htmlspecialchars_decode($param['data_fl'][0]['mname'])}" /></div>
+
+<div class="bianhao">商品编号：NO0000.{$param['mpid']}<br />
+
+零售单价：{if condition="$param['isyh'] eq 0"}
+{if condition="$param['data_fl'][0]['mprice'] lt 1"}{:number_format($param['data_fl'][0]['mprice']/100,4)}{else/}{:number_format($param['data_fl'][0]['mprice']/100,2)}{/if}
+{else/}
+{if condition="$param['minprice'][0]['mdj'] lt 1"}{:number_format($param['minprice'][0]['mdj']/100,4)}{else/}{:number_format($param['minprice'][0]['mdj']/100,2)}{/if}~{if condition="$param['data_fl'][0]['mprice'] lt 1"}{:number_format($param['data_fl'][0]['mprice']/100,4)}{else/}{:number_format($param['data_fl'][0]['mprice']/100,2)}{/if}
+{/if} 元
+<br />
+{if condition="$param['isyh'] eq 0"}		
+
+{else/} 
+{foreach name="$param['data_yh']" item="vo"} 
+<font color="#ff0000"  size="2">
+购买{$vo['mdy']}个以上按批发价￥{$vo['mdj']/100}计算</font></br>
+{/foreach} 							   
+{/if}
+</div>
+
+
+<div class="wu"></div><div class="bianhao">
+手机扫码购买<br/>
+<img src="{:url('@jingdian/Qr')}?size=168&text=http://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}" width="168" height="168">
+</div>
+</div>
+
+
+
+</div>
+<div class="rigth">
+<div class="trade-goodinfo">
+{:htmlspecialchars_decode($param['data_fl'][0]['mname'])}</div>
+<div class="trade-goodinfo2">
+<span  style="color:#080808">零售单价</span>
+<span class="trade-price">¥{if condition="$param['isyh'] eq 0"}
+{if condition="$param['data_fl'][0]['mprice'] lt 1"}{:number_format($param['data_fl'][0]['mprice']/100,4)}{else/}{:number_format($param['data_fl'][0]['mprice']/100,2)}{/if}
+{else/}
+{if condition="$param['minprice'][0]['mdj'] lt 1"}{:number_format($param['minprice'][0]['mdj']/100,4)}{else/}{:number_format($param['minprice'][0]['mdj']/100,2)}{/if}~{if condition="$param['data_fl'][0]['mprice'] lt 1"}{:number_format($param['data_fl'][0]['mprice']/100,4)}{else/}{:number_format($param['data_fl'][0]['mprice']/100,2)}{/if}
+{/if} </span>
+
+
+<span style="float:right">
+{if condition="$param['data_fl'][0]['type'] eq 0"}
+			   <img src="__YOUYUNBAO__/images/zdfh.png">
+			   {else/}
+			   <img src="__YOUYUNBAO__/images/sdfh.png">
+			   {/if}
+			   
+
+<span style="color:#6c6c6c;font-size:14px;">累积销量：{$param['data_fl'][0]['sellercount']}个</span>
+</span>
+</div><br/>
+
+
+ 
+<form action="{:url('Index/orderdetail')}" id="p_form" method="post">
+<div class="from">
+ <div class="from_wz_3">购买数量：</div>
+ <div class="from_in_2">
+ 
+		<input type="hidden" id="mpid" name="mpid" value="{$param['data_fl'][0]['id']}" />
+		
+		{if condition="$param['data_fl'][0]['mmax'] egt $goodscount['mail']['count'][0]['count']/$param['data_fl'][0]['sendbeishu']"}		
+		<input id="p_num" name="buynum" class="z" type="number" value="1" placeholder="{$param['data_fl'][0]['mmin']}" required min="1" max="{$goodscount['mail']['count'][0]['count']/$param['data_fl'][0]['sendbeishu']}" >
+		{else/}		
+		<input id="p_num" name="buynum" class="z" type="number" value="1" placeholder="{$param['data_fl'][0]['mmin']}" required min="1" max="{$param['data_fl'][0]['mmax']}" >
+		{/if}
+									
+									
+ 
+ </div>
+ <div class="from_in_2 yanzheng" style="width:200px"> 
+ 
+ 
+<font size="2" color="#FF7200">库存<i id='kucun'>{$goodscount['mail']['count'][0]['count']}</i>件</span>
+ </div>
+
+</div>
+	   
+
+
+      <div class="from">
+        <div class="from_off_4"></div>
+		<div class="from_in_4" style="width:100px">
+		{if condition="(int)$goodscount['mail']['count'][0]['count'] egt $param['data_fl'][0]['sendbeishu']"}	
+			{if condition="config('web_reg_type') neq 0"}
+				{if condition="session('useraccount.account') eq null"}              
+				<input type="button" style="cursor:pointer;" class="button button-3d button-primary button-small" value="游客购买" onclick="var a=' 1';p_submit(a)"/>
+				{else/}		
+					<input type="button" style="cursor:pointer;" class="button button-3d button-primary button-small" value="会员购买" onclick="var a=' 1';p_submit(a)"/>
+				{/if}
+			{/if}
+		{else/}				
+					<a href="#" onclick="javascript:history.go(-1);" class="button button-3d button-caution button-small">已售罄</a>
+		{/if}				
+		
+	
+		</div> <div class="from_in_2 yanzheng" style="width:100px">
+			<a href="#" onclick="javascript:history.go(-1);" class="button button-3d button-highlight button-rounded button-small">返回</a></div>
+        </div>
+<div class="from"><font color="#2581ff"  size="2"><div class="from_off_4"></div><div class="from_in_4" style="width:450px">发货倍数:(买一件发{$param['data_fl'][0]['sendbeishu']}个卡密) </div></font></div>       </form> 
+
+
+		
+ <div class="trade-goodinfo2">
+	  商品介绍：
+      </div>
+      <div class="xiangqing">
+		{if condition="$param['data_fl'][0]['xqnotice'] eq ''"}
+		暂无注意事项
+		{else/} 
+		{:htmlspecialchars_decode($param['data_fl'][0]['xqnotice'])}
+		{/if} </div>
+
+</div>
+
+</div>
+
+</div>
+<script type="text/javascript">
+function p_input(a){
+	var num = parseInt(document.getElementById("p_num").value);
+	if(num == 0){
+		alert('购买数量至少一个！');
+		document.getElementById("p_num").value = 1;
+	}
+	if(num > a){
+		alert('库存最多购买'+a+'个！');
+		document.getElementById("p_num").value = a;
+	}
+}
+
+function p_submit(a){
+	if(a >= 1){
+		document.getElementById("p_form").submit();
+	} else {
+		alert('库存不足！');
+	}
+}   
+</script>
+<div id="footer">
+    		<a href="https://beian.miit.gov.cn/">{:config('web_site_icp')}</a> {:config('web_site_copy')} {:config('web_site_cnzz')}</div></p><br/>
+</div>
+<script type="text/javascript">
+	$(document).ready(function() {
+				msgboxtip();
+			});
+function msgboxtip(){
+		var msgboxtext="{$param['data_fl'][0]['msgboxtip']}";
+		if(msgboxtext.replace(/\s+/g,"")!==""){
+		    layer.alert(msgboxtext, {
+                skin: 'layui-layer-lan'
+                ,title: '购买须知！'
+                ,closeBtn: 0
+                ,anim: 4 //动画类型
+              });
+              }
+	}
+</script>
+</body>
+</html>

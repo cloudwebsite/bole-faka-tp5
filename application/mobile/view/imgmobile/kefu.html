@@ -1,0 +1,134 @@
+<!doctype html>
+
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0 user-scalable=no">
+
+		<meta name="format-detection" content="telephone=no" />
+		<title>{:config('web_site_title')}</title>
+		<link rel="stylesheet" type="text/css" href="__IMGMOBILE__/css/foxui.min.css-v=0.2.css">
+		<link rel="stylesheet" type="text/css" href="__IMGMOBILE__/css/style.css-v=3.0.0.css">
+
+		<link rel="stylesheet" type="text/css" href="__IMGMOBILE__/css/iconfont.css-v=2017070719.css">
+		<!--<link rel="stylesheet" href="//at.alicdn.com/t/font_82607_e93d131lklr6n7b9.css">-->
+
+		<script type="text/javascript" src="{:config('cdnpublic')}jquery/1.8.2/jquery.min.js"></script>
+
+		<link rel="stylesheet" href="{:config('cdnpublic')}layer/3.1.1/mobile/need/layer.css" />
+		<script type="text/javascript" src="{:config('cdnpublic')}layer/3.1.1/mobile/layer.js"></script>
+		<style>
+			.aligncenter {
+				clear: both;
+				display: block;
+				margin: auto;
+			}
+		</style>
+
+	</head>
+
+	<body ontouchstart>
+
+		<div class='fui-page-group '>
+
+			<div class='fui-page fui-page-current  page-goods-detail' id='page-goods-detail-index'>
+
+				<div class="fui-header">
+					<div class="fui-header-left">
+						<a class="back" id="btn-back" onclick="back();"></a>
+					</div>
+					<div class="title">
+						客服中心 </div>
+					<div class="fui-header-right"></div>
+				</div>
+				<div class="fui-content navbar order-list" style="top:1.9rem;">
+					<div class="fui-content-inner">
+						<div class="container" id='list-content'>
+							
+							{if condition="config('weixin_erweima') neq ''"}
+							<div class="fui-list-group order-item" data-orderid="5333" data-verifycode="">
+								<a  data-nocache="true">
+									<div class="fui-list-group-title lineblock2 " style="text-align: center;">
+										微信二维码
+
+									</div>
+
+									<div class="fui-list goods-list">
+										<div class="aligncenter fui-list-media">
+											<img class="" src="/uploads/images/{:config('weixin_erweima')}" style="width: 8.5rem;">
+										</div>
+
+									</div>
+
+								</a>
+
+							</div>
+							{/if}
+							
+							{if condition="config('WEB_QQ') neq ''"}
+							<div class="fui-list-group order-item" data-orderid="5333" data-verifycode="">
+								<a href="mqqwpa://im/chat?chat_type=crm&amp;uin={:config('WEB_QQ')}&amp;version=1&amp;src_type=web&amp;web_src=">
+									<div class="fui-list-group-title lineblock2 " style="text-align: center;">
+										客服QQ
+										
+									</div>
+
+									<div class="fui-list goods-list" >
+										<div class="aligncenter fui-list-media" >
+											<i class="icon icon-qq" style="font-size: 0.7rem; color: #fd5454;"></i> 
+											<a href="https://wpa.qq.com/msgrd?v=3&uin={:config('WEB_QQ')}&site=qq&menu=yes">{:config('WEB_QQ')}</a>
+										</div>
+										
+										
+
+									</div>
+
+									
+								</a>
+								
+							</div>
+							{/if}
+							{if condition="config('web_mobile') neq ''"}
+							<div class="fui-list-group order-item" data-orderid="5333" data-verifycode="">
+								<a  data-nocache="true">
+									<div class="fui-list-group-title lineblock2 " style="text-align: center;">
+										联系电话
+										
+									</div>
+
+									<div class="fui-list goods-list" >
+										<div class="aligncenter fui-list-media" >
+											<i class="icon icon-mobile2" style="font-size: 0.7rem; color: #fd5454;"></i> 
+											<a href="tel:{:config('web_mobile')}">{:config('web_mobile')}</a>
+										</div>
+										
+										
+
+									</div>
+
+									
+								</a>
+								
+							</div>
+							{/if}
+							
+
+						</div>
+					</div>
+				</div>
+
+				<div id='comments-container'></div>
+
+				{include file="public/imgmobile_navbar" /}	
+
+			</div>
+
+		</div>
+		<script type="text/javascript">
+			$('#lianxikefu').addClass("active");
+			{include file="public/common" /}
+		</script>
+	</body>
+
+</html>

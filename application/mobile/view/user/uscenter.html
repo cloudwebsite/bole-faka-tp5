@@ -1,0 +1,245 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0 user-scalable=no">
+		<script>
+			document.documentElement.style.fontSize = document.documentElement.clientWidth / 750 * 40 + "px";
+		</script>
+		<meta name="format-detection" content="telephone=no" />
+		<title>{:config('web_site_title')}</title>
+		<link rel="stylesheet" type="text/css" href="__IMGMOBILE__/css/foxui.min.css-v=0.2.css">
+		<link rel="stylesheet" type="text/css" href="__IMGMOBILE__/css/style.css-v=3.0.0.css">
+		<script type="text/javascript" src="{:config('cdnpublic')}qrcodejs/1.0.0/qrcode.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="__IMGMOBILE__/css/iconfont.css-v=2017070719.css">
+		<!--<link rel="stylesheet" href="//at.alicdn.com/t/font_82607_e93d131lklr6n7b9.css">-->
+
+		<script type="text/javascript" src="{:config('cdnpublic')}jquery/1.8.2/jquery.min.js"></script>
+
+		<link rel="stylesheet" href="{:config('cdnpublic')}layer/3.1.1/mobile/need/layer.css" />
+		<script type="text/javascript" src="{:config('cdnpublic')}layer/3.1.1/mobile/layer.js"></script>
+
+		<style type="text/css">
+			body {
+				position: absolute;
+				;
+				max-width: 750px;
+				margin: auto;
+			}
+			
+			.fui-navbar {
+				max-width: 750px;
+			}
+			
+			.fui-navbar,
+			.fui-footer {
+				max-width: 750px;
+			}
+			
+			.fui-page.fui-page-from-center-to-left,
+			.fui-page-group.fui-page-from-center-to-left,
+			.fui-page.fui-page-from-center-to-right,
+			.fui-page-group.fui-page-from-center-to-right,
+			.fui-page.fui-page-from-right-to-center,
+			.fui-page-group.fui-page-from-right-to-center,
+			.fui-page.fui-page-from-left-to-center,
+			.fui-page-group.fui-page-from-left-to-center {
+				-webkit-animation: pageFromCenterToRight 0ms forwards;
+				animation: pageFromCenterToRight 0ms forwards;
+			}
+		</style>
+
+		<style>
+			.danmu {
+				display: none;
+				opacity: 0;
+			}
+		</style>
+	</head>
+
+	<body ontouchstart>
+
+		<div class='fui-page-group '>
+			<style>
+				.fui-icon-col.external.before:before {
+					content: '';
+					position: absolute;
+					top: 1rem;
+					bottom: 1rem;
+					left: 0;
+					width: 1px;
+					background-color: #ebebeb;
+					display: block;
+					z-index: 15;
+				}
+			</style>
+			<div class='fui-page  fui-page-current'>
+				<div class="fui-header">
+					<div class="fui-header-left">
+						<a class="back" onclick='back()'></a>
+					</div>
+					<div class="title">会员中心</div>
+					<div class="fui-header-right"></div>
+				</div>
+
+				<div class='fui-content member-page navbar'>
+					<div style="overflow: hidden;height: 7.5rem;position: relative;background: #fff">
+						<div class="headinfo" style="z-index:100;border: none;">
+							<a class="setbtn" href="{:url('user/usinfo')}" data-nocache='true'><i class="icon icon-shezhi"></i></a>
+							<div class="child">
+								<div class="title">余额</div>
+								<div class="num">{:number_format($useraccount.money,2)}</div>
+								<a href="{:url('user/uspay')}">
+									<div class="btn">充值</div>
+								</a>
+							</div>
+							<div class="child userinfo">
+								<a href="#" data-nocache="true" style="color: white;">
+									<div class="face"><img src="__USCENTER__/images/kwayi.jpg" /></div>
+									<div class="name">{$useraccount.account}</div>
+								</a>
+								<div class="level">
+									[{$groupUser.group_name}({$groupUser.discount/10}折)]
+								</div>
+							</div>
+							<div class="child">
+								<div class="title">积分</div>
+								<div class="num">{$useraccount.integral}</div>
+							</div>
+						</div>
+						<div class="member_header"></div>
+					</div>
+
+					<div class="fui-cell-group fui-cell-click" style="margin-top: 0">
+						<a class="fui-cell external" href="{:url('user/usorder')}">
+							<div class="fui-cell-icon"><i class="icon icon-dingdan1"></i></div>
+							<div class="fui-cell-text">我的订单</div>
+							<div class="fui-cell-remark" style="font-size: 0.65rem;">查看全部订单</div>
+						</a>
+						<div class="fui-icon-group selecter col-3">
+							<a class="fui-icon-col external" href="{:url('user/usorder')}">
+								<div class="icon icon-green radius"><i class="icon icon-daifukuan1"></i></div>
+								<div class="text">全部订单</div>
+								<div class="fui-cell-remark">
+									<span class="badge">{$count}</span>
+								</div>
+							</a>
+							<a class="fui-icon-col external" href="{:url('user/usorder',['mstatus'=>888])}">
+								<div class="icon icon-orange radius"><i class="icon icon-daifahuo1"></i></div>
+								<div class="text">正在交易</div>
+								<div class="fui-cell-remark">
+									<span class="badge">{$zcount}</span>
+								</div>
+							</a>
+							<a class="fui-icon-col external" href="{:url('user/usorder',['mstatus'=>666])}">
+								<div class="icon icon-blue radius"><i class="icon icon-daishouhuo1"></i></div>
+								<div class="text">交易完成</div>
+								<div class="fui-cell-remark">
+									<span class="badge">{$successcount}</span>
+								</div>
+							</a>
+
+						</div>
+					</div>
+
+					<div class="fui-cell-group fui-cell-click">
+						<a class="fui-cell" href="{:url('mobile/user/uspaylog')}">
+							<div class="fui-cell-icon"><i class="icon icon-tixian"></i></div>
+							<div class="fui-cell-text">
+								<p>财务明细</p>
+							</div>
+							<div class="fui-cell-remark"></div>
+						</a>
+						<a class="fui-cell" href="{:url('mobile/user/usintegrallog')}">
+							<div class="fui-cell-icon"><i class="icon icon-xiaofei"></i></div>
+							<div class="fui-cell-text">
+								<p>
+									积分明细 </p>
+							</div>
+							<div class="fui-cell-remark"></div>
+						</a>
+						<a class="fui-cell" href="{:url('mobile/integral/index')}">
+							<div class="fui-cell-icon"><i class="icon icon-xiaofei"></i></div>
+							<div class="fui-cell-text">
+								<p>
+									积分商城 </p>
+							</div>
+							<div class="fui-cell-remark"></div>
+						</a>
+						<a class="fui-cell" href="{:url('mobile/user/usfxcenter')}">
+							<div class="fui-cell-icon"><i class="icon icon-same"></i></div>
+							<div class="fui-cell-text">
+								<p>
+									分销中心 </p>
+							</div>
+							<div class="fui-cell-remark"></div>
+						</a>
+						<a class="fui-cell" href="{:url('user/tixian')}">
+							<div class="fui-cell-icon"><i class="icon icon-daituikuan2"></i></div>
+							<div class="fui-cell-text">
+								<p>
+									佣金提现 </p>
+							</div>
+							<div class="fui-cell-remark"></div>
+						</a>
+						<a class="fui-cell" href="{:url('user/usTixianlog')}">
+							<div class="fui-cell-icon"><i class="icon icon-liebiao"></i></div>
+							<div class="fui-cell-text">
+								<p>
+									提现明细 </p>
+							</div>
+							<div class="fui-cell-remark"></div>
+						</a>
+					</div>
+
+					<div class="fui-cell-group fui-cell-click transparent">
+						<a class="fui-cell external changepwd" href="{:url('user/usupdatepassword')}">
+							<div class="fui-cell-text" style="text-align: center;">
+								<p>修改密码</p>
+							</div>
+						</a>
+						<a class="fui-cell external btn-logout" href="{:url('@mobile/User/loginOut')}">
+							
+							<div class="fui-cell-text" style="text-align: center;">
+								<p>退出登录</p>
+							</div>
+						</a>
+					</div>
+
+					<div class="pop-apply-hidden" style="display: none">
+						<div class="verify-pop pop">
+							<div class="close"><i class="icon icon-roundclose"></i></div>
+							<div class="qrcode">
+								<div class="inner">
+									<div class="title"></div>
+									<div class="text"></div>
+								</div>
+								<div class="inner-btn" style="padding: 0.5rem">
+									<div class="btn btn-warning" style="width: 100%; margin: 0">我已阅读</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+				</div>
+				
+			</div>
+
+			{include file="public/imgmobile_navbar" /}	
+
+			<div class="wap-qrcode-container">
+				<p class="example1">{:config('m_title')}</p>
+				<div class="wap-qrcode-image" id="wap-qrcode"></div>
+				<p class="example1">微信“扫一扫”浏览</p>
+			</div>
+			{include file="public/footer" /}
+			<script type="application/x-javascript">
+				
+				$('#huiyuanzhongxin').addClass("active");
+				var qrcode = new QRCode(document.getElementById("wap-qrcode"),{width:155,height:170}).makeCode(window.location.href);
+				{include file="public/common" /}
+			
+			</script>>
+</body>
+</html>

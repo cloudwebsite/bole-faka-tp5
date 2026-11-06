@@ -1,0 +1,261 @@
+{include file="public/header" /}
+
+<body ontouchstart>
+	<header class='demos-header' style="padding: 30px 0;padding-bottom: 0px;">
+		<h1 class="demos-title">订单信息查询</h1>
+	</header>
+	<form method="post" action="{:url('mobile/Index/selectorder')}">
+		<div class="weui-cells weui-cells_form">
+			<div class="weui-cell weui-cell_vcode">
+				<div class="weui-cell__bd">
+					<input class="weui-input" type="text" placeholder="订单号/手机号" name="key" id="key" value="{$val}">
+				</div>
+				<div class="weui-cell__ft" style="padding: 10px;">
+					<a href="javascript:;" class="weui-btn weui-btn_mini weui-btn_primary" id="mysubmit">订单查询</a>
+				</div>
+			</div>
+		</div>
+	</form>
+
+	<div class="weui-btn-area">
+		<a class="weui-btn weui-btn_primary" onclick="gohome();">回到首页</a>
+	</div>
+
+	<script id="list-template" type="text/html">
+
+		{{# for(var i=0;i
+		<d.length;i++){ }} <div class="weui-form-preview">
+			<div class="weui-form-preview__hd">
+				<label class="weui-form-preview__label" style="font-size: 16px;bold;color: #000;">订单编号[{{i+1}}]</label>
+				<p class="weui-form-preview__value" style="font-size: 16px;">{{d[i].mcard}}</p>
+			</div>
+			<div class="weui-form-preview__bd">
+				
+				<div class="weui-form-preview__item">
+					<label class="weui-form-preview__label">提取商品</label>
+					<span class="weui-form-preview__value">{{d[i].name}}</span>
+				</div>
+
+				<div class="weui-form-preview__item">
+					<label class="weui-form-preview__label">订单金额</label>
+					<span class="weui-form-preview__value">{{d[i].mamount}}</span>
+				</div>
+
+				<div class="weui-form-preview__item">
+					<label class="weui-form-preview__label">状态</label>
+					<span class="weui-form-preview__value">
+        							{{# if(d[i].type==0){ }}
+        								{{# if(d[i].mstatus==0){ }}
+										 未提取
+										{{# }else if(d[i].mstatus==1){ }}
+										已提取
+										{{# }else if(d[i].mstatus==2){ }}
+										未付款
+										 {{# }else{ }}	
+										 未知数
+										 {{# } }}
+									{{# }else if(d[i].type==1){ }}
+										{{# if(d[i].mstatus==0){ }}
+										 已付款
+										{{# }else if(d[i].mstatus==1){ }}
+										已下单
+										{{# }else if(d[i].mstatus==2){ }}
+										未付款
+										{{# }else if(d[i].mstatus==3){ }}
+										进行中
+										{{# }else if(d[i].mstatus==4){ }}
+										已撤回
+										{{# }else if(d[i].mstatus==5){ }}
+										已完成
+										{{# }else{ }}	
+										 未知数
+										 {{# } }}
+									{{# } }}	 
+		  </span>
+				</div>
+				<div class="weui-form-preview__item">
+					<label class="weui-form-preview__label">支付通道</label>
+					<span class="weui-form-preview__value">
+											{{# if(d[i].maddtype==0){ }}
+											 积分兑换
+											{{# }else if(d[i].maddtype==1){ }}
+											管理员
+											{{# }else if(d[i].maddtype==2){ }}
+											支付宝扫码
+											{{# }else if(d[i].maddtype==3){ }}
+											微信扫码
+											{{# }else if(d[i].maddtype==4){ }}
+											聚合支付
+											{{# }else if(d[i].maddtype==5){ }}
+											余额支付
+											{{# }else if(d[i].maddtype==6){ }}
+											QQ钱包
+											{{# }else if(d[i].maddtype==7){ }}
+											财付通
+											{{# }else if(d[i].maddtype==8){ }}
+											USDT
+											{{# }else{ }}	
+											未知数
+											{{# } }}	
+
+		  	
+		  </span>
+				</div>
+				<div class="weui-form-preview__item">
+					<label class="weui-form-preview__label">付款时间</label>
+					<span class="weui-form-preview__value">{{d[i].update_time}}</span>
+				</div>
+
+				<div class="weui-form-preview__item">
+					<label class="weui-form-preview__label">使用IP</label>
+					<span class="weui-form-preview__value">{{d[i].userip}}</span>
+				</div>
+				<div class="weui-form-preview__item">
+					
+					<span class="weui-form-preview__value" style="color: red;">
+				{{# if(d[i].type==0){ }}	
+					{{# if(d[i].mstatus==0 && d[i].mflid!=0 ){ }}
+					<a href="javascript:;" class="weui-btn weui-btn_mini weui-btn_primary show-card" onclick="tiqu('{{d[i].mcard}}','{{d[i].mflid}}',{{# if(d[i].need_lianxi){ }}1{{# }else{ }}0{{# } }})">提取卡密</a>
+					{{# }else if(d[i].mstatus==0 && d[i].mflid==0){ }}
+					<a href="javascript:;" class="weui-btn weui-btn_mini weui-btn_default show-card" onclick="tiqubyorder('{{d[i].mcard}}')">点我提取</a>
+					{{# }else if(d[i].mstatus==1){ }}
+					<a href="javascript:;" class="weui-btn weui-btn_mini weui-btn_warn show-card" onclick="fenxiang('{{d[i].mcard}}')">查看卡密</a>
+					<a href="{:url('mobile/index/imgorderhistory')}?order={{d[i].mcard}}" class="weui-btn weui-btn_mini weui-btn_plain-primary show-card">交易快照</a>
+					{{# }else if(d[i].mstatus==2){ }}
+					<a href="javascript:;" class="weui-btn weui-btn_mini weui-btn_warn show-card">未付款</a>
+					{{# }else if(d[i].mstatus==4){ }}
+					<a href="javascript:;" class="weui-btn weui-btn_mini weui-btn_warn show-card">已撤回</a>
+					{{# }else{ }}
+					<a href="javascript:;" class="weui-btn weui-btn_mini weui-btn_warn show-card">未知订单</a>
+					{{# } }}  	
+				{{# }else if(d[i].type==1){ }}
+					{{# if(d[i].mstatus==0 || d[i].mstatus==1 || d[i].mstatus==3 || d[i].mstatus==4 || d[i].mstatus==5){ }}
+					<a href="javascript:;" class="weui-btn weui-btn_mini weui-btn_primary show-card" onclick="getOrderDetailByOrder('{{d[i].mcard}}')">查看详情</a>
+					{{# }else if(d[i].mstatus==2){ }}
+					<a href="javascript:;" class="weui-btn weui-btn_mini weui-btn_warn show-card">未付款</a>
+					{{# }else{ }}
+					<a href="javascript:;" class="weui-btn weui-btn_mini weui-btn_warn show-card">未知订单</a>
+					{{# } }}
+					<a href="{:url('mobile/index/imgorderhistory')}?order={{d[i].mcard}}" class="weui-btn weui-btn_mini weui-btn_plain-primary show-card">交易快照</a>
+				{{# } }} 
+				    
+			
+		
+		  			</span>
+				</div>
+
+			</div>
+
+			</div>
+			{{# } }}
+
+	</script>
+
+	<div class="weui-form-preview__hd">
+		<label class="weui-form-preview__label" style="font-size: 16px;bold;color: #000;">总共数量</label>
+		<p class="weui-form-preview__value" style="font-size: 16px;">{$count}条</p>
+	</div>
+	<div id="list-content">
+
+	</div>
+
+	<div class="weui-loadmore" id="spiner-example">
+		<i class="weui-loading"></i>
+		<span class="weui-loadmore__tips">正在加载</span>
+	</div>
+	{include file="public/footer" /}
+</body>
+<script src="/static/admin/js/layer/layer.js"></script>
+
+<script src="/static/admin/js/laypage/laypage.js"></script>
+<script src="/static/admin/js/laytpl/laytpl.js"></script>
+<script src="/static/admin/js/lunhui.js"></script>
+<script type="text/javascript">
+	Ajaxpage();
+
+	function Ajaxpage(curr) {
+		var key = $('#key').val();
+		$.getJSON('{:url("mobile/Index/selectorder")}', {
+			page: curr || 1,
+			key: key
+		}, function(data) {
+			$("#spiner-example").css('display', 'none'); //数据加载完关闭动画 
+			if(data == '') {
+				$("#list-content").html('<div class="weui-loadmore weui-loadmore_line"><span class="weui-loadmore__tips">暂无数据</span></div>');
+			} else {
+				var tpl = document.getElementById('list-template').innerHTML;
+				laytpl(tpl).render(data, function(html) {
+					document.getElementById('list-content').innerHTML = html;
+				});
+				laypage({
+					cont: $('#AjaxPage'), //容器。值支持id名、原生dom对象，jquery对象,
+					pages: '{$allpage}', //总页数
+					skip: true, //是否开启跳页
+
+					skin: '#1AB5B7', //分页组件颜色
+					curr: curr || 1,
+					groups: 3, //连续显示分页数
+					jump: function(obj, first) {
+						if(!first) {
+							Ajaxpage(obj.curr)
+						}
+						//$('#allpage').html('第'+ obj.curr +'页，共'+ obj.pages +'页');
+					}
+				});
+			}
+		});
+	}
+
+	function gohome() {
+		location.href = "{:config('is_https')}://" + window.location.host + '/mobile';
+	}
+
+	function download(order) {
+		location.href = "{:url('Index/dc')}" + "?order=" + order;
+	}
+
+	function fenxiang(order) {
+
+		top.location.href="{:url('Index/fenxiang')}"+"?order="+order.toString();
+
+	}
+
+	function tiqu(order, mpid, needLianxi) {
+		needLianxi = needLianxi || 0;
+		var go = function () {
+			window.location.href = "{:url('@mobile/Getmail/index')}" + "?mpid=" + mpid + "&number=" + order;
+		};
+		if (needLianxi != 1) {
+			go();
+			return;
+		}
+		layer.prompt({title: '请输入下单时填写的联系方式', formType: 0}, function (val, index) {
+			layer.close(index);
+			$.post("{:url('mobile/Index/confirmGetmail')}", {number: order, lianxi: val}, function (res) {
+				if (res.code == 1) {
+					window.location.href = "{:url('@mobile/Getmail/index')}" + "?mpid=" + res.data.mpid + "&number=" + res.data.number;
+				} else {
+					layer.msg(res.msg || '验证失败');
+				}
+			}, 'json');
+		});
+	}
+
+	function tiqubyorder(order) {
+
+		window.location.href = "{:url('@mobile/index/order')}" + "?number=" + order;
+
+	}
+	
+	function getOrderDetailByOrder(order)
+		{
+			location.href="{:url('Order/getOrderDetailByOrder')}"+"?number="+order;
+		}
+	$(function() {
+		$("#mysubmit").click(function() {
+			document.forms[0].submit();
+		});
+	});
+</script>
+
+</html>

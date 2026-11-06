@@ -1,0 +1,110 @@
+{include file="public/imgpc2/head_title" /}
+<link rel="stylesheet" href="__IMGPC2__/css/common.css" />
+<link rel="stylesheet" href="__IMGPC2__/css/animate.min.css" />
+<link rel="stylesheet" href="__IMGPC2__/css/location.css" />
+<link rel="stylesheet" href="__IMGPC2__/css/item.css" />
+<link rel="stylesheet" type="text/css" href="__IMGPC__/css/cart.css" />
+<link rel="stylesheet" href="__IMGPC__/css/quan.css" />
+<link rel="stylesheet" href="__IMGPC__/css/center.css" />
+<!--自定义导航-->
+<script type="text/javascript" src="{:config('cdnpublic')}jquery/1.7.2/jquery.min.js"></script>
+</head>
+
+	<body>
+		<div class="header">
+			{include file="public/imgpc2/header_top" /}
+			<div class="head-bot">
+				<div class="nb">
+					{include file="public/imgpc2/header_search" /}
+					<div class="clearfix"></div>
+	
+					<!--原位置-->
+				</div>
+			</div>
+			<!--自定义导航，移动了位置-->
+			{include file="public/imgpc2/nav" /}
+			<!--自定义导航，移动了位置-->
+		</div>
+		
+		<div class="center-body distrib">
+			<div class="nb">
+				<div class="center-lside">
+					<!--{tpl usermenu}-->
+				</div>
+				<div class="dd-infor-end">
+					    	<div class="pwlp-th">
+						 		<ul class="thead">
+						 			<li class="td1">商品</li>
+						 			<li class="td2">单价（元）</li>
+						 			<li class="td3">数量</li>
+						 			<li class="td4">金额</li>
+						 		</ul>
+						 	</div>
+					    	<ul>
+					    		
+						 		<li class="td1">
+						 		   <div class="pro-det">
+						 		    	<a class="pic-box" href="{:url('jingdian/Index/goodsdetail',['mpid'=>$Order['data']['data_fl']['id']])}" target="_blank">
+						 		    		<img src="{$Order['data']['imgurl']}" onerror="this.src='/static/admin/images/head_default.gif'" width="50" height="50">
+						 		    	</a>
+						 		        <div class="pic-describ">
+						 		    	    <h3><a href="{:url('jingdian/Index/goodsdetail',['mpid'=>$Order['data']['data_fl']['id']])}" target="_blank">{$Order['data']['mname']}</a></h3>
+						 		    	    <p>
+						 		    	    				
+											<span style="margin-right: 15px;font-size: 12px;color: #666;">订单号：{$Order['data']['data_card']['mcard']}</span>
+											
+											</p>
+						 		        </div>
+						 		    </div>
+						 		    <div class="pic-price">
+						 		    	 ¥ {$Order['data']['price']}
+						 		    </div>
+						 		    <div class="pic-num">
+						 		    	{$Order['data']['buynum']}
+						 		    </div>
+						 		    <div class="pic-yh">
+						 		    	 ¥ {$Order['data']['data_card']['mamount']}
+						 		    </div>
+						 		</li>
+						 		
+						 	</ul>
+					    </div>
+				<div class="center-rside pages-style">
+					<div class="center-title-sig">
+						<h3 class="tab"><span>卡密信息</span></h3>						   
+					</div>
+					<div class="set-password" style="padding-bottom: 10px;">
+						<div class="set-pass-box" style="width: 100%;padding: 1% 1%;margin: 0;background-color: #d1d1d2">
+						{$html}
+						</div>
+					</div>
+					
+				</div>
+			</div>
+		</div>
+		
+		<style>			
+			.tb-bd{border:solid 1px #ddd;border-spacing: 0;border-collapse: collapse;text-align: center;}			
+			.tb-bd td{border: 1px solid #ddd;vertical-align: middle;padding: 8px;}
+			.tb-bd th{border: 1px solid #ddd;vertical-align: middle;background-color: #F1F1F1;padding: 12px 8px;}
+			.distrib{font-size: 14px;}			
+			.distrib td{padding: 20px;}
+			.distrib .list-bd{border-top: solid 1px #ddd;}
+			.distrib .list-bd .list-bd-th{text-align: left;}
+			.distrib .list-bd ul{width: 100%;padding: 0px;}
+			.commission{margin-top: 50px;}
+		</style>
+
+		
+		
+		
+		{include file="public/imgpc2/footer" /}
+		
+
+
+			
+
+
+	</body>
+
+</html>

@@ -1,0 +1,188 @@
+{include file="public/integral/header" /}
+  <style type="text/css">
+			/*主题字体颜色*/
+			/*有hover效果提前添加col-hover类名*/
+			/*有click效果提前添加col-on类名*/
+			/*有focus效果提前加col-focus*/
+			
+			.theme-col {
+				color: #d13636!important;
+			}
+			
+			.col-hover:hover {
+				color: #d13636!important;
+			}
+			
+			.col-on.active,
+			.col-on.active a {
+				color: #d13636!important;
+			}
+			
+			.col-focus:focus {
+				color: #d13636!important;
+			}
+			
+			.nav-pills>li.active>a,
+			.nav-pills>li>a:hover,
+			.nav-pills>li.active>a:focus {
+				color: #d13636!important;
+			}
+			/*主题背景颜色*/
+			/*有hover效果提前添加bg-hover类名*/
+			/*有click效果提前添加bg-on类名*/
+			/*有focus效果提前加bg-focus*/
+			
+			.theme-bg,
+			.layui-layer-btn0 {
+				background-color: #d13636!important;
+				color: #fff!important;
+			}
+			
+			.bg-hover:hover {
+				background-color: #d13636!important;
+			}
+			
+			.bg-on.active,
+			.bg-on.active a {
+				background-color: #d13636!important;
+			}
+			
+			.bg-focus:focus {
+				background-color: #d13636!important;
+			}
+			
+			.index-on {
+				background-color: #d13636!important;
+			}
+			/*主题边框颜色*/
+			/*有hover效果提前添加bd-hover类名*/
+			/*有click效果提前添加bd-on类名*/
+			/*有focus效果提前加bd-focus*/
+			
+			.theme-bd,
+			.layui-layer-btn0 {
+				border-color: #d13636!important;
+			}
+			
+			.bd-hover:hover {
+				border-color: #d13636!important;
+			}
+			
+			.bd-on.active {
+				border-color: #d13636!important;
+			}
+			
+			.bd-on.active a {
+				color: #d13636!important;
+			}
+			
+			.bd-focus:focus {
+				border-color: #d13636!important;
+			}
+			
+			.bb {
+				border-color: #d13636!important;
+			}
+			
+			.zc:hover {
+				color: #d13636!important;
+			}
+		</style> 
+ </head> 
+ <body> 
+  {include file="public/integral/top" /}
+	{include file="public/integral/nav" /}
+  
+  <!-- banner --> 
+  <!--商品列表--> 
+  {volist name="GoodsListAll" id="vo" key="keyright"}
+  {if condition="count($vo['goods']) neq 0"}
+  <div class="content home-goods"> 
+   <div class="page-title f22px color333"> 
+    <h3><span>{$vo['loucengname']}</span></h3> 
+    <a target="_parent" href="" class="f12px more">更多 <em></em> </a> 
+   </div> 
+   <div class="rows"> 
+    <ul class=""> 
+     {volist name="vo['goods']" id="f"}
+     <li class="listitems thumbnail dumitems1 span4"> <a target="_blank" href="{:url('jingdian/integral/goodsdetail',['id'=>$f.id])}"><img class="lazy" src="/static/admin/images/head_default.gif" data-original="{$f['webimgurl']}" alt="" width="100%" onerror="this.src='/static/admin/images/head_default.gif'" /></a> 
+      <div class="caption"> 
+       <center class="theme-col f18px tleft verdana">
+        {if condition="$f.mprice lt 1"}{:number_format($f.mprice/100,0)}{else/}{:number_format($f.mprice/100,0)}{/if}
+        <span class="f12px ml5 color999">积分</span>
+        <div style="float:right;display: inline;"><span class="f12px ml5 color999">已兑换</span><span class="f12px ml5" style="color: #b3b3b3;">{$f.sellercount}</span></div>
+       </center>
+       
+       
+       <h4 class="tcenter goods-name"><a target="_blank" href="{:url('jingdian/integral/goodsdetail',['id'=>$f.id])}">{:htmlspecialchars_decode($f['mname'])}</a></h4> 
+      </div> 
+     </li>
+     {/volist}
+    </ul> 
+   </div> 
+  </div>
+  {/if}
+  {/volist}
+
+ 
+
+  
+  <div class="fangjiabanbox"> 
+   <div class="box"> 
+    <img src="__JF__/images/fangjia-off.png" class="pop-off" /> 
+    <div style="background-color: #fff;padding: 55px 30px;width: 912px;margin: 0 auto;"> 
+     <h3 style="text-align: center;font-size: 24px;"></h3> 
+     <div style="margin-top: 20px;font-size: 14px; line-height: 22px; color: #000;"> 
+      <p style="font-size: 14px; color: #000;">尊敬的客户：</p> 您好！ 
+      <div style="text-align: right;"> 
+       <span>百礼汇积分云</span>
+       <br /> 
+       <span>1970-01-01 08:00:00</span> 
+      </div> 
+     </div> 
+    </div> 
+   </div> 
+  </div> 
+  <div class="cls"></div> 
+  <script type="text/javascript" src="__JF__/js/app.js"></script> 
+  <script type="text/javascript">
+		$(function() {
+			$(".pop-off").click(function() {
+				$(".fangjiabanbox").toggle();
+			});
+			$(".tongzhibox").click(function() {
+				$(".fangjiabanbox").toggle();
+			});
+			//  	$('.pop-off').click(function(){
+			//  		$('.fangjiabanbox').hide();
+			//  	})
+			$(".fangjia-off").click(function(e) {
+				$(".tongzhibox").hide();
+				if(e && e.stopPropagation) { //非IE 
+					e.stopPropagation();
+				} else { //IE 
+					window.event.cancelBubble = true;
+				}
+			})
+			var lg = $(".carousel-inner .item").length;
+			if(lg > 1) {
+				$('#carousel-620342').carousel({
+					interval: 5000
+				});
+			}
+			if(lg <= 1) {
+				$('#carousel-620342').carousel({
+					interval: false
+				});
+			}
+		})
+		$("img.lazy").lazyload({
+			effect: "fadeIn",
+			threshold: 200
+		});
+	</script> 
+
+  
+ {include file="public/integral/footer" /}
+ </body>
+</html>

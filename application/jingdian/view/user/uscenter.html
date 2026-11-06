@@ -1,0 +1,230 @@
+ {include file="public/user/userheader" /}
+
+     <link href="__USCENTER__/css/basic.css" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" href="__USCENTER__/css/iconfont.css">
+    <script language="javascript" src="{:config('cdnpublic')}jquery/1.8.3/jquery.min.js"></script>
+    <script language="javascript" src="__USCENTER__/js/qiandao.js"></script>
+    <script src="{:config('cdnpublic')}layer/3.1.1/layer.js"></script>
+    <script src="https://www.jq22.com/demo/jquery-SuperSlide20160825/jquery.SuperSlide.2.1.1.js"></script>
+    <script language="javascript" src="https://www.layuicdn.com/layui-v2.5.4/layui.js"></script>
+    <script language="javascript" src="__USCENTER__/js/common.js"></script>
+    <script language="javascript" src="__USCENTER__/js/index.js"></script>
+    <script src="__USCENTER__/js/person_content.js"></script>
+    <link rel="stylesheet" href="__USCENTER__/css/index.css">
+    <link rel="stylesheet" href="__USCENTER__/css/person_content.css">
+    <link rel="stylesheet" href="__USCENTER__/css/common.css">
+    </head>
+ <body>
+    <!--头部-->
+    {include file="public/user/usertop" /}
+    <!--头部-->
+    <!--个人中心-->
+    <div class="main">
+      <div class="clearfix person_conetent">﻿
+        <!--左侧菜单-->
+        {include file="public/user/userleft" /}
+        
+        <!--右侧展示-->
+        <div class="person_content_r right">
+          <div class="person_info">
+            <!--个人信息-->
+            <div class="person_info_t clearfix">
+              <div class="person_info_t_l left">
+                <div class="person_info_t_pic">
+                  <img src="__USCENTER__/images/kwayi.jpg" alt="" /></div>
+                <span class="person_id">{$useraccount.nickname}</span></div>
+              <div class="left person_info_mid">
+                <h2 class="person_name">{$useraccount.account}</h2>
+                <div class="person_xy_box">
+                  <dl class="clearfix">
+                    <dt class="left">买家等级：</dt>
+                    <dd class="left xy_dd" style="width: auto;">{$groupUser.group_name}
+                      <span style="color: #f6821c;">({$groupUser.discount/10}折)</span>&nbsp;&nbsp;当前积分：
+                      <span style="color: #f6821c;">{$useraccount.integral} &nbsp;&nbsp;&nbsp;<a href="{:url('jingdian/integral/index')}"><span style="color: #2987e6;">积分兑换</span></a></span></dd>
+                  </dl>
+                </div>
+                <div class="person_status">
+                  <dl class="clearfix">
+                    <dt class="left">上次登录时间：</dt>
+                    <dd class="left">{$useraccount.last_login_time|date="Y-m-d H:i:s",###}</dd></dl>
+                </div>
+                <div class="person_status">
+                  <dl class="clearfix">
+                    <dt class="left">上次登录地址：</dt>
+                    <dd class="left">{$useraccount.last_login_ip}
+                      <span style="color: #2987e6;">({$useraccount.last_login_ipadd.country}{$useraccount.last_login_ipadd.area})</span></dd>
+                  </dl>
+                </div>
+              </div>
+              <div class="right person_info_money">
+                <dl class="clearfix">
+                  <dt class="left">可用余额：</dt>
+                  <dd class="left money_num">{:number_format($useraccount.money,2)}</dd>
+                </dl>
+                <dl class="clearfix">
+                  <dt class="left">推广佣金：</dt>
+                  <dd class="left money_num">{:number_format($useraccount.tg_money,4)}</dd>
+                </dl>
+                <div class="person_info_money_btn">
+                  <a href="{:url('user/uspay')}" class="pay_btn">充值</a>
+                	<a href="{:url('user/tixian')}">提现</a>
+                </div>
+              </div>
+            </div>
+            <!--订单信息-->
+            <div class="person_order_info">
+              <ul class="person_order_info_list">
+                <li>
+                  <i class="order_info_icon dfk"></i>
+                  <p>全部订单：
+                    <span class="num">{$count}</span></p>
+                  <a href="{:url('user/usorder')}">查看全部订单&gt;</a></li>
+                <li>
+                  <i class="order_info_icon zjy"></i>
+                  <p>正在交易订单：
+                    <span class="num">{$zcount}</span></p>
+                  <a href="{:url('user/usorder',['mstatus'=>888])}">查看交易中订单&gt;</a></li>
+                <li>
+                  <i class="order_info_icon" style="background: url(/static/jingdian/uscenter/images/success_icon.png) no-repeat center;width:60px;height:60px"></i>
+                  <p>已完成订单：
+                    <span class="num">{$successcount}</span></p>
+                  <a href="{:url('user/usorder',['mstatus'=>5])}">查看已完成订单&gt;</a></li>
+              </ul>
+            </div>
+          </div>
+          <!--我的订单-->
+          <div class="person_orders">
+            <div class="person_orders_title clearfix">
+              <h2 class="left">我的订单</h2>
+              <a href="{:url('user/usorder')}" class="right">查看全部订单</a></div>
+            <div class="perosn_orders_tab">
+              <div class="orders_tab_t">
+                <div class="w352 left orders_name">名称</div>
+                <div class="w186 left center">金额</div>
+                <div class="w90 left center">订单状态</div>
+                <div class="w190 left center">订单号</div>
+                <div class="w108 left center">操作</div>
+              </div>
+              <!--订单列表-->
+              <div class="orders_list_box">
+                <!--暂无订单-->
+                {if condition="count($count) gt 0"}
+                <ul class="orders_list">
+                {volist name="orderUser" id="vo"}
+                {if condition="$i elt 3"}
+                  <li class="clearfix">
+                    <div class="left orders_list_xq w352">
+                      <a href="{:url('jingdian/Index/goodsdetail',['mpid'=>$vo['mflid']])}" class="orders_list_pic" target="_blank" style="margin:0px 0px;">
+                        <div class="left orders_list_pic" style="margin:0px 0px;">
+                          {if condition="$vo.imgurl eq ''"}
+                        
+                          <img src="/static/admin/images/head_default.gif" alt="{:strip_tags(htmlspecialchars_decode($vo.name))}" />
+                          {else/}
+                          <img src="{$vo.imgurl}" onerror="this.src='/static/admin/images/head_default.gif'" alt="{:strip_tags(htmlspecialchars_decode($vo.name))}" />
+                          {/if}
+                        </div>
+                        <div class="left orders_list_text" style="margin-left: 15px;">
+                          <p class="font-sl">{:htmlspecialchars_decode($vo.name)}</p>
+                          <span>{$vo.create_time|date="Y-m-d H:i:s",###}</span></div>
+                      </a>
+                    </div>
+                    <div class="left orders_list_sale w186 center font-sl">￥
+                      <span>{$vo.mamount}</span></div>
+                    <div class="left orders_list_status w90 center">
+                    {if condition="$vo.type eq 0"}
+                      	{if condition="$vo.mstatus eq 0 and $vo.mflid eq 0"}
+							<span>未使用</span>
+						{elseif condition="$vo.mstatus eq 0 and $vo.mflid neq 0"/}
+							<span>未提取</span>
+						{elseif condition="$vo.mstatus eq 1"/}
+							<span>已提取</span>	
+                      	{elseif condition="$vo.mstatus eq 2"/}
+							<span>未付款</span>
+						{/if}	
+                    {elseif condition="$vo.type eq 1"/}
+                        {if condition="$vo.mstatus eq 0 or $vo.mstatus eq 1"}
+                        	<span>待发货</span>
+                        {elseif condition="$vo.mstatus eq 2"/}
+							<span>未付款</span>	
+                        {elseif condition="$vo.mstatus eq 3"/}
+							<span>进行中</span>	
+                      	{elseif condition="$vo.mstatus eq 4"/}
+							<span>已取消</span>
+						{elseif condition="$vo.mstatus eq 5"/}
+							<span>已发货</span>
+						{/if}
+					{/if}	
+                    </div>
+                    <div class="left orders_list_dh w190 center font-sl">
+                      <span>{$vo.mcard}</span></div>
+                    <div class="left orders_list_handle w108 center">
+                    	{if condition="$vo.type eq 0"}
+	                      	{if condition="$vo.mstatus eq 0 and $vo.mflid eq 0"}
+								<a href="/" class="handle_btn handle_qr">未消费，联系客服返款</a>
+							{elseif condition="$vo.mstatus eq 0 and $vo.mflid neq 0"/}
+								<a onclick="tiqu('{$vo.mcard}','{$vo.mflid}');" class="handle_btn handle_qr">提取卡密</a>
+							{elseif condition="$vo.mstatus eq 1"/}								
+								<a onclick="tiqu('{$vo.mcard}','{$vo.mflid}');" class="handle_btn handle_qr">查看卡密</a>
+	                      	{elseif condition="$vo.mstatus eq 2"/}
+								<a herf="#" class="handle_btn handle_qr">未付款</a>
+							{/if}	
+	                    {elseif condition="$vo.type eq 1"/}
+	                        
+							{if condition="$vo.mstatus eq 1"}	
+			                    <a onclick="getOrderDetailByOrder('{$vo.mcard}')" class="handle_btn handle_qr" style="background-color: #fb760f;border: 1px solid #e6ca29">查看详情</a>			                                		
+			                {elseif condition="$vo.mstatus eq 0 and $vo.mflid neq 0"/}
+			                    <a onclick="tiqu('{$vo.mcard}','{$vo.mflid}');" class="handle_btn handle_qr">确定购买</a>
+			                {elseif condition="$vo.mstatus eq 2"/}
+			                     <a onclick="getOrderDetailByOrder('{$vo.mcard}')" class="handle_btn handle_qr" style="background-color: #fb760f;border: 1px solid #e6ca29">查看详情</a>
+			                {elseif condition="$vo.mstatus eq 3"/}
+			                    <a onclick="getOrderDetailByOrder('{$vo.mcard}')" class="handle_btn handle_qr" style="background-color: #fb760f;border: 1px solid #e6ca29">查看详情</a>
+			                {elseif condition="$vo.mstatus eq 4"/}
+			                    <a onclick="getOrderDetailByOrder('{$vo.mcard}')" class="handle_btn handle_qr" style="background-color: #fb760f;border: 1px solid #e6ca29">查看详情</a>
+			                {elseif condition="$vo.mstatus eq 5"/}
+			                    <a onclick="getOrderDetailByOrder('{$vo.mcard}')" class="handle_btn handle_qr" style="background-color: #fb760f;border: 1px solid #e6ca29">查看详情</a>
+			                {/if}	  
+						{/if}	
+                      
+                    </div>
+                  </li>
+                  {/if}
+                 {/volist}           
+                </ul>
+                {else/}
+                	<div class="no_order"><i class="no_order_icon"></i><p>暂无订单<a href="/" target="_blank" class="go_shop">去逛逛</a></p></div>
+                {/if}	
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--非商家提示去认证-->
+    <div class="motel_box"></div>
+    <div class="motel_in">
+      <h2>您非商家</h2>
+      <p>无法操作商家功能认证后可升级</p>
+      <div class="go_att">
+        <a href="/Seller/add_store" class="att_btn">去认证</a>
+        <a href="javascript:;" class="close_btn">取消</a></div>
+    </div>{include file="public/imgpc/footer" /}
+    <script>
+    	_person_con.shouMenu('.person_menu_title', '.person_menu_lsit');
+    		function downloadtxt(order){
+				location.href="{:url('Index/dc')}"+"?order="+order;
+			}
+				
+			function fenxiang(order){
+				top.location.href="{:url('Index/fenxiang')}"+"?order="+order.toString();
+			}
+			function tiqu(order,mpid){
+				location.href = "{:url('@jingdian/Getmail/index')}"+"?mpid="+mpid+"&number="+order;
+			}
+			
+			function getOrderDetailByOrder(order)
+			{
+				location.href="{:url('Order/getOrderDetailByOrder')}"+"?number="+order;
+			}
+    </script></body>
+
+</html>

@@ -1,0 +1,154 @@
+{include file="public/header" /}
+<link href="{:config('cdnpublic')}twitter-bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+    <link href="{:config('cdnpublic')}font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="{:config('cdnpublic')}animate.css/2.0/animate.min.css" rel="stylesheet">
+    <link href="{:config('cdnpublic')}iCheck/1.0.2/skins/square/green.css" rel="stylesheet">
+    <link href="{:config('cdnpublic')}chosen/1.1.0/chosen.min.css" rel="stylesheet">
+    <link href="{:config('cdnpublic')}switchery/0.8.2/switchery.css" rel="stylesheet">
+    <link href="/static/admin/css/style.min.css?v=4.1.0" rel="stylesheet">
+    <link href="{:config('cdnpublic')}sweetalert/1.0.1/sweetalert.min.css" rel="stylesheet">
+<style>
+
+	#main{
+		text-align: center;
+	}
+	#content{
+		text-align: left;
+		width: 700px;
+    	background: white;
+	    margin: 0 auto;
+	    padding-top: 30px;
+	    padding-bottom: 30px;
+	    color: gray;
+	    line-height: 30px;
+	}
+
+</style>
+{include file="public/top_jingdian" /}
+<body onload="onload()">
+
+
+
+			
+			
+
+			<div id="content">
+					
+					<div class="panel panel-default" style="margin-bottom: 5px;">
+					<div class="panel-heading">
+						<h3 class="panel-title">
+							订单详情
+						</h3>
+					</div>
+					<div class="panel-body">
+					
+					<p><span class="glyphicon glyphicon-align-justify"> 商品名称：</span> {:htmlspecialchars_decode($param['data_fl'][0]['mname'])}</p>
+					<p><span class="glyphicon glyphicon-align-justify"> 订单编号：</span>{$orderdetail['data']['mcard']}</p>
+					<p><span class="glyphicon glyphicon-align-justify"> 订单金额：</span>{$orderdetail['data']['mamount']} 元</p>
+					<p><span class="glyphicon glyphicon-align-justify"> 商品单价：</span>{if condition="$param['isyh'] eq 1"}{$param['minprice'][0]['mdj']/100}{else/}{$param['minprice']/100} {/if}元</p>
+					<p><span class="glyphicon glyphicon-align-justify"> 订单状态：</span>
+					
+					{if condition="$orderdetail['data']['mstatus'] eq 1"}
+					<span class="label label-info">已付款，等待卖家发货</span>
+					{elseif condition="$orderdetail['data']['mstatus'] eq 2"/}
+					<span class="label label-warning">未付款</span>
+					{elseif condition="$orderdetail['data']['mstatus'] eq 0"/}
+					<span class="label label-warning">未使用</span>
+					{elseif condition="$orderdetail['data']['mstatus'] eq 3"/}
+					<span class="label label-warning">进行中...</span>
+					{elseif condition="$orderdetail['data']['mstatus'] eq 4"/}
+					<span class="label label-primary">订单撤回</span>
+					{elseif condition="$orderdetail['data']['mstatus'] eq 5"/}
+					<span class="label label-success">卖家已发货</span>
+					{/if}
+					
+					</p>
+					
+					
+					{if condition="count($orderattach) eq 0"}
+								
+								<p><span class="glyphicon glyphicon-align-justify"> 附加选项：</span>无</p>
+		
+									{else/}
+									<div class="well well-sm">
+									<div class="panel panel-default">
+								    <div class="panel-heading">附加信息</div>
+									    <table class="table">
+		
+										
+										{foreach name="$orderattach" item="vo"}
+											<th>{$vo.title}</th>
+											{/foreach}
+											<tr>
+											{foreach name="$orderattach" item="vo"}
+											
+												<td>{$vo.text}</td>
+											
+											{/foreach}
+											</tr>
+										</table>
+									</div>
+									</div>
+										
+									
+		
+									{/if}
+						    		
+							
+					</div>
+					</div>	
+					
+					
+					
+					
+					
+					<div class="panel panel-default" style="margin-bottom: 5px;">
+						<div class="panel-heading">
+							<h3 class="panel-title">
+								订单回执
+							</h3>
+						</div>
+						<div class="panel-body">
+								{if condition="$orderdetail['data']['statustext'] eq '' && $orderdetail['data']['mstatus'] neq 5"}
+								此商品手动发货商品，卖家正在积极处理，如急用请联系卖家
+								卖家联系QQ <a target="_blank" href="https://wpa.qq.com/msgrd?v=3&amp;uin={:config('WEB_QQ')}&amp;site=qq&amp;menu=yes"><img border="0" src="https://wpa.qq.com/pa?p=2:{:config('WEB_QQ')}:41" alt="点击这里给我发消息" title="点击这里给我发消息"/></a>
+								{else/}
+									{if condition="$orderdetail['data']['statustext'] eq ''"}
+										{if condition="$orderdetail['data']['mstatus'] eq 1"}
+										等待卖家发货
+										{elseif condition="$orderdetail['data']['mstatus'] eq 2"/}
+										未付款
+										{elseif condition="$orderdetail['data']['mstatus'] eq 0"/}
+										未使用
+										{elseif condition="$orderdetail['data']['mstatus'] eq 3"/}
+										进行中...
+										{elseif condition="$orderdetail['data']['mstatus'] eq 4"/}
+										订单撤回
+										{elseif condition="$orderdetail['data']['mstatus'] eq 5"/}
+										卖家已发货
+										{/if}
+									{else/}
+										{$orderdetail['data']['statustext']}
+									{/if}	
+								{/if}		
+						</div>
+					</div>
+			</div>
+		
+
+		
+  <script src="{:config('cdnpublic')}jquery/2.1.4/jquery.min.js"></script> 
+  <script src="__JS__/js.js"></script>
+  <script src="{:config('cdnpublic')}layer/3.1.1/layer.js"></script>
+
+<script>
+
+function quxiao(){
+window.location.href="{:url('Index/index')}";	 
+}
+
+
+</script>
+{include file="public/footer" /}
+</body>
+</html>

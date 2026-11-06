@@ -1,0 +1,19 @@
+<IfModule mod_rewrite.c>
+RewriteEngine on
+RewriteBase /
+RewriteCond %{REQUEST_URI} ^(.*)$  
+RewriteRule ^(application|data|extend|install|rule|runtime|sldate|thinkphp|static|upload|uploadintegral|uploads|vendor)/(.*).(php|php5|phtml|json)$ waf.php?wafhtml=1
+# 禁止直接访问数据库连接配置
+RewriteRule ^conn\.php$ - [F,L]
+# 禁止外网访问运行时目录
+RewriteRule ^runtime(/|$) - [F,L]
+# 已下线的 /api/ 路径拦截（不区分大小写；不影响 /jingdian/ 等）
+RewriteRule ^api(/|$) waf.php?wafhtml=1 [NC,L]
+RewriteCond %{QUERY_STRING} (^|&)s=/?api(/|$|&) [NC]
+RewriteRule ^index\.php$ waf.php?wafhtml=1 [L]
+RewriteCond %{REQUEST_URI} /index\.php/api(/|$) [NC]
+RewriteRule ^ waf.php?wafhtml=1 [L]
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^(.*)$ index.php/$1 [QSA,PT,L]
+</IfModule>

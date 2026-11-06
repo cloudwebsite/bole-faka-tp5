@@ -1,0 +1,107 @@
+{include file="public/header" /}
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="ibox float-e-margins">
+        <div class="ibox-title">
+            <h5>销售统计</h5>
+            <div class="ibox-tools">
+                <a href="{:url('Order/index')}" class="btn btn-white btn-xs">返回订单列表</a>
+            </div>
+        </div>
+        <div class="ibox-content">
+            <div class="form-inline" style="margin-bottom:15px;">
+                <label>维度</label>
+                <select class="form-control" id="type" style="width:140px;margin:0 8px;">
+                    {foreach name="types" item="tname" key="k"}
+                    <option value="{$k}" {if condition="$type eq $k"}selected{/if}>{$tname}</option>
+                    {/foreach}
+                </select>
+                <label>起</label>
+                <input type="date" class="form-control" id="starttime" value="{$starttime}" style="margin:0 8px;" />
+                <label>止</label>
+                <input type="date" class="form-control" id="endtime" value="{$endtime}" style="margin:0 8px;" />
+                <button type="button" class="btn btn-primary" id="btn-query"><i class="fa fa-search"></i> 查询</button>
+                <span id="sum-line" style="margin-left:16px;color:#666;"></span>
+            </div>
+            <p class="text-muted" style="margin-bottom:10px;">默认近 30 天；已排除未付款与后台导出单。合计为全量，列表分页显示。</p>
+            <table class="table table-bordered table-hover">
+                <thead>
+                <tr>
+                    <th id="th-name">名称</th>
+                    <th id="th-count">订单数量</th>
+                    <th id="th-jine">总金额</th>
+                </tr>
+                </thead>
+                <tbody id="tbody">
+                <tr><td colspan="3" class="text-center text-muted">点击查询加载</td></tr>
+                </tbody>
+            </table>
+            <div class="row" style="margin-top:10px;">
+                <div class="col-sm-6">
+                    <span id="page-info" class="text-muted"></span>
+                </div>
+                <div class="col-sm-6 text-right">
+                    <div id="AjaxPage"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{include file="public/footer" /}
+<script type="text/javascript">
+var lastAllpage = 1;
+function loadStats(curr){
+    var type = $('#type').val();
+    var starttime = $('#starttime').val();
+    var endtime = $('#endtime').val();
+    $('#tbody').html('<tr><td colspan="3" class="text-center">加载中…</td></tr>');
+    $.getJSON('{:url("Order/sales_stats_data")}', {
+        type: type,
+        starttime: starttime,
+        endtime: endtime,
+        page: curr || 1
+    }, function(res){
+        if (!res || res.code != 1) {
+            $('#tbody').html('<tr><td colspan="3" class="text-center text-danger">查询失败</td></tr>');
+            return;
+        }
+        var lines = res.lines || ['名称','订单数量','总金额'];
+        $('#th-name').text(lines[0] || '名称');
+        $('#th-count').text(lines[1] || '订单数量');
+        $('#th-jine').text(lines[2] || '总金额');
+        lastAllpage = res.allpage || 1;
+        $('#sum-line').text('合计：' + (res.sum_count||0) + ' 单，金额 ' + (res.sum_jine||0)
+            + '（' + (res.start_fmt||'') + ' ~ ' + (res.end_fmt||'') + '）');
+        $('#page-info').text('第 ' + (res.page||1) + ' / ' + lastAllpage + ' 页，共 ' + (res.count||0) + ' 组');
+        var rows = res.data || [];
+        if (!rows.length) {
+            $('#tbody').html('<tr><td colspan="3" class="text-center text-muted">无数据</td></tr>');
+            $('#AjaxPage').empty();
+            return;
+        }
+        var html = '';
+        for (var i = 0; i < rows.length; i++) {
+            html += '<tr><td style="word-break:break-all;">' + $('<div/>').text(rows[i].name).html()
+                + '</td><td>' + rows[i].count + '</td><td>' + rows[i].jine + '</td></tr>';
+        }
+        $('#tbody').html(html);
+        laypage({
+            cont: $('#AjaxPage'),
+            pages: lastAllpage,
+            skip: true,
+            skin: '#1AB5B7',
+            curr: res.page || curr || 1,
+            groups: 3,
+            jump: function(obj, first){
+                if (!first) {
+                    loadStats(obj.curr);
+                }
+            }
+        });
+    }).fail(function(){
+        $('#tbody').html('<tr><td colspan="3" class="text-center text-danger">请求失败</td></tr>');
+    });
+}
+$('#btn-query').on('click', function(){ loadStats(1); });
+$(function(){ loadStats(1); });
+</script>

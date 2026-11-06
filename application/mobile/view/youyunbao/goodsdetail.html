@@ -1,0 +1,504 @@
+
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="applicable-device" content="mobile" />
+<title>{:config('web_site_title')}</title>
+<meta name="keywords" content="{:config('web_site_keyword')}" />
+<meta charset="UTF-8" name="description" content="{:config('web_site_description')}" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+<link href="__MYOUYUNBAO__/css/frozen.css" rel="stylesheet" type="text/css">
+<link href="__MYOUYUNBAO__/css/public.css" rel="stylesheet" type="text/css" />
+<link href="___MYOUYUNBAO__/css/login.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="{:config('cdnpublic')}jquery/1.8.2/jquery.min.js"></script>
+<link rel="stylesheet" href="{:config('cdnpublic')}layer/3.1.1/mobile/need/layer.css" />
+<script type="text/javascript" src="{:config('cdnpublic')}layer/3.1.1/mobile/layer.js"></script>
+{include file="public/order_disclaimer_boot" /}
+</head>
+
+<body>
+<div class="mobile">
+
+<link href="__MYOUYUNBAO__/css/baoliao.css" rel="stylesheet" type="text/css">
+
+<script type="text/javascript">
+$(document).ready(function(){
+$(".shaixuan").click(function(event){
+event.stopPropagation(); 
+$(".shaixuan_box").show();
+$(".shaixuan_box").animate({right:'100%'});
+$("body,html").css("overflow","hidden");
+$(".shaixuan_box").css("overflow","auto");
+$('body').bind("touchmove",function(e){    
+e.preventDefault();    
+});
+});
+$(".shaixuan_mall a").click(function(event){
+$("body,html").css("overflow","auto");
+$(".shaixuan_box").animate({right:'-100%'});
+$(".shaixuan_box").hide(5);	
+$("body").unbind("touchmove");  
+});
+});
+</script>
+
+<div class="header1">
+<header>
+<div class="header"> <a class="new-a-back" href="javascript:history.back();"> <span><img src="__MYOUYUNBAO__/images/iconfont-fanhui.png"></span> </a>
+<div class="m_logo"><a href="#"></a><div style="margin-top: 5px;margin-left: 25px;"><font style="font-size: 22px;color: #FFFFFF;">{:config('web_site_title')}</font></div></div>
+<div class="header_right shaixuan"><img src="__MYOUYUNBAO__/images/iconfont-shouye.png"></div>
+</div>
+</header>
+<div class="shaixuan_box">
+<div class="shaixuan_mall">
+<h1>站点导航</h1>
+<div class="shaixun_item">
+			<a href="{:url('@mobile/index')}" class="current">首页</a>
+			<a href="{:url('Index/selectorder')}" class="current">订单查询</a>
+			<a href="{:url('Index/category')}" class="current">全部分类</a>
+			<a href="{:url('Index/kefu')}" class="current">联系客服</a>
+			<a href="{:url('@mobile/Detail/getall')}" class="current">常见问题</a>
+</div>
+<p><a href="#" class="shaixuan_colos">关闭</a></p>
+</div>
+</div>
+</div>
+<div class="m_user w">
+{if condition="config('web_reg_type') neq 0"}
+{if condition="session('useraccount.account') eq null"}					
+&nbsp;&nbsp;&nbsp;&nbsp;【<a href="{:url('@mobile/User/uscenter')}">登录</a>】&nbsp;&nbsp;【<a href="{:url('@mobile/User/reg')}">注册</a>】 
+{else/}
+<b>你好,{:session('useraccount.account')} </b>
+&nbsp;&nbsp;
+<a href="{:url('@mobile/User/uscenter')}">会员中心</a>
+<a href="{:url('@mobile/User/loginOut')}" onclick="return confirm('确定要退出吗？')">【安全退出】</a>
+{/if}
+{/if}
+</div>
+
+<div class="view w">
+<div class="bl_view_img"><img src="{$param['data_fl'][0]['imgurl']}"  alt="{:htmlspecialchars_decode($param['data_fl'][0]['mname'])}" /></div>
+<div class="bl_view_title">{:htmlspecialchars_decode($param['data_fl'][0]['mname'])}</div>
+<div class="bl_view_tag">
+<div class="bl_view_price">零售价：{if condition="$param['isyh'] eq 0"}
+{if condition="$param['data_fl'][0]['mprice'] lt 1"}{:number_format($param['data_fl'][0]['mprice']/100,4)}{else/}{:number_format($param['data_fl'][0]['mprice']/100,2)}{/if}
+{else/}
+{if condition="$param['minprice'][0]['mdj'] lt 1"}{:number_format($param['minprice'][0]['mdj']/100,4)}{else/}{:number_format($param['minprice'][0]['mdj']/100,2)}{/if}~{if condition="$param['data_fl'][0]['mprice'] lt 1"}{:number_format($param['data_fl'][0]['mprice']/100,4)}{else/}{:number_format($param['data_fl'][0]['mprice']/100,2)}{/if}
+{/if} </div>
+<div class="bl_view_mall">{if condition="$param['isyh'] eq 0"}		
+
+{else/} 
+{foreach name="$param['data_yh']" item="vo"} 
+批发价：{$vo['mdj']/100} 元 ({$vo['mdy']}个起按批发价)</br>
+{/foreach} 							   
+{/if}
+
+</div>    
+</div>
+<div class="bl_view_tag">
+<div class="bl_view_user">商品类型：{if condition="$param['data_fl'][0]['type'] eq 0"}
+			   <img src="__MYOUYUNBAO__/images/zdfh.png">
+			   {else/}
+			   <img src="__MYOUYUNBAO__/images/sdfh.png">
+			   {/if}
+</div>
+<div class="bl_view_time">销量：{$param['data_fl'][0]['sellercount']}个</div>
+</div>
+<div class="bl_view_title">商品库存：
+<font size="2" color="#FF7200"> 库存<i id='kucun'>{$goodscount['mail']['count'][0]['count']}</i>件</span>
+</div>
+<form action="{:url("Index/orderpay")}" id="frm" role="form"  method="post">
+<div class="bl_view_title">联系手机：<input class="search_input2" type="tel" id="mobile" id="lianxi" name="lianxi" value="" placeholder="请输入手机号码" required> </div>	
+{if condition="$param['isattach'] eq 1"}
+{foreach name="$attach" item="vo"}										
+<div class="bl_view_title"> {$vo.title}:<input class="search_input2" type="text" id="attach{$vo.id}" name="attach[{$vo.id}]" value="" placeholder="{$vo['tip']}" required> </div>	
+{/foreach}											
+{/if}			
+<div class="bl_view_title"> 购买数量：<input class="search_input2 num"  id="num" type="text" name="buynum" value="1" ></div>
+
+
+
+				<!--支付参数-->
+<input type="hidden" name="title" value="{:strip_tags(htmlspecialchars_decode($param['data_fl'][0]['mname']))}"/>				
+<input type="hidden" name="p3_Amt" value=""/>
+<input type="hidden" name="p2_Order" value=""/>
+<input type="hidden" name="p5_Pid" value="{$param['data_fl'][0]['id']}"/>
+<input type="hidden" name="pa_MP" value=""/>
+<input type="hidden" name="price" value=""/>
+<input type="hidden" name="sendbeishu" value="{$param['data_fl'][0]['sendbeishu']}"/>
+
+</form> 
+
+
+	<script type="text/javascript">
+					
+      
+					function toDecimal(x){
+				  		var f = parseFloat(x);
+						if(isNaN(f)) {
+							return false;
+						}
+						var f;
+						if(getFloor(x)<2){
+							f = Math.round(x * 100) / 100;
+						}else if(getFloor(x)>2){
+							f = Math.round(x * 10000) / 10000;
+						}	
+						var s = f.toString();
+						var rs = s.indexOf('.');
+						if(rs < 0) {
+							rs = s.length;
+							s += '.';
+						}
+						while(s.length <= rs + 2) {
+							s += '0';
+						}
+						return s;
+				  	}
+				  	
+					function getFloor(x){
+						var y = String(x).indexOf('.') + 1;
+						var count = String(x).length - y;
+						if(y <= 0) {
+							count=0;
+						}
+						return count;										
+					}
+					
+					function getOrder() {
+						//设定时间格式化函数
+						Date.prototype.format = function(format) {
+							var args = {
+								"M+": this.getMonth() + 1,
+								"d+": this.getDate(),
+								"h+": this.getHours(),
+								"m+": this.getMinutes(),
+								"s+": this.getSeconds(),
+							};
+							if(/(y+)/.test(format))
+								format = format.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+							for(var i in args) {
+								var n = args[i];
+								if(new RegExp("(" + i + ")").test(format))
+									format = format.replace(RegExp.$1, RegExp.$1.length == 1 ? n : ("00" + n).substr(("" + n).length));
+							}
+							return format;
+						};
+				
+						var order = new Date().format("yyyyMMddhhmmss") + randomNum(10);
+						return order;
+					}
+				
+					function randomNum(n) {
+						var t = '';
+						for(var i = 0; i < n; i++) {
+							t += Math.floor(Math.random() * 10);
+						}
+						return t;
+					}
+					
+					
+						
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+var flag=false;
+
+
+function checkform(){
+
+		var mmin={$param['data_fl'][0]['mmin']};
+		var mmax={$param['data_fl'][0]['mmax']};
+		var countnum ={$goodscount['mail']['count'][0]['count']};
+		var buynum=parseInt($('.num').val());												
+		var sendbeishu=parseInt($('[name=sendbeishu]').val());
+		var money=0;
+		var contact = $('[name=lianxi]').val();
+	
+	{if condition="$param['isattach'] eq 1"}		
+	{foreach name="$attach" item="vo"}	
+	if(''==$.trim($("#attach{$vo.id}").val())){		
+		layer.open({
+				content: '{$vo.title}不能为空',
+				btn: '我知道了',
+				time: 30 //2秒后自动关闭
+			});
+		$("#attach{$vo.id}").focus();											
+		return false;
+	}
+	{/foreach}		
+	{/if}
+	{if condition="session('useraccount.account') eq null"}							
+	if(contact.length != 0) {
+		
+		var reg = /^(\d){11}$/;
+		if(!reg.test(contact)) {
+			layer.open({
+				content: '请填写正确的联系手机<br>',
+				btn: '我知道了',
+				time: 30 //2秒后自动关闭
+			});
+			
+			return false;
+		}
+	}
+	{/if}
+	if(countnum=='0'){
+			layer.open({
+				content: '库存为空，请联系客服补货',
+				btn: '我知道了',
+				time: 30 //2秒后自动关闭
+			});
+			return false;
+	}
+	if(buynum*sendbeishu>countnum){
+			layer.open({
+				content: '库存不足，请修改购买数量',
+				btn: '我知道了',
+				time: 30 //2秒后自动关闭
+			});
+			$('.num').val(parseInt(countnum/sendbeishu));
+			return false;
+	}
+	if(buynum<mmin || isNaN(buynum)){
+			layer.open({
+				content: '起购数量：'+mmin,
+				btn: '我知道了',
+				time: 30 //2秒后自动关闭
+			});
+			$('.num').val(parseInt(mmin));
+			return false;
+	}
+	if(buynum>mmax){
+			layer.open({
+				content: '最大购买数量：'+mmax,
+				btn: '我知道了',
+				time: 30 //2秒后自动关闭
+			});
+			$('.num').val(parseInt(mmax));
+			return false;
+		}
+		return true;
+}
+var index;
+function create(){
+	runWithOrderDisclaimer(__ORDER_DISCLAIMER__, __ORDER_DISCLAIMER_WAIT__, function () {
+	try { sessionStorage.setItem('order_disclaimer_ok', '1'); } catch (e) {}
+	index=layer.open({
+		type: 2
+		,content: '加载中'
+		,shade: 'background-color: rgba(0,0,0,.2)'
+		,shadeClose:false
+	  });
+	  submit();
+	});
+}
+
+
+function submit(){
+	
+	var buynum=parseInt($('.num').val());
+	var mpid={$param['data_fl'][0]['id']};
+	var code=1;
+	var errormsg="";
+	   
+	if(buynum!==0 &&!isNaN(buynum)){
+		
+		$.when(getBuyMoney(buynum,mpid)).done(function(res){
+			if(res.code==1){
+				$('[name=p3_Amt]').val(res.money);
+				$("[name=price]").val(toDecimal(res.mdj/100));
+				
+				code=1;
+
+		  
+				if($('[name=p3_Amt]').val()<0.01){
+					layer.open({
+							content: '最小支付金额0.01，当前金额'+$('[name=p3_Amt]').val(),
+							btn: '我知道了',
+							time: 30 //2秒后自动关闭
+					});	
+					layer.close(index);
+					return false;
+				}
+			
+			$('[name=p2_Order]').val(getOrder());
+			$('[name=p5_Pid]').val(mpid);
+			contact=$('[name=lianxi]').val();
+			if(!checkform()){
+				layer.close(index);
+				return false;
+			}
+			
+			var orderno=$("[name=p2_Order]").val();
+			var result="0";
+			
+		
+			
+			
+			//*******************上传附加信息头
+			 result="0";
+			 {if condition="$param['isattach'] eq 1"}
+				var i=0;
+				var attachcount="{:count($attach)}";
+				{foreach name="$attach" item="vo"}
+				$.when(AddOrderAttach(orderno,{$vo.id},$.trim($("#attach{$vo.id}").val()))).done(function (res) {
+					if(res.code!=1){																
+							layer.open({
+									content: '异常错误，请重新提交attach',
+									btn: '我知道了',
+									time: 30 //2秒后自动关闭
+							});			
+						layer.close(index);
+						$("#jiesuan").css("background-color","#007cc3");
+						return false;		
+					}else{
+						i++;
+						if(i>=attachcount){
+							if(flag==false){
+								flag=true;
+								layer.close(index);
+								$("#frm").submit();
+							}else{
+								layer.close(index);
+								console.log("数据处理中");
+								return false;
+							}
+						}
+						
+					}
+				});
+																																														
+				{/foreach}
+				//*******************上传附加信息尾		
+				{else/}
+							if(flag==false){
+								flag=true;
+								layer.close(index);
+								$("#frm").submit();
+							}else{
+								layer.close(index);
+								console.log("数据处理中");
+								return false;
+							}
+			{/if}
+														
+				
+			}else{
+				code=-1;
+				errormsg=res.msg;
+				layer.open({
+						content: errormsg,
+						btn: '我知道了',
+						time: 30 //2秒后自动关闭
+				});	
+				layer.close(index);
+				return false;														
+			}
+		});
+		
+	}
+	
+	
+	
+	
+}
+function closebtn(){
+	layer.closeAll();
+}
+//计算价格
+function getBuyMoney(buynum,mpid){
+	var defer = $.Deferred();											
+	$.getJSON("{:url('@jingdian/Index/getBuyMoney')}",
+				{'buynum' : buynum,
+				'mpid':mpid
+				},
+				function(data) {
+					defer.resolve(data);		
+				});
+	return defer;
+}
+//上传附加选项
+function AddOrderAttach(orderno,attachid,text){
+	var defer = $.Deferred();
+	$.ajax({
+		url: "{:url('@jingdian/Api/AddOrderAttach')}",
+		type: 'post',
+		data: { 'orderno': orderno,
+				'attachid': attachid,
+				'text':text
+								},
+		async: true,
+		dataType: 'json',
+		success: function (data) {
+			defer.resolve(data);
+		}
+	});
+	return defer;
+}
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="go_buy"><input onclick="create();" type="submit" value="自助购买" /></div>
+<div class="bl_view_title"><font color="#2581ff"  size="2">发货倍数:(买一件发{$param['data_fl'][0]['sendbeishu']}个卡密) </font></div>  
+
+</div>
+<div class="m_userx w">
+<a target="blank" href="mqqwpa://im/chat?chat_type=wpa&uin={:config('WEB_QQ')}&version=1&src_type=web"><img  style="CURSOR: pointer" border="0" SRC=http://wpa.qq.com/pa?p=1:123456:4 alt="发送消息给我">&nbsp;&nbsp;{:config('WEB_QQ')}</a>&nbsp;&nbsp; &nbsp;&nbsp;<a href="tel://{:config('WEB_MOBILE')}">客服电话：{:config('WEB_MOBILE')}</a>
+</div>
+<div class="bl_view_content w">
+<h1>商品说明<span>具体使用方法请阅读商品说明</span></h1>
+<div class="bl_view_word">
+{if condition="$param['data_fl'][0]['xqnotice'] eq ''"}
+暂无注意事项
+{else/} 
+{:htmlspecialchars_decode($param['data_fl'][0]['xqnotice'])}
+{/if}
+</div>
+</div>
+<div class="m_user w"> 	
+<a href="#">返回顶部</a>
+</div>
+
+
+</body>
+</html>

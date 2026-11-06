@@ -1,0 +1,172 @@
+<!doctype html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <title></title>
+    
+    <style>
+        body{
+            font-family: "Microsoft Yahei", "微软雅黑", "Pinghei";
+        }
+        button,a{
+            border: none;
+            font-size: 16px;
+        }
+        .order_show{
+            padding:20px;
+        }
+        .order_info{
+            line-height:30px;
+            font-size:14px;
+            color:#666;
+            padding:20px;
+        }
+        .order_pay{
+            line-height:30px;
+            font-size:16px;
+            color:#333;
+            padding:20px;
+            border-bottom:1px solid #eee;
+        }
+        .order_pay img{
+            float: left;
+            margin-right: 20px;
+        }
+        .order_pay p{
+            margin: 0;
+            float: left;
+        }
+        .order_pay p span{
+            color: crimson;
+        }
+        .order_btn1,.order_btn2{
+            display: block;
+            text-decoration: none;
+            color: #fff;
+            margin: 20px;
+            float: left;
+            height: 40px;
+            line-height: 40px;
+            padding: 0 20px;
+            border-radius: 3px;
+        }
+        .order_btn1{
+            background: crimson;
+        }
+        .order_btn2{
+            background: #ccc;
+        }
+    </style>
+</head>
+<body>
+
+	{if condition="$param['pd_FrpId'] eq 'wxpay'"/}
+	<form name="p" method="post" action="{:url('pay/index/reqPay')}" target="_blank">
+	{elseif condition="$param['pd_FrpId'] eq 'qqpay'"/}
+	<form name="p" method="post" action="{:url('pay/index/reqPay')}" target="_blank">
+	{elseif condition="$param['pd_FrpId'] eq 'alipay'"/}
+	<form name="p" method="post" action="{:url('pay/index/reqPay')}" target="_blank">
+	{elseif condition="$param['pd_FrpId'] eq 'usdtpay'"/}
+	<form name="p" method="post" action="{:url('pay/index/reqPay')}" target="_blank">	
+	{elseif condition="$param['pd_FrpId'] eq 'unionPay'"/}
+	<form name="p" method="post" action="{:url('pay/index/reqPay')}" target="_blank">	
+				{else /}
+				未知
+				{/if}
+    <input type="hidden" name="p2_Order" value="{$param['p2_Order']}" />
+    <input type="hidden" name="p3_Amt" value="{$param['p3_Amt']}" />
+    <input type="hidden" name="pd_FrpId" value="{$param['pd_FrpId']}" />
+    <input type="hidden" name="p5_Pid" value="{$param['p5_Pid']}" />
+    <input type="hidden" name="pa_MP" value="" />
+      <input type="hidden" name="title" value="{$param['title']}" />
+<div class="order_show">
+    <div class="order_pay">
+        <img src="__LOAD917__/Skin/List/Default/images/order_pay.png" alt="">
+        <p>
+           
+				支付金额： <span>{$param['p3_Amt']}元 </span><br>
+            
+            支付方式： <span>
+            	
+            	{if condition="$param['pd_FrpId'] eq 'alipay'"}
+            	支付宝
+				{elseif condition="$param['pd_FrpId'] eq 'wxpay'"/}
+				微信扫码
+				{elseif condition="$param['pd_FrpId'] eq 'qqpay'"/}
+				QQ扫码
+				{elseif condition="$param['pd_FrpId'] eq 'usdtpay'"/}
+				USDT
+				{elseif condition="$param['pd_FrpId'] eq 'unionPay'"/}
+				聚合支付
+				{elseif condition="$param['pd_FrpId'] eq 'tenpay'"/}
+				财付通
+				{else /}
+				未知
+				{/if}
+            </span>
+        </p>
+        <div style="clear: both"></div>
+    </div>
+    <div class="order_info">
+        订单编号： {$param['p2_Order']}<br>
+        商品名称： {$param['title']}<br>
+        购买数量：   {$param['buynum']}  </div>
+    <div class="paybtn" id="d1">
+        <a onclick="back_url()" class="order_btn2">重新选择支付</a>
+        <button class="order_btn1">确认开始付款</button>
+    </div>
+    <div class="paybtn" style="display:none;" id="d2">
+        <a onclick="back_url()" class="order_btn2">返回商品</a>
+        <a href="#" id="pay" target="_parent" class="order_btn1"> 等待付款中...</a>
+    </div>
+</div>
+</form>
+<script src="https:{:config('cdnpublic')}jquery/1.7.2/jquery.min.js"></script>
+<script type="text/javascript">
+    function back_url() {
+        try {
+       
+			var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+			parent.layer.close(index);
+        } catch (err) {
+            window.history.back();
+        }
+        return false;
+    }
+
+	function oderquery(){
+        var date = new Date();
+		var timer = date.getTime().toString();
+	   	$.ajax({               
+	            url:"{:url('pay/index/checkdingdan')}?mcard={$param['p2_Order']}&t=" + timer,
+	            type: "GET",
+	            dataType:"text",
+	            success: function (res) {	                
+	                if (res==1) { //订单状态为1表示支付成功	    
+	               // clearInterval(index);          
+                 
+                 $("#pay").attr("href","{:url('@jingdian/Getmail/index')}"+"?mpid={$param['p5_Pid']}&number={$param['p2_Order']}")
+                 $("#pay").html("付款成功，查看卡密");
+                 
+	               
+	                }else{
+	                	setTimeout('oderquery()',1000);
+	                }
+	            },
+	            error: function () {
+	               setTimeout('oderquery()',1000); 
+	            }
+	        });
+        
+    }
+	
+    $(function(){
+        $("#d1").click(function(){
+            $("#d1").hide();
+            $("#d2").show().attr("dis");
+			setTimeout('oderquery()',3000);
+        });
+    });
+</script>
+</body>
+</html>

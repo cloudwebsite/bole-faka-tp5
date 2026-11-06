@@ -1,0 +1,69 @@
+.update-git {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+}
+.update-git-item {
+  width: calc(50% - 10px);
+}
+.update-git-logs,
+.update-git-version {
+  padding: 20px;
+  background: #f5f7f9;
+}
+.update-git-version {
+  min-height: 117px;
+}
+.update-git-version p {
+  font-size: 18px;
+  line-height: 30px;
+  font-weight: 700;
+}
+.update-git-version p:first-child {
+  font-size: 14px;
+  font-weight: 400;
+  color: #888;
+}
+.update-git-logs {
+  margin-top: 20px;
+  height: calc(100vh - 365px);
+  min-height: 200px;
+  overflow-y: auto;
+}
+.update-git-tag {
+  padding: 3px 10px;
+  margin-right: 10px;
+  font-size: 12px;
+  background-color: #ecf5ff;
+  color: #409eff;
+  border: 1px solid #d9ecff;
+  border-radius: 4px;
+  box-sizing: border-box;
+  white-space: nowrap;
+}
+.update-git-tag-danger {
+  background-color: #fef0f0;
+  border-color: #fde2e2;
+  color: #f56c6c;
+}
+.update-git-tag-success {
+  background-color: #f0f9eb;
+  border-color: #e1f3d8;
+  color: #67c23a;
+}
+.update-git-tag-warn {
+  background-color: #fdf6ec;
+  border-color: #faecd8;
+  color: #e6a23c;
+}
+@media screen and (max-width: 768px) {
+  .update-git {
+    flex-direction: column;
+  }
+  .update-git-item {
+    width: 100%;
+  }
+  .update-git-logs {
+    display: none;
+  }
+}

@@ -1,0 +1,136 @@
+{include file="public/header" /}
+<link rel="stylesheet" type="text/css" href="//www.layuicdn.com/layui-v2.4.5/css/layui.css?v=201811010202">
+</br>
+</br>
+<div class="layui-form" action="">
+    <div class="layui-form-item">
+        <label class="layui-form-label">订单有效期</label>
+        <div class="layui-input-block">
+            <input type="number" id="close" lay-verify="required" placeholder="请输入创建的订单几分钟后失效" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">通讯密钥</label>
+        <div class="layui-input-block">
+            <input type="text" id="key" lay-verify="required" placeholder="请输入通讯密钥" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">区分方式</label>
+        <div class="layui-input-block">
+            <div class="layui-upload">
+                <select id="payQf">
+                    <option value="1">金额递增</option>
+                    <option value="2">金额递减</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">微信码</label>
+        <div class="layui-input-block">
+            <input type="text" id="wximg" lay-verify="required" placeholder="请输入微信收款码" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">聚合码</label>
+        <div class="layui-input-block">
+            <input type="text" id="jhimg" lay-verify="required" placeholder="请输入聚合收款码" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">支付宝收款码</label>
+        <div class="layui-input-block">
+            <input type="text" id="aliimg" lay-verify="required" placeholder="请输入支付宝收款码url" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+	
+
+	<div class="layui-form-item" style="text-align: left;">
+       <button class="layui-btn" onclick="window.open('https://www.sojson.com/qr/deqr.html')">收款码解码地址</button>
+    </div>
+	
+	
+
+    <div class="layui-form-item" style="text-align: right;">
+        <button class="layui-btn" onclick="save()">保存</button>
+    </div>
+
+</div>
+
+    <script src="//www.layuicdn.com/layui-v2.4.5/layui.js?v=201811010202"></script>
+<script src="{:config('cdnpublic')}jquery/2.1.4/jquery.min.js"></script>
+
+<script>
+    function formatDate(now) {
+        now = new Date(now*1000);
+        return now.getFullYear()
+            + "-" + (now.getMonth()>8?(now.getMonth()+1):"0"+(now.getMonth()+1))
+            + "-" + (now.getDate()>9?now.getDate():"0"+now.getDate())
+            + " " + (now.getHours()>9?now.getHours():"0"+now.getHours())
+            + ":" + (now.getMinutes()>9?now.getMinutes():"0"+now.getMinutes())
+            + ":" + (now.getSeconds()>9?now.getSeconds():"0"+now.getSeconds());
+
+    }
+
+
+    layui.use(['form','layer'], function(){
+        var table = layui.table,form = layui.form;
+        form.render();
+	});
+
+    function save() {
+        var wximg = $("#wximg").val();
+        var jhimg = $("#jhimg").val();
+        var aliimg = $("#aliimg").val();
+        var key = $("#key").val();
+        var close = $("#close").val();
+        var payQf = $("#payQf").val();
+      
+        if (key == ""){
+            layer.msg("请输入通讯密钥");
+            return;
+        }
+
+        if (close == ""){
+            layer.msg("请输入创建的订单几分钟后失效");
+            return;
+        }
+        $.post("saveSetting","key="+key+"&wxpay="+encodeURIComponent(wximg)+"&jhpay="+encodeURIComponent(jhimg)+"&alipay="+encodeURIComponent(aliimg)+"&close="+close+"&payQf="+payQf,function (data) {
+            if (data.code==1){
+                $.post("getSettings",function (data) {
+                    console.log(data);
+                    if (data.code==1){
+                        $("#jhimg").val(data.data.jhpay);
+                        $("#aliimg").val(data.data.alipay);
+                        $("#wximg").val(data.data.wxpay);
+                        $("#key").val(data.data.key);
+                        $("#close").val(data.data.close);
+                    }
+                });
+            }
+            layer.msg(data.msg);
+        });
+    }
+
+
+    function getstate(){
+        $.post("getSettings",function (data) {
+            console.log(data);
+            if (data.code==1){
+                $("#key").val(data.data.key);
+                $("#close").val(data.data.close);
+                $("#payQf").val(data.data.payQf);
+				$("#jhimg").val(data.data.jhpay);
+				$("#aliimg").val(data.data.alipay);
+				$("#wximg").val(data.data.wxpay);  
+            }
+        });
+    }
+    getstate();
+</script>
+</body>
+</html>

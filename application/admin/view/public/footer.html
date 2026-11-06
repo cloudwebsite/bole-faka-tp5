@@ -1,0 +1,66 @@
+<script src="{:config('cdnpublic')}jquery/2.1.4/jquery.min.js"></script>
+<script src="{:config('cdnpublic')}twitter-bootstrap/3.3.6/js/bootstrap.js"></script>
+<script src="{:config('cdnpublic')}chosen/1.1.0/chosen.jquery.js"></script>
+<script src="{:config('cdnpublic')}iCheck/1.0.2/icheck.min.js"></script>
+<script src="https://www.layuicdn.com/laydate-v5.0.9/laydate.js"></script>
+<script src="{:config('cdnpublic')}switchery/0.5.0/switchery.min.js"></script><!--IOS开关样式-->
+<script src="{:config('cdnpublic')}jquery.form/3.51/jquery.form.min.js"></script>
+<script src="{:config('cdnpublic')}layer/3.1.1/layer.min.js"></script>
+<script src="__JS__/laypage/laypage.js"></script>
+<script src="__JS__/laytpl/laytpl.js"></script>
+<script src="__JS__/lunhui.js"></script>
+<script>
+    (function () {
+        // 不依赖 jQuery：先同步 meta，再给所有 POST 表单补令牌
+        var meta = document.querySelector('meta[name="csrf-token"]');
+        var inputs = document.querySelectorAll('input[name="__token__"]');
+        var csrf = '';
+        if (inputs.length) {
+            csrf = inputs[inputs.length - 1].value || '';
+            if (meta && csrf) {
+                meta.setAttribute('content', csrf);
+            }
+        } else if (meta) {
+            csrf = meta.getAttribute('content') || '';
+        }
+        if (csrf) {
+            var forms = document.getElementsByTagName('form');
+            for (var i = 0; i < forms.length; i++) {
+                var method = (forms[i].getAttribute('method') || 'get').toLowerCase();
+                if (method !== 'post') {
+                    continue;
+                }
+                if (forms[i].querySelector('input[name="__token__"]')) {
+                    continue;
+                }
+                var hid = document.createElement('input');
+                hid.type = 'hidden';
+                hid.name = '__token__';
+                hid.value = csrf;
+                forms[i].appendChild(hid);
+            }
+        }
+        if (window.jQuery && csrf) {
+            $.ajaxSetup({
+                headers: {'X-CSRF-TOKEN': csrf},
+                beforeSend: function (xhr, settings) {
+                    var method = (settings.type || 'GET').toUpperCase();
+                    if (method !== 'GET' && method !== 'HEAD') {
+                        if (typeof settings.data === 'string') {
+                            if (settings.data.indexOf('__token__=') === -1) {
+                                settings.data += (settings.data ? '&' : '') + '__token__=' + encodeURIComponent(csrf);
+                            }
+                        } else if (settings.data && typeof settings.data === 'object' && !settings.data.__token__) {
+                            settings.data.__token__ = csrf;
+                        }
+                    }
+                }
+            });
+        }
+    })();
+    if (window.jQuery) {
+        $(document).ready(function () {
+            $(".i-checks").iCheck({checkboxClass: "icheckbox_square-green", radioClass: "iradio_square-green"});
+        });
+    }
+</script>

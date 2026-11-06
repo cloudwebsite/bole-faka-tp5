@@ -1,0 +1,22 @@
+@charset "utf-8";
+/* 代码整理：懒人之家 www.lanrenzhijia.com */
+
+a:hover{ text-decoration:none;}
+
+
+/* 本案例代码begin */
+.left_nav{ width:180px; height:auto;padding:3px;position:fixed; top:25%;left:10px; z-index:777; background:#fff; border:1px solid #CDCDCD;}
+.left_nav dl dt{ width:145px; height:32px; line-height:32px; background:url(../images/long.png) no-repeat 12px center #E6238F; padding-left:35px; color:#fff; margin-bottom:4px;}
+.left_nav dl dd{ width:188px; height:38px; position:relative;}
+.left_nav dl dd .nav_right{ width:300px; height:auto; overflow:hidden; position:absolute; left:185px; top:0px; padding:0px 5px 5px 5px;background:#fff; display:none; border:1px solid #ccc;}
+.left_nav dl dd .nav_right a{ width:260px;height:30px; line-height:30px; text-align:left; color:#666;padding-left:40px; background:url(../images/nav_right_bg.png) no-repeat 20px center; display:block; float:left; margin-top:5px; white-space:nowrap;
+ text-overflow:ellipsis;
+ -o-text-overflow:ellipsis;
+ overflow: hidden;border:1px solid #ccc;}
+.left_nav dl dd .nav_right a:hover{ width:262px;height:30px; line-height:30px; text-align:left; color:#fff;padding-left:40px; background:url(../images/nav_right_bg2.png) no-repeat 20px center #E6238F; text-decoration:none;}
+.left_nav dl dd a.nav_left{width:167px; height:35px; line-height:35px; background:url(../images/left_nav_dt_bg.png) no-repeat 165px center #E0E0E0; padding-left:13px; display:block; border-bottom:1px solid #fff;color:#3C4347; white-space:nowrap;
+ text-overflow:ellipsis;
+ -o-text-overflow:ellipsis;
+ overflow: hidden;}
+.left_nav dl dd a.nav_left:hover{background:url(../images/left_nav_dt_bg2.png) no-repeat 165px center #E6238F; color:#fff; text-decoration:none;}
+

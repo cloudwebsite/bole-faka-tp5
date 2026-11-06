@@ -1,0 +1,170 @@
+{include file="public/user/userheader" /}
+     <link href="__USCENTER__/css/basic.css" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" href="__USCENTER__/css/iconfont.css">
+    <script language="javascript" src="{:config('cdnpublic')}jquery/1.8.3/jquery.min.js"></script>
+    <script language="javascript" src="__USCENTER__/js/qiandao.js"></script>
+    <script src="__USCENTER__/js/wangeditor.min.js"></script>
+    <script src="__USCENTER__/js/plupload.full.min.js"></script>
+    <script src="{:config('cdnpublic')}layer/3.1.1/layer.js"></script>
+    <script language="javascript" src="https://www.layuicdn.com/layui-v2.5.4/layui.js"></script>
+    <script language="javascript" src="__USCENTER__/js/common.js"></script>
+    <script language="javascript" src="__USCENTER__/js/index.js"></script>
+    <script src="__USCENTER__/js/person_content.js"></script>
+    <link rel="stylesheet" href="__USCENTER__/css/index.css">
+    <link rel="stylesheet" href="__USCENTER__/css/person_content.css">
+    <link rel="stylesheet" href="__USCENTER__/css/publish_need.css">
+    <link rel="stylesheet" href="__USCENTER__/css/common.css" /></head>
+    <link href="__USCENTER__/css/style.min.css?v=4.1.0" rel="stylesheet">
+ <body>
+    <!--头部-->
+    {include file="public/user/usertop" /}
+    <!--头部-->
+    <!--个人中心-->
+    <div class="main">
+      <div class="clearfix person_conetent">﻿
+        <!--左侧菜单-->
+        {include file="public/user/userleft" /}
+        
+        <!--右侧展示-->
+        <div class="person_content_r right">
+
+            <!--安全中心-->
+            <div class="need_admin">
+                <div class="clearfix publish_need_tit">
+                    <h2 class="left">安全中心</h2>
+                </div>
+                <div class="security_content">
+
+                    <form id="change_pass" onsubmit="return false;">
+                        <div class="person_change_pass">
+                            <dl class="clearfix">
+                                <dt class="left">旧密码</dt>
+                                <dd class="left">
+                                    <input type="password" id="old_pass" placeholder="" class="input_default">
+                                </dd>
+                            </dl>
+                            <dl class="clearfix">
+                                <dt class="left">新密码</dt>
+                                <dd class="left">
+                                    <input type="password" id="new_pass" class="input_default">
+                                </dd>
+                            </dl>
+                            <dl class="clearfix">
+                                <dt class="left">请确认新密码</dt>
+                                <dd class="left">
+                                    <input type="password" id="new_pass_again" class="input_default">
+                                </dd>
+                            </dl>
+                            <button class="change_pass js_change_pass">确认提交</button>
+                        </div>
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+      </div>
+    </div>
+             
+  
+
+    <!--非商家提示去认证-->
+    {include file="public/imgpc/footer" /}
+    
+   <script>
+	
+	    _person_con.shouMenu('.person_menu_title','.person_menu_lsit');
+	    
+	    function in_array(stringToSearch, arrayToSearch) {
+		     for (s = 0; s < arrayToSearch.length; s++) {
+		      thisEntry = arrayToSearch[s].toString();
+		      if (thisEntry == stringToSearch) {
+		       return true;
+		      }
+		     }
+		     return false;
+		}
+		
+		function checkpassword(password){
+			var rupsw=["123456","a123456","123456a","5201314","111111","000000","qq123456","123123","qwe123"];
+			if(in_array(password,rupsw)){
+			    
+			  	layer.msg(password+'此密码是弱密码不能使用!!',{icon:2,time:3000});
+			    return false;
+			}
+			if(password.length<6){
+			  
+			  	
+			  	layer.msg('密码长度不能小于6个字符串',{icon:2,time:3000});
+			    return false;
+		  	}
+		  	if(password.length>20){
+			  	
+			  	
+			  	layer.msg('密码长度不能大于20个字符串',{icon:2,time:3000});
+			    return false;
+		  	}
+		  	if(password==''){
+		  		
+		  		
+			  	layer.msg('密码不能为空',{icon:2,time:3000});
+			    return false;
+		  	}
+		  	var reg = new RegExp("[\\u4E00-\\u9FFF]+","g");
+			if(reg.test(password)){
+				
+				
+			  	layer.msg('密码不支持汉字，只支持字母、数字(6-20)位',{icon:2,time:3000});
+			    return false;
+			}
+			return true;
+		}
+	
+	
+	
+	        //修改密码
+	    $('#change_pass').submit(function(){
+	
+	        var loadindex=layer.load(0, {shade: [0.5,'#fff']});
+	        
+	        var oldpass = $.trim($('#old_pass').val());
+	        var password = $.trim($('#new_pass').val());
+	        var passwordagain=$.trim($('#new_pass_again').val());
+	        if(checkpassword(password)==false){
+	        	layer.close(loadindex);
+	        	return false;
+	        }
+	        if(password!=passwordagain){
+	        	layer.msg('俩次输入密码不一样',{icon:2,time:3000});
+	        	layer.close(loadindex);
+	        	return false;
+	        }
+	        $.ajax({
+	            url:"{:url('user/usUpdatePassWord')}",
+	            type:'post',
+	            dataType:'json',
+	            data:{
+	                password:oldpass,
+	                newpassword:password
+	            },
+	            success:function(data){
+	
+	                if (data.code  == '1') {
+	                    layer.msg(data.msg,{icon:1,time:2000});
+	                    location.href="{:url('user/uscenter')}";
+	                }else{
+	                    layer.msg(data.msg,{icon:2,time:2000});
+	                    layer.close(loadindex);
+	                }
+	                console.log(data); 
+	            },
+	        })
+	
+	
+	    });
+	
+	</script>
+ </body>
+
+</html>

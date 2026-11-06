@@ -1,0 +1,1 @@
+<?php use think\Route;Route::rule('houtai','admin/login/index');

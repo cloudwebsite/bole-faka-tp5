@@ -1,0 +1,405 @@
+{include file="public/header" /}
+<link rel="stylesheet" type="text/css" href="/static/admin/webupload/webuploader.css">
+<link rel="stylesheet" type="text/css" href="/static/admin/webupload/style.css">
+<style type="text/css">
+/* TAB */
+.nav-tabs.nav>li>a {
+    padding: 10px 25px;
+    margin-right: 0;
+}
+.nav-tabs.nav>li>a:hover,
+.nav-tabs.nav>li.active>a {
+    border-top: 3px solid #1ab394;
+    padding-top: 8px;
+    border-bottom: 1px solid #FFFFFF;
+}
+.nav-tabs>li>a {
+    color: #A7B1C2;
+    font-weight: 500;  
+    margin-right: 2px;
+    line-height: 1.42857143;
+    border: 1px solid transparent;
+    border-radius: 0;
+}
+</style>
+
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>分站配置</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="form_basic.html#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content">       
+                    <div class="panel blank-panel">
+                        <div class="panel-heading">                     
+                            <div class="panel-options">
+                                <ul class="nav nav-tabs">
+                                    <li class="active"><a data-toggle="tab" href="#tab-1" aria-expanded="true">基本配置</a></li>
+                                    <li><a data-toggle="tab" href="#tab-2" aria-expanded="false">提现配置</a></li>
+                                    
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="panel-body">
+                            <div class="tab-content">
+                                <div id="tab-1" class="tab-pane active">
+                                    <form action="{:url('config/save')}" method="post" class="form-horizontal">
+                                        {:token()}
+                                                       
+                                        
+                                        <div class="hr-line-dashed"></div>                                
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">主站域名：</label>
+                                            <div class="input-group col-sm-4">                                              
+                                                <input type="text" class="form-control" name="config[main_webhost]" value="{$config.main_webhost}">
+                                                <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>主站域名请正确填写，否则前台打不开  例如：baidu.com 多个域名用 , 分割    例如 www.baidu.com,www.ccc.com,www.yx.com </span>                                           
+                                            </div>
+                                        </div> 
+                                        
+                                        <div class="hr-line-dashed"></div>
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">自助开通：</label>
+                                            <div class="input-group col-sm-4">
+                                                <div class="radio i-checks">
+                                                    <input type="radio" name='config[sub_zizhu]' value="1" {if condition="$config['sub_zizhu'] eq 1 "}checked{/if}/>自助开通&nbsp;&nbsp;
+                                                    <input type="radio" name='config[sub_zizhu]' value="0" {if condition="$config['sub_zizhu'] eq 0 "}checked{/if}/>手动开通
+                                                </div>
+                                            <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>自助开通：会员可通过网站自助开通分站  手动开通：仅管理员后台手动给会员开通</span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">分站年费：</label>
+                                            <div class="input-group col-sm-4">                                              
+                                                <input type="text" class="form-control" name="config[sub_year]" value="{$config.sub_year}">                                          
+                                            </div>
+                                        </div>
+										
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">分站永久费：</label>
+                                            <div class="input-group col-sm-4">                                              
+                                                <input type="text" class="form-control" name="config[sub_forever]" value="{$config.sub_forever}">                                          
+                                            </div>
+                                        </div>                               
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">分站域名：</label>
+                                            <div class="input-group col-sm-4">                                              
+                                                <input type="text" class="form-control" name="config[sub_webhost]" value="{$config.sub_webhost}">
+                                                <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>分站域名请正确填写，供用户自主选择  例如：baidu.com 多个域名用 , 分割    例如 baidu.com,ccc.com,yx.com </span>                                           
+                                            </div>
+                                        </div> 
+                                        <div class="hr-line-dashed"></div>
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">订单查询限制：</label>
+                                            <div class="input-group col-sm-4">
+                                                <div class="radio i-checks">
+                                                    <input type="radio" name='config[fz_selectauth]' value="0" {if condition="$config['fz_selectauth'] eq 0 "}checked{/if}/>开启&nbsp;&nbsp;
+                                                    <input type="radio" name='config[fz_selectauth]' value="1" {if condition="$config['fz_selectauth'] eq 1 "}checked{/if}/>关闭
+                                                </div>
+                                            <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>开启：会员只能通过购买的网站查询订单  关闭：会员可以通过主站和所有分站查询订单</span>
+                                            </div>
+                                        </div>
+                                        
+                                        <!--<div class="hr-line-dashed"></div>                                
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">分站价格（暂无功能）：</label>
+                                            <div class="input-group col-sm-4">                                              
+                                                <input type="text" class="form-control" name="config[fz_money]" value="{$config.fz_money}">
+                                                <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>单位（元） </span>                                           
+                                            </div>
+                                        </div>   
+                                        
+                                        <div class="hr-line-dashed"></div>                                
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">分站域名（暂无功能）：</label>
+                                            <div class="input-group col-sm-4">                                              
+                                                <input type="text" class="form-control" name="config[fz_host]" value="{$config.fz_host}">
+                                                <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>分站域名 </span>                                           
+                                            </div>
+                                        </div> 
+                                        
+                                        <div class="hr-line-dashed"></div>                                
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">分站IP（暂无功能）：</label>
+                                            <div class="input-group col-sm-4">                                              
+                                                <input type="text" class="form-control" name="config[fz_ip]" value="{$config.fz_ip}">
+                                                <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>分站IP </span>                                           
+                                            </div>
+                                        </div>  -->
+                                       
+                                       
+                                        
+                                        <div class="hr-line-dashed"></div>
+                                        <div class="form-group">
+                                            <div class="col-sm-4 col-sm-offset-3">
+                                                <button class="btn btn-primary" type="submit"><i class="fa fa-save"></i> 保存信息</button>&nbsp;&nbsp;&nbsp;
+                                                <a class="btn btn-danger" href="javascript:history.go(-1);"><i class="fa fa-close"></i> 返回</a>
+                                            </div>
+                                        </div>                               
+                                    </form>
+                                </div>
+                                
+                                
+                                <div id="tab-2" class="tab-pane">
+                                    <form action="{:url('config/save')}" method="post" class="form-horizontal">
+                                        {:token()}
+      
+                                        <div class="hr-line-dashed"></div>                                
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">单次提现最低金额：</label>
+                                            <div class="input-group col-sm-4">                                              
+                                                <input type="number" class="form-control" name="config[fx_txmoney]" value="{$config.fx_txmoney}">
+                                                <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>单次提现最低金额，0表示不限制 </span>                                           
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="hr-line-dashed"></div>                                
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">单日提现最大次数：</label>
+                                            <div class="input-group col-sm-4">                                              
+                                                <input type="number" class="form-control" name="config[fx_txcount]" value="{$config.fx_txcount}">
+                                                <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>单日提现最大次数，0表示不限制 </span>                                           
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="hr-line-dashed"></div> 
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">手续费类型：</label>
+                                            <div class="input-group col-sm-4">
+                                                <div class="radio i-checks">
+                                                    <input type="radio" name='config[fx_sxftype]' value="0" {if condition="$config['fx_sxftype'] eq 0 "}checked{/if}/>固定金额&nbsp;&nbsp;
+                                                    <input type="radio" name='config[fx_sxftype]' value="1" {if condition="$config['fx_sxftype'] eq 1 "}checked{/if}/>金额百分比                                    
+                                                </div>
+                                            <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>固定金额：手续费都是固定的  金额比例：按照单笔提现的金额x比例=手续费</span>
+                                            </div>
+                                        </div>
+                                        <div class="hr-line-dashed"></div>                                
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">单次提现手续费：</label>
+                                            <div class="input-group col-sm-4">                                              
+                                                <input type="number" class="form-control" name="config[fx_sxf]" value="{$config.fx_sxf}">
+                                                <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>单日提现最大次数，0表示无手续费 </span>                                           
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="hr-line-dashed"></div>
+                                        <div class="form-group">
+                                            <div class="col-sm-4 col-sm-offset-3">
+                                                <button class="btn btn-primary" type="submit"><i class="fa fa-save"></i> 保存信息</button>&nbsp;&nbsp;&nbsp;
+                                                <a class="btn btn-danger" href="javascript:history.go(-1);"><i class="fa fa-close"></i> 返回</a>
+                                            </div>
+                                        </div>                               
+                                    </form>
+                                </div>
+                       </div>
+                        </div>
+                    </div>         
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{include file="public/footer" /}
+<script type="text/javascript" src="/static/admin/webupload/webuploader.min.js"></script>
+<script type="text/javascript">
+
+var uploader=new Array();
+ $("div[id=imgPicker]").each(function(index){
+      console.log(index);
+        //上传图片,初始化WebUploader
+      var $list = $(this).prev();
+      if(index==0){
+      	 var thumbnailWidth = 413;   //缩略图高度和宽度 （单位是像素），当宽高度是0~1的时候，是按照百分比计算，具体可以看api文档
+      	var thumbnailHeight = 74;
+      }else{
+      var thumbnailWidth = 200;   //缩略图高度和宽度 （单位是像素），当宽高度是0~1的时候，是按照百分比计算，具体可以看api文档
+      var thumbnailHeight = 200;
+      }
+      
+      var data_photo=$(this).parent('div').eq(0).find('input');
+      var img_data=$(this).next().next().children("img");
+      //alert(data_photo.val());
+    // $(this).addClass('webuploader-container');
+     uploader[index] = WebUploader.create({
+     
+        auto: true,// 选完文件后，是否自动上传。   
+        swf: '/static/admin/webupload/Uploader.swf',// swf文件路径 
+        server: "{:url('Upload/uploadico')}",// 文件接收服务端。
+        duplicate :true,// 重复上传图片，true为可重复false为不可重复
+        pick:$(this),// 选择文件的按钮。可选。
+
+        accept: {
+            title: 'Images',
+            extensions: 'gif,jpg,jpeg,bmp,png,ico',
+            mimeTypes: 'image/*'
+        },
+
+        'onUploadSuccess': function(file, data, response) {
+           data_photo.val(data._raw);
+           img_data.attr('src', '/uploads/images/' + data._raw).show();
+           //img_data.hide();
+        }
+    });
+
+    uploader[index].on( 'fileQueued', function( file ) {
+      
+        
+        
+         var $li = $(  
+               '<div id="' + file.id + '" class="file-item thumbnail">' +  
+                   '<img>' +  
+                   '<div class="info">' + file.name + '</div>' +  
+               '</div>'  
+               ),  
+           $img = $li.find('img');  
+  
+  
+       // $list为容器jQuery实例  
+       //$list.append( $li );  
+   // 创建缩略图  
+       // 如果为非图片文件，可以不用调用此方法。  
+       // thumbnailWidth x thumbnailHeight 为 100 x 100  
+       uploader[index].makeThumb( file, function( error, src ) {   //webuploader方法  
+           if ( error ) {  
+               //$img.replaceWith('<span>不能预览</span>');  
+               return;  
+           }  
+  
+           //$img.attr( 'src', src );  
+       }, thumbnailWidth, thumbnailHeight );  
+     
+    });
+      // 文件上传过程中创建进度条实时显示。
+    uploader[index].on( 'uploadProgress', function( file, percentage ) {
+        var $li = $( '#'+file.id ),
+            $percent = $li.find('.progress span');
+ 
+        // 避免重复创建
+        if ( !$percent.length ) {
+            $percent = $('<p class="progress"><span></span></p>')
+                    .appendTo( $li )
+                    .find('span');
+        }
+ 
+        $percent.css( 'width', percentage * 100 + '%' );
+    });
+
+    // 文件上传成功
+    uploader[index].on( 'uploadSuccess', function( file ) {
+       
+         layer.alert("上传成功",{offset: '250px',icon:1});  
+         
+    });
+
+    // 文件上传失败，显示上传出错。
+    uploader[index].on( 'uploadError', function( file ) {
+        $( '#'+file.id ).find('p.state').text('上传出错!');
+    }); 
+    
+    // 完成上传完了，成功或者失败，先删除进度条。
+    uploader[index].on( 'uploadComplete', function( file ) {
+        $( '#'+file.id ).find('.progress').remove();
+    });
+    
+
+    });
+  
+
+
+
+
+    var config = {
+        '.chosen-select': {},                    
+    }
+    for (var selector in config) {
+        $(selector).chosen(config[selector]);
+    }
+ $(function() {
+		$('#puttoken').click(function(){
+			 layer.confirm('是否生成新的TOKEN?', {
+										  btn: ['确定','取消'] //按钮
+										}, function(index){
+										  len = 32;
+										　　var $chars = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678';    /****默认去掉了容易混淆的字符oOLl,9gq,Vv,Uu,I1****/
+										　　var maxPos = $chars.length;
+										　　var pwd = '';
+										　　for (i = 0; i < len; i++) {
+										　　　　pwd += $chars.charAt(Math.floor(Math.random() * maxPos));
+										　　}
+												layer.msg(pwd+"<br><br>请复制牢记您的新TOKEN", {
+													icon:1
+												  ,time: 0 //不自动关闭
+												  ,btn: ['确定生成', '取消生成']
+												  ,yes: function(index){
+												  	$('#tokentext').val(pwd);
+											    	$("#formtoken").attr("action", "{:url('save')}");    
+								    				$("#formtoken").submit(); 
+												  }
+												});
+												
+										　　
+										  //layer.close(index);
+										},function(index){
+										  layer.close(index);																  
+										});
+		　　
+    			return false;
+				});	
+		$('button[name=qiyong]').click(function(){
+
+			var index= $(this).attr("id");
+			if(index=='moban1'){
+				$('#moban_index').val("1");
+			}else if(index=='moban2'){
+				$('#moban_index').val("2");
+			}else if(index=='moban3'){
+				$('#moban_index').val("3");
+			}else if(index=='moban4'){
+				$('#moban_index').val("4");
+			}
+			
+			$("#formmoban").attr("action", "{:url('save')}");    
+			$("#formmoban").submit(); 
+										
+		　　
+    			return false;
+				});
+		$('button[name=wapqiyong]').click(function(){
+
+			var index= $(this).attr("id");
+			if(index=='wapmoban1'){
+				$('#wapmoban_index').val("1");
+			}else if(index=='wapmoban2'){
+				$('#wapmoban_index').val("2");
+			}else if(index=='wapmoban3'){
+				$('#wapmoban_index').val("3");
+			}
+			
+			$("#wapformmoban").attr("action", "{:url('save')}");    
+			$("#wapformmoban").submit(); 
+										
+		　　
+    			return false;
+				});
+		$('button[name=deleteimg]').click(function(){
+            var inputname =$(this).parent('div').parent('div').find("input").val("");
+            layer.msg('删除成功，保存配置即可生效');
+				});
+		
+});						   
+</script>
+</body>
+</html>

@@ -1,0 +1,161 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0 user-scalable=no">
+		<script>
+			document.documentElement.style.fontSize = document.documentElement.clientWidth / 750 * 40 + "px";
+		</script>
+		<meta name="format-detection" content="telephone=no" />
+		<title>{:config('web_site_title')}</title>
+		<link rel="stylesheet" type="text/css" href="__IMGMOBILE__/css/foxui.min.css-v=0.2.css">
+		<link rel="stylesheet" type="text/css" href="__IMGMOBILE__/css/style.css-v=3.0.0.css">
+
+     
+		<link rel="stylesheet" type="text/css" href="__IMGMOBILE__/css/iconfont.css-v=2017070719.css">
+
+		<script src="__IMGMOBILE__/js/jquery.min.js"></script>
+
+		<style>
+			.danmu {
+				display: none;
+				opacity: 0;
+			}
+		</style>
+	</head>
+
+	<body onload="Init()">
+
+		<div class='fui-page-group '>
+
+			<style>
+				.fui-content {
+					background-color: #019fe8;
+					background-image: url("__IMGMOBILE__/img/alipay.png");
+					background-repeat: no-repeat;
+					background-size: 80%;
+					background-position: center 8rem;
+				}
+				
+				.layer {
+					position: fixed;
+					top: 0;
+					left: 0;
+					right: 0;
+					bottom: 0;
+					background-image: url("__IMGMOBILE__/img/guide.png");
+					background-repeat: no-repeat;
+					background-position: top right;
+					background-size: 28%;
+					color: #fff;
+				}
+				
+				.layer .text {
+					height: 10rem;
+					width: 13rem;
+					color: #fff;
+					position: absolute;
+					top: 2.5rem;
+					left: 50%;
+					margin-left: -5.5rem;
+					font-size: 1.1rem;
+				}
+				
+				.layer .tip {
+					height: 1rem;
+					left: 0;
+					right: 0;
+					bottom: 3rem;
+					position: absolute;
+					font-size: 0.8rem;
+					text-align: center;
+				}
+			</style>
+
+			<div id="main" class='fui-page  fui-page-current order-create-page' style="display: none;">
+				<div class='fui-content'>
+					<div class="layer">
+						<div class="text">
+							<p>① 请点击右上角</p>
+							<p>② 通过【浏览器打开】</p>
+							<p>③ 完成支付</p>
+							<p>④ 返回此页面</p>
+						</div>
+						<div class="tip">TIP: 支付完成后自动跳转</div>
+					</div>
+				</div>
+			</div>
+
+			<script language='javascript'>
+				var width = window.screen.width * window.devicePixelRatio;
+
+				var height = window.screen.height * window.devicePixelRatio;
+
+				var h = document.body.offsetHeight * window.devicePixelRatio;
+
+				if(height == 2436 && width == 1125) {
+
+					$(".fui-navbar,.cart-list,.fui-footer,.fui-content.navbar").addClass('iphonex')
+
+				}
+
+				if(h == 1923) {
+
+					$(".fui-navbar,.cart-list,.fui-footer,.fui-content.navbar").removeClass('iphonex');
+
+				}
+				var setInt;	
+				function Init() {
+					var callbackurl = "{$callbackurl}";
+					var isweixin = "{$isweixin}";
+					if(isweixin == '0') {
+						location.href = callbackurl;
+					}else{
+						$('#main').show();
+						setInt=setInterval('ajaxstatus()',2000); 
+					}
+				}
+							
+					
+				function ajaxstatus() {
+						var p2_Order="{$param['p2_Order']}";
+						var date = new Date();
+						var timer = date.getTime().toString();
+					        $.ajax({
+					            url:"{:url('pay/index/checkdingdan')}?mcard="+p2_Order+"&t=" + timer,
+					            type: 'GET',
+					            dataType:'text',
+					            success: function (res) {	                
+					                if (res==1) { //订单状态为1表示支付成功	              
+					                  	clearInterval(setInt);
+					                 	location.href = "{:url('@mobile/Getmail/index')}"+"?mpid={$param['p5_Pid']}&number={$param['p2_Order']}";
+					                	setTimeout("documentwrite()", 5000);					                
+					                } 
+									if (res==3) { //订单状态为1表示支付成功	              
+					                  	clearInterval(setInt);
+					                 	location.href = "{:url('@mobile/user/uscenter')}";
+					                	setTimeout("documentwriteuser()", 5000);					                
+					                }
+					            },
+					            error: function () {
+					                
+					            }
+					        });
+					    
+					
+					}
+					
+					function documentwrite() {
+						document.write("你的订单编号是：{$param['p2_Order']}<p><a href={:config('is_https')}://" + window.location.host + "/mobile/getmail/index.html?mpid={$param['p5_Pid']}&number={$param['p2_Order']}>支付成功，如5秒内没跳转请点击我</a>");
+					}
+					
+					function documentwriteuser() {
+
+					document.write("你的订单编号是：{$param['p2_Order']}<p><a href={:config('is_https')}://" + window.location.host + "/mobile/user/uspaylog.html>支付成功，如5秒内没跳转请点击我</a><script>location.href = \"{:url('@mobile/user/uscenter')}\"+\"\";<\/script>");
+				}
+			</script>
+
+	</body>
+
+</html>

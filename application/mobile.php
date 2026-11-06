@@ -1,0 +1,1 @@
+<?php use think\Route;Route::rule('mg/:mpid','mobile/Index/goodsdetail');Route::rule('mg','mobile/Index/goodsdetail');Route::rule('mc/:lmid','mobile/index/categorybyid');

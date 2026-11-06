@@ -1,0 +1,24 @@
+{include file="public/header" /}
+
+<body>
+
+	<script src="{:config('cdnpublic')}jquery/2.1.4/jquery.min.js"></script>
+	<script src="__JS__/js.js"></script>
+	<script src="{:config('cdnpublic')}layer/3.1.1/layer.js"></script>
+	<script src="/static/admin/js/lunhui.js"></script>
+	<script type="text/javascript">
+		var msg = '{:addslashes($errormsg)}';
+		parent.layer.closeAll('loading');
+		layer.open({
+			title: '警告提示',
+			content: msg,
+			yes: function(index, layero) {
+				location.href = "{:url('Index/index')}";
+				layer.close(index); //如果设定了yes回调，需进行手工关闭
+			}
+		});
+	</script>
+
+</body>
+
+</html>

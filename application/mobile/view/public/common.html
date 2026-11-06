@@ -1,0 +1,64 @@
+  //商品详情
+function goodsdetail(id){
+  	  layer.open({
+	    type: 2
+	    ,content: '加载中'
+	    ,shade: 'background-color: rgba(0,0,0,.2)'
+	    ,shadeClose:false
+	  });
+  	var str="{:url("mobile/Index/goodsdetail",['mpid'=>'goodid'])}";
+  	var url=str.replace('goodid',id);
+  	location.href=url;
+  	layer.closeAll();
+ }
+//首页
+function home(){
+	layer.open({
+	    type: 2
+	    ,content: '加载中'
+	    ,shade: 'background-color: rgba(0,0,0,.2)'
+	    ,shadeClose:false
+	  });
+	location.href="{:url("Index/index")}";
+	layer.closeAll();
+}
+//全部分类
+function list(){
+	layer.open({
+	    type: 2
+	    ,content: '加载中'
+	    ,shade: 'background-color: rgba(0,0,0,.2)'
+	    ,shadeClose:false
+	  });
+	location.href="{:url("Index/category")}";
+	layer.closeAll();
+}
+//订单查询
+function selectorder(){
+	layer.open({
+	    type: 2
+	    ,content: '加载中'
+	    ,shade: 'background-color: rgba(0,0,0,.2)'
+	    ,shadeClose:false
+	  });
+	location.href="{:url("Index/selectorder")}";
+	layer.closeAll();
+}
+//返回上一页
+function back(){
+	window.location.href=document.referrer;
+}
+//指定商品分类
+function categorybyid(id){
+	layer.open({
+	    type: 2
+	    ,content: '加载中'
+	    ,shade: 'background-color: rgba(0,0,0,.2)'
+	    ,shadeClose:false
+	  });
+	var str="{:url("mobile/Index/categorybyid",['lmid'=>'cateid'])}";
+  var url=str.replace('cateid',id);
+  location.href=url;
+	layer.closeAll();
+}
+

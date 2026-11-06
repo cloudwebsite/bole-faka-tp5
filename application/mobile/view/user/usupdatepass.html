@@ -1,0 +1,274 @@
+<!doctype html>
+
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0 user-scalable=no">
+		<script>
+			document.documentElement.style.fontSize = document.documentElement.clientWidth / 750 * 40 + "px";
+		</script>
+		<meta name="format-detection" content="telephone=no" />
+		<title>{:config('web_site_title')}</title>
+		<link rel="stylesheet" type="text/css" href="__IMGMOBILE__/css/foxui.min.css-v=0.2.css">
+		<link rel="stylesheet" type="text/css" href="__IMGMOBILE__/css/style.css-v=3.0.0.css">
+
+		<link rel="stylesheet" type="text/css" href="__IMGMOBILE__/css/iconfont.css-v=2017070719.css">
+		<!--<link rel="stylesheet" href="//at.alicdn.com/t/font_82607_e93d131lklr6n7b9.css">-->
+
+		<script type="text/javascript" src="{:config('cdnpublic')}jquery/1.8.2/jquery.min.js"></script>
+
+		<link rel="stylesheet" href="{:config('cdnpublic')}layer/3.1.1/mobile/need/layer.css" />
+		<script type="text/javascript" src="{:config('cdnpublic')}layer/3.1.1/mobile/layer.js"></script>
+		<style>
+			.aligncenter {
+				clear: both;
+				display: block;
+				margin: auto;
+			}
+			.header .name {
+			    height: 2.5rem;
+			    color: rgb(18, 115, 215);
+			    text-align: center;
+			    font-size: 1rem;
+			    line-height: 2.5rem;
+			}
+			.text {
+			    padding: 0 1.6rem;
+			    color: #888;
+			    font-size: 0.8rem;
+			    text-align: center;
+			    line-height: 3rem;
+			}
+			body {
+				position: absolute;
+				;
+				max-width: 750px;
+				margin: auto;
+			}
+			
+			.fui-navbar {
+				max-width: 750px;
+			}
+			
+			.fui-navbar,
+			.fui-footer {
+				max-width: 750px;
+			}
+			
+			.fui-page.fui-page-from-center-to-left,
+			.fui-page-group.fui-page-from-center-to-left,
+			.fui-page.fui-page-from-center-to-right,
+			.fui-page-group.fui-page-from-center-to-right,
+			.fui-page.fui-page-from-right-to-center,
+			.fui-page-group.fui-page-from-right-to-center,
+			.fui-page.fui-page-from-left-to-center,
+			.fui-page-group.fui-page-from-left-to-center {
+				-webkit-animation: pageFromCenterToRight 0ms forwards;
+				animation: pageFromCenterToRight 0ms forwards;
+			}
+		</style>
+
+	</head>
+
+	<body ontouchstart>
+
+		<div class='fui-page-group '>
+
+			<div class='fui-page fui-page-current  page-goods-detail' id='page-goods-detail-index' style="background-color: #fff">
+
+				<div class="fui-header">
+					<div class="fui-header-left">
+						<a class="back" id="btn-back" onclick="back();"></a>
+					</div>
+					<div class="title">
+						 修改密码</div>
+					<div class="fui-header-right"></div>
+				</div>
+				<div class="fui-content navbar order-list" style="top:1.9rem;">
+					<form  method="post" id="change_pass" onsubmit="return false;">
+					<div class="fui-content-inner">
+						<div class="container" id='list-content'>
+						
+						<div class="fui-cell-group">
+							<div class="header">
+				            
+				            	<div class="name">{:config('m_title')}</div>
+				        	</div>	
+							<div class="fui-cell">
+								<div class="fui-cell-icon">
+									<i class="icon icon-people"></i>
+								</div>
+								<div class="fui-cell-info">
+									<input type="password" placeholder="请输入原密码" class="fui-input" id="old_pass" value="">
+								</div>
+							</div>
+							
+						
+							<div class="fui-cell">
+								<div class="fui-cell-icon">
+									<i class="icon icon-lock"></i>
+								</div>
+								<div class="fui-cell-info">
+									<input type="password" placeholder="请输入新密码密码" class="fui-input" id="new_pass">
+								</div>
+							</div>
+							<div class="fui-cell">
+								<div class="fui-cell-icon">
+									<i class="icon icon-lock"></i>
+								</div>
+								<div class="fui-cell-info">
+									<input type="password" placeholder="请再次输入新密码密码" class="fui-input" id="new_pass_again">
+								</div>
+							</div>
+							
+							<div style="text-align: center;"><button class="btn"   type="submit" style="width: 80%;">立即修改</button></div>
+							
+							
+						</div>
+										
+						
+							
+
+						</div>
+					</div>
+					</form>
+				</div>
+
+				<div id='comments-container'></div>
+
+				
+
+			</div>
+
+		</div>
+		<script type="text/javascript" src="{:config('cdnpublic')}jquery.form/3.51/jquery.form.min.js"></script>
+		<script type="text/javascript" src="/static/admin/js/lunhui.js"></script>
+		<script type="text/javascript">
+			{include file="public/common" /}
+			 function in_array(stringToSearch, arrayToSearch) {
+		     for (s = 0; s < arrayToSearch.length; s++) {
+		      thisEntry = arrayToSearch[s].toString();
+		      if (thisEntry == stringToSearch) {
+		       return true;
+		      }
+		     }
+		     return false;
+		}
+		
+		function checkpassword(password){
+			var rupsw=["123456","a123456","123456a","5201314","111111","000000","qq123456","123123","qwe123"];
+			if(in_array(password,rupsw)){
+			    layer.open({
+							content: password+'此密码是弱密码不能使用!!',
+							btn: '我知道了',
+							time: 30 //2秒后自动关闭						
+							});	
+			  	
+			    return false;
+			}
+			if(password.length<6){
+			  	layer.open({
+							content: '密码长度不能小于6个字符串',
+							btn: '我知道了',
+							time: 30 //2秒后自动关闭						
+							});	
+			  	
+			  	
+			    return false;
+		  	}
+		  	if(password.length>20){
+			  	layer.open({
+							content: '密码长度不能大于20个字符串',
+							btn: '我知道了',
+							time: 30 //2秒后自动关闭						
+							});	
+			  	
+			  	
+			    return false;
+		  	}
+		  	if(password==''){
+		  		layer.open({
+							content: '密码不能为空!!',
+							btn: '我知道了',
+							time: 30 //2秒后自动关闭						
+							});	
+		  		
+			  	layer.msg('密码不能为空',{icon:2,time:3000});
+			    return false;
+		  	}
+		  	var reg = new RegExp("[\\u4E00-\\u9FFF]+","g");
+			if(reg.test(password)){
+				layer.open({
+							content: '密码不支持汉字，只支持字母、数字(6-20)位!!',
+							btn: '我知道了',
+							time: 30 //2秒后自动关闭						
+							});	
+				
+			  	
+			    return false;
+			}
+			return true;
+		}
+	
+	
+	
+	        //修改密码
+	    $('#change_pass').submit(function(){
+	
+	        var loadindex= layer.open({type: 2});;
+	        
+	        var oldpass = $.trim($('#old_pass').val());
+	        var password = $.trim($('#new_pass').val());
+	        var passwordagain=$.trim($('#new_pass_again').val());
+	        if(checkpassword(password)==false){
+	        	layer.close(loadindex);
+	        	return false;
+	        }
+	        if(password!=passwordagain){
+	        	layer.open({
+							content: '俩次输入密码不一样!!',
+							btn: '我知道了',
+							time: 30 //2秒后自动关闭						
+							});	
+	        	
+	        	layer.close(loadindex);
+	        	return false;
+	        }
+	        $.ajax({
+	            url:"{:url('user/usUpdatePassWord')}",
+	            type:'post',
+	            dataType:'json',
+	            data:{
+	                password:oldpass,
+	                newpassword:password
+	            },
+	            success:function(data){
+	
+	                if (data.code  == '1') {
+	                    layer.open({
+							content: data.msg,
+							btn: '我知道了',
+							time: 30 //2秒后自动关闭						
+							});		                 
+	                    location.href="{:url('user/uscenter')}";
+	                }else{
+	                    layer.open({
+							content: data.msg,
+							btn: '我知道了',
+							time: 30 //2秒后自动关闭						
+							});	
+	                   
+	                    layer.close(loadindex);
+	                }
+	                console.log(data); 
+	            },
+	        })
+	
+	
+	    });
+	
+		</script>
+	</body>
+
+</html>

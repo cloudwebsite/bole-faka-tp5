@@ -1,0 +1,832 @@
+{include file="public/header" /}
+<link href="{:config('cdnpublic')}twitter-bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+<link href="{:config('cdnpublic')}font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet">
+<link href="{:config('cdnpublic')}animate.css/2.0/animate.min.css" rel="stylesheet">
+<link href="{:config('cdnpublic')}iCheck/1.0.2/skins/square/green.css" rel="stylesheet">
+<link href="{:config('cdnpublic')}chosen/1.1.0/chosen.min.css" rel="stylesheet">
+<link href="{:config('cdnpublic')}switchery/0.8.2/switchery.css" rel="stylesheet">
+<link href="/static/admin/css/style.min.css?v=4.1.0" rel="stylesheet">
+<link href="{:config('cdnpublic')}sweetalert/1.0.1/sweetalert.min.css" rel="stylesheet">
+<body>
+{include file="public/top_jingdian" /}
+	<div id="container">
+		<div class="row">
+
+			<div class="col-xs-1 col-sm-1 col-md-2 col-lg-3"></div>
+			<div class="col-xs-10 col-sm-10 col-md-8 col-lg-6" style="margin-top: 20px;">
+
+				<form method="post" action="" id="formid">
+					<div class="panel panel-default" >
+						<div class="panel-heading">
+							<h3 class="panel-title">
+							购买详情
+						</h3>
+						</div>
+						<div class="panel-body">
+							<input type="hidden" id="mpid" name="p5_Pid" value="{$param['mpid']}">
+							<input type="hidden" id="mmin" name="mmin" value="{$param['mmin']}">
+							<input type="hidden" id="mmax" name="mmax" value="{$param['mmax']}">
+							<input style="display:none" type="text" name="p2_Order" id="p2_Order" value="">
+							<input type="hidden" id="mtitle" name="title" value="{:htmlspecialchars_decode($param['mname'])}">
+							<p><span class="glyphicon glyphicon-align-justify"> 商品名称：</span>{:htmlspecialchars_decode($param['mname'])}</p>
+
+							<p><span class="glyphicon glyphicon-align-justify"> 商品单价：</span>{$param['mprice']/100} 元</p>
+							<p><span class="glyphicon glyphicon-align-justify"> 发送倍数：</span>买一件发送{$param['sendbeishu']}个卡密</p>
+							{if condition="$param['isyh'] eq 0"}
+							<p><span class="glyphicon glyphicon-align-justify"> 商品优惠：</span>无</p>
+
+							{else/}
+
+							<table class="table" style="margin-bottom: -15px !important">
+
+								<th>数量≥个</th>
+								<th>单价(元) </th>
+								{foreach name="$param['data_yh']" item="vo"}
+								<tr>
+									<td>{$vo['mdy']}</td>
+									<td>{$vo['mdj']/100}</td>
+								</tr>
+								{/foreach}
+							</table>
+
+							{/if}
+							
+						</div>
+					</div>
+
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<h3 class="panel-title">
+									购买数量
+								</h3>
+						</div>
+						<div class="panel-body">
+							<input style="display:none" type="text" name="biaoshi" id="biaoshi" value="">
+
+							<p>购买数量： <input id="buynum" value="" class="form-control" name="buynum" type="text" style="width:35%;text-align:center;display:inline;" onkeyup="if(isNaN(value))execCommand('undo')" onafterpaste="if(isNaN(value))execCommand('undo')" placeholder="请输入购买数量">
+								<!--<p>购买数量： <input id="p3_Amt" name="p3_Amt" type="text" style="width:35%;text-align:center;" onkeyup="if(isNaN(value))execCommand('undo')" onafterpaste="if(isNaN(value))execCommand('undo')" placeholder="请输入购买金额">-->
+								<span id="tip" style="padding:5px; margin-bottom: 0px;"> 库存  {$param['countnum']} 个 购买一件发{$param['sendbeishu']}个</span></p>
+							{if condition="session('useraccount.account') eq null"}
+							<p>联系手机： <input type="text" id="Mobile" class="form-control" style="width:35%;text-align:center;display:inline;" onKeyUp="value=value.replace(/[^\d|chun]/g,'')" placeholder="请输入联系方式">
+								<span id="mobiletip" style="padding:5px; margin-bottom: 0px;"> 
+													   	 {if condition="config('lianxi_mobile') eq 0"}
+													   	 选填 用来查询订单使用，推荐填写
+													   	 {else/} 
+													   	 必填 用来查询订单使用，推荐填写
+													   	{/if}
+													   	</span></p>
+							<p>接收邮箱： <input type="text" id="Email" class="form-control" style="width:35%;text-align:center;display:inline;" placeholder="请输入接收邮箱">
+								<span id="emailtip" style="padding:5px; margin-bottom: 0px;"> 
+													   	 {if condition="config('lianxi_email') eq 0"}
+													   	 选填 用来接收卡密信息，不填写则不发送
+													   	 {else/} 
+													   	 必填 用来接收卡密信息
+													   	{/if}
+													   	</span>
+							</p>
+							{/if}
+						</div>
+					</div>
+					
+					{if condition="$param['isattach'] eq 1"}
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<h3 class="panel-title" style="color:red">
+									*订单设置
+							</h3>
+						</div>
+						<div class="panel-body">
+							
+							<table class="table table-bordered " style="margin-bottom: 0px !important">
+
+								{foreach name="$attach" item="vo"}	
+								<tr>
+									<td class="text-right" width="1%" bgcolor="#5cb85c" style="color:#fff;white-space: nowrap;">{$vo['title']}</td>
+									<td><input  id="attach{$vo.id}" value="" class="form-control" name="attach[{$vo.id}]" type="text" style="text-align:center;display:inline;"  placeholder="{$vo.tip}"></td>
+															
+								</tr>
+								{/foreach}
+							</table>		
+						</div>
+					</div>
+					{/if}
+					
+					
+					
+
+					<div class="panel panel-default">
+						<div class="text-center panel-body">
+
+							<span style="font-size: 18px;font-weight: bold;color: #636363;">你应付总金额 &nbsp;<font color="red" id="Money" name="Money">&nbsp;0.00&nbsp;&nbsp;</font> 元</span>
+							<input style="display:none" type="text" name="p3_Amt" id="p3_Amt" value="">
+						</div>
+					</div>
+					{if condition="session('useraccount.account') neq null"}
+					{if condition="$param['useraccount']['money'] egt 0"}
+					<div class="panel panel-default" id="yuepay">
+						<div class="panel-heading">
+							<h3 class="panel-title">
+							余额支付
+						</h3>
+						</div>
+						<div class="panel-body">
+							
+							<div>
+								<span><input type="checkbox" id="userbalance" checked="checked" disabled="disabled">&nbsp;使用余额</span><span class="yeuse">（我的余额：<b class="orange-bold">{$param['useraccount']['money']}</b>元）</span>。
+							</div>
+						</div>
+					</div>
+					{/if}
+					{/if}
+
+					<div class="panel panel-default" id="paytype">
+						<div class="panel-heading">
+							<h3 class="panel-title">
+							选择支付方式
+						</h3>
+						</div>
+						<div class="panel-body">
+							
+							<div>
+								<ul>
+									{if condition="config('balance_pay_only') neq 1 && config('balance_pay_only') neq '1' && config('blfk_pay_alipay') neq '0'"}
+									<li style="margin-left: 18px;margin-bottom: 20px;float: left;list-style: none;"><input type="radio" name="hehe" value="alipay" title="支付宝当面付" id="alipay" class="hehe"><span><label for="alipay"><img id='close' style='vertical-align:middle;' src='__IMG__/newali.png'  /></label></span></li>
+									{/if} 
+									{if condition="config('balance_pay_only') neq 1 && config('balance_pay_only') neq '1' && config('blfk_pay_qqpay') neq '0'"}
+									<li style="margin-left: 18px;margin-bottom: 20px;float: left;list-style: none;"><input type="radio" name="hehe" value="qqpay" title="QQ钱包" id="qqpay" class="hehe"><label for="qqpay"><img id='close' style='vertical-align:middle;' src='__IMG__/newqqpay.png'  /></label></li>
+									{/if}
+									{if condition="config('balance_pay_only') neq 1 && config('balance_pay_only') neq '1' && config('blfk_pay_wxpay') neq '0'"}
+									<li style="margin-left: 18px;margin-bottom: 20px;float: left;list-style: none;"><input type="radio" name="hehe" value="wxpay" title="微信支付" id="wxpay" class="hehe"><label for="wxpay"><img id='close' style='vertical-align:middle;' src='__IMG__/newwx.png'  /></label></li>
+									{/if}
+									{if condition="config('balance_pay_only') neq 1 && config('balance_pay_only') neq '1' && config('blfk_pay_usdtpay') neq '0'"}
+									<li style="margin-left: 18px;margin-bottom: 20px;float: left;list-style: none;"><input type="radio" name="hehe" value="usdtpay" title="USDT支付" id="usdtpay" class="hehe"><label for="usdtpay"><img id='close' style='vertical-align:middle;' src='__IMG__/newusdt.png'  /></label></li>
+									{/if} 
+									{if condition="config('balance_pay_only') neq 1 && config('balance_pay_only') neq '1' && config('blfk_pay_unionpay') neq '0'"}
+									<li style="margin-left: 18px;margin-bottom: 20px;float: left;list-style: none;"><input type="radio" name="hehe" value="unionPay" title="聚合支付" id="unionpay" class="hehe"><label for="unionpay"><img id='close' style='vertical-align:middle;' src='__IMG__/newjuhe.png'  /></label></li>
+									{/if} 
+									{if condition="config('balance_pay_only') neq 1 && config('balance_pay_only') neq '1' && config('blfk_pay_tenpay') neq '0'"}
+									<li style="margin-left: 18px;margin-bottom: 20px;float: left;list-style: none;"><input type="radio" name="hehe" value="tenpay" title="财付通" id="tenpay" class="hehe"><label for="tenpay"><img id='close' style='vertical-align:middle;' src='__IMG__/newtenpay.png'  /></label></li>
+									{/if} 
+									<input type="hidden" name="pd_FrpId" id="pd_FrpId" value="alipay">
+									<input type="hidden" name="pa_MP" id="pa_MP" value="">
+								</ul>
+							</div>
+						</div> 
+					</div>
+					<p class="alert alert-warning">请确定是否要进行购买？(请注意,提错不换!!!!)</p>
+
+					<div class="panel panel-default">
+						<div class="text-center panel-body">
+							<button type="button" id="ok" name="ok" class="btn btn-primary btn-lg" style="margin-right: 10%;"> 确定购买</button>
+
+							<button type="button" name="call" class="btn btn-waring btn-lg" style="margin-left: 10%;" onclick="quxiao();"> 取消购买</button>
+
+						</div>
+					</div>
+
+				</form>
+
+			</div>
+
+			<div class="col-xs-1 col-sm-1 col-md-2 col-lg-3"></div>
+		</div>
+		{include file="public/footer" /}
+	</div>
+
+	<script src="{:config('cdnpublic')}jquery/2.1.4/jquery.min.js"></script>
+	<script src="__JS__/js.js"></script>
+	<script src="{:config('cdnpublic')}layer/3.1.1/layer.js"></script>
+	{include file="public/order_disclaimer_boot" /}
+
+	<script>
+        $(document).ready(function () {
+        	$('#paytype li input:first').attr('checked', 'checked');
+        	$('#pd_FrpId').val($('#paytype li input:first').val());
+        });
+		{if condition="session('useraccount.account') neq null"}
+		{if condition="$param['useraccount']['money'] egt 0"}
+		
+		$('#paytype').hide();
+		{else/}
+		$('#paytype').show();
+		{/if}
+		{/if}	
+		var lianxi_mobile = {:config('lianxi_mobile')};
+		var lianxi_email = {:config('lianxi_email')};
+		var goods = {:json_encode($param['data_yh'])};
+		var data = eval(goods);
+		
+		function randomNum(n) {
+			var t = '';
+			for(var i = 0; i < n; i++) {
+				t += Math.floor(Math.random() * 10);
+			}
+			return t;
+		}
+
+		function checkform() {
+
+		}
+
+		
+
+		function checkMobile(mobile) {
+
+			if(mobile.length == 11) {
+
+				return true;
+			}
+			return false;
+		}
+
+		function checkEmail(email) {
+
+			//对电子邮件的验证
+			var myreg = /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/;
+			if(!myreg.test(email)) {
+				myreg.focus();
+				return false;
+			}
+			return true;
+		}
+
+		function xx() {
+
+			//注意：parent 是 JS 自带的全局对象，可用于操作父页面
+			var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+			document.getElementById("formid").action = "__ZYPAY__/req.php";
+
+			document.getElementById("formid").submit();
+			//parent.layer.close(index);
+
+		}
+
+		function quxiao() {
+
+			window.parent.location.href = "{:config('is_https')}://" + window.location.host;
+
+		}
+
+		
+
+		$(function() {
+
+			$("#Mobile").blur(function() {
+				var mobile = $('#Mobile').val();
+
+				if(mobile !== '') {
+					if(!checkMobile(mobile)) {
+						$("#mobiletip").attr('class', '');
+						$("#mobiletip").attr('style', 'color:red');
+						if(lianxi_mobile == '1') {
+							$("#mobiletip").html("手机号输入不正确");
+						} else {
+							$("#mobiletip").html("手机号输入不正确 可以为空");
+						}
+
+					} else {
+						$("#mobiletip").attr('class', 'glyphicon glyphicon-ok');
+						$("#mobiletip").attr('style', 'color:blue');
+						$("#mobiletip").html("");
+					}
+				} else {
+					$("#mobiletip").attr('class', '');
+					$("#mobiletip").attr('style', '');
+
+					if(lianxi_mobile == '1') {
+						$("#mobiletip").html("必填 用来查询订单使用");
+					} else {
+						$("#mobiletip").html("选填 用来查询订单使用，推荐填写");
+					}
+				}
+			});
+
+			$("#Email").blur(function() {
+				var mobile = $('#Email').val();
+
+				if(mobile !== '') {
+					if(!mobile.match(/^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((\.[a-zA-Z0-9_-]{2,3}){1,2})$/)) {
+						$("#emailtip").attr('class', '');
+						$("#emailtip").attr('style', 'color:red');
+						if(lianxi_email == '1') {
+							$("#emailtip").html("邮箱格式不正确");
+						} else {
+							$("#emailtip").html("邮箱格式不正确 可以为空");
+						}
+
+					} else {
+						$("#emailtip").attr('class', 'glyphicon glyphicon-ok');
+						$("#emailtip").attr('style', 'color:blue');
+						$("#emailtip").html("");
+					}
+
+				} else if($("#emailtip").html() == '邮箱格式不正确 可以为空' || $("#emailtip").html() == '邮箱格式不正确') {
+					$("#emailtip").attr('class', '');
+					$("#emailtip").attr('style', '');
+
+					if(lianxi_email == '1') {
+						$("#emailtip").html("必填 用来接收卡密信息");
+					} else {
+						$("#emailtip").html("选填 用来接收卡密信息");
+					}
+
+				} else {
+					$("#emailtip").attr('class', '');
+					$("#emailtip").attr('style', '');
+					if(lianxi_email == '1') {
+						$("#emailtip").html("必填 用来接收卡密信息");
+					} else {
+						$("#emailtip").html("选填 用来接收卡密信息");
+					}
+				}
+			});
+
+			$('#buynum').bind('input propertychange', function() {
+
+				var mpid = $('#mpid').val();
+				var buynum = parseInt($('#buynum').val());
+				var mmin = parseInt($('#mmin').val());
+				var mmax = parseInt($('#mmax').val());
+				$("#biaoshi").val("0");
+				var money = 0;
+				var price = parseFloat({$param['mprice']/100});
+				if(buynum !== 0 && !isNaN(buynum)) {
+					$("#Money").html("0.00");
+					if(buynum < mmin) {
+						$("#tip").attr('style', 'color:red');
+						$("#tip").html("最小购买数量：" + mmin + " 个");
+						$("#biaoshi").val("0");
+						//$('#buynum').val(mmin);
+						//getMoney(mmin);
+					}  else if(buynum*{$param['sendbeishu']} > {$param['countnum']}) {
+						$("#tip").attr('style', 'color:red');
+						$("#tip").html("库存不足,时时库存：" + {$param['countnum']} + " 个 购买一件发"+{$param['sendbeishu']}+"个");
+						$("#biaoshi").val("0");
+						$('#buynum').val({$param['countnum']/$param['sendbeishu']});
+						if({$param['countnum']/$param['sendbeishu']}>=mmin && {$param['countnum']/$param['sendbeishu']}<=mmax){							
+							getMoney({$param['countnum']/$param['sendbeishu']});
+						}
+						
+					} else if(buynum > mmax) {
+						$("#tip").attr('style', 'color:red');
+						$("#tip").html("最大购买数量：" + mmax + " 个");
+						$("#biaoshi").val("0");
+						$('#buynum').val(mmax);
+						getMoney(mmax);
+					}else {
+						getMoney(buynum);
+						
+					}
+
+				} else if(buynum == 0) {
+					$("#tip").attr('style', 'color:red');
+					$("#tip").html("请填写正确的购买数量");
+					$("#biaoshi").val("0");
+					$('#buynum').val(mmin);
+					getMoney(mmin);
+				} else {
+					$("#tip").attr('style', '');
+					$("#tip").html("&nbsp;库存  {$param['countnum']} 个 购买一件发"+{$param['sendbeishu']}+"个");
+					$("#biaoshi").val("0");
+					$("#Money").html('0.00');
+					//$('#buynum').val(mmin);
+					//getMoney(mmin);
+				}
+
+			});
+			
+			function getMoney(buynum){
+				//计算单价
+				var money;
+				var price = parseFloat({$param['mprice']/100});
+				var typeprice={$param['user']['usertypeprice']};
+				var discount;
+				if(typeprice==1){
+					//会员私密价格
+					price={$param['user']['userprice']/100};
+				}else if(typeprice==2){
+					//分组价格
+					price={$param['user']['userprice']/100};
+				}else if(typeprice==3){
+					//会员折扣
+					discount={$param['user']['discount']};
+					if(data.length > 0) {
+							for(var i = 0; i < data.length; i++) {
+								if(data[i].mdy > buynum) {
+
+								} else {
+									price = parseFloat(data[i].mdj / 100);
+								}
+							}
+
+						}
+					if(discount>0 && discount<100){
+						discount=parseFloat(discount/100);
+						price=parseFloat(price*discount);
+					}
+				}else{
+					//批发价格
+					if(data.length > 0) {
+							for(var i = 0; i < data.length; i++) {
+								if(data[i].mdy > buynum) {
+
+								} else {
+									price = parseFloat(data[i].mdj / 100);
+								}
+							}
+
+						}
+				}
+				
+
+						//计算购买金额
+						money = buynum * price;
+						money=toDecimal(money);
+						
+						
+						{if condition="session('useraccount.account') neq null"}
+						 {if condition="config('balance_pay_only') eq 1 || config('balance_pay_only') eq '1'"}
+						 	$('#yuepay').show();
+						 	$('#paytype').hide();
+						 {else/}
+						 if({$param['useraccount']['money']}>money){
+						 	$('#yuepay').show();
+						 	$('#paytype').hide();
+						 }else{
+						 	$('#yuepay').hide();
+						 	$('#paytype').show();
+						 }
+						 {/if}
+						{else/}
+						 {if condition="config('balance_pay_only') eq 1 || config('balance_pay_only') eq '1'"}
+						 	$('#paytype').hide();
+						 {/if}
+						{/if}
+						$("#tip").attr('style', '');
+						$("#tip").html("&nbsp;库存  {$param['countnum']} 个 购买一件发"+{$param['sendbeishu']}+"个");
+						$("#Money").html(money);
+						$("#biaoshi").val("1");
+						$("#p3_Amt").val(money);
+			}
+		
+			
+			function checkForm(){
+							
+			}
+
+			function toDecimal(x){
+		  		var f = parseFloat(x);
+				if(isNaN(f)) {
+					return false;
+				}
+				var f;
+				if(getFloor(x)<2){
+					f = Math.round(x * 100) / 100;
+				}else if(getFloor(x)>2){
+					f = Math.round(x * 10000) / 10000;
+				}	
+				var s = f.toString();
+				var rs = s.indexOf('.');
+				if(rs < 0) {
+					rs = s.length;
+					s += '.';
+				}
+				while(s.length <= rs + 2) {
+					s += '0';
+				}
+				return s;
+		  	}
+		  	
+			function getFloor(x){
+				var y = String(x).indexOf('.') + 1;
+				var count = String(x).length - y;
+				if(y <= 0) {
+					count=0;
+				}
+				return count;										
+			}
+
+			$(":radio").click(function() {
+				var val = $(this).val();
+				$("#pd_FrpId").val(val);
+				
+
+			});
+            var indexload;
+			$('#ok').click(function() {
+				runWithOrderDisclaimer(__ORDER_DISCLAIMER__, __ORDER_DISCLAIMER_WAIT__, function () {
+					indexload = layer.load(0, {shade: [0.4,'#0f0e0e']});
+					submitform();
+				});
+			});
+			
+			
+
+		});
+		
+		function submitform(){
+				var out_trade_no = document.getElementById("p2_Order");
+				//设定时间格式化函数
+				Date.prototype.format = function(format) {
+					var args = {
+						"M+": this.getMonth() + 1,
+						"d+": this.getDate(),
+						"h+": this.getHours(),
+						"m+": this.getMinutes(),
+						"s+": this.getSeconds()
+					};
+					if(/(y+)/.test(format))
+						format = format.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+					for(var i in args) {
+						var n = args[i];
+						if(new RegExp("(" + i + ")").test(format))
+							format = format.replace(RegExp.$1, RegExp.$1.length == 1 ? n : ("00" + n).substr(("" + n).length));
+					}
+					return format;
+				};
+
+				out_trade_no.value = new Date().format("yyyyMMddhhmmss") + randomNum(10);
+
+				var biaoshi = $("#biaoshi").val();
+				var pd_FrpId = $("#pd_FrpId").val();
+				var p2_Order = $("#p2_Order").val();
+				var money = $('#p3_Amt').val();
+				var mpid = $("#mpid").val();
+				var title = $("#mtitle").val();
+				var lianxi = $("#Mobile").val();
+				var email = $('#Email').val();
+				var buynum = parseInt($('#buynum').val());
+                
+                {if condition="$param['isattach'] eq 1"}		
+				{foreach name="$attach" item="vo"}	
+				if(''==$.trim($("#attach{$vo.id}").val())){
+					layer.alert("{$vo.title}不能为空", {
+						skin: 'layui-layer-lan',
+						closeBtn: 0,
+						anim: 0 //动画类型
+					});
+					
+					layer.closeAll('loading');
+					$("#attach{$vo.id}").focus();
+					return false;
+				}
+				{/foreach}		
+				{/if}
+                
+                
+                
+				if(biaoshi == 0) {
+					layer.alert("金额输入错误,请检查金额", {
+						skin: 'layui-layer-lan',
+						closeBtn: 0,
+						anim: 0 //动画类型
+					});
+					layer.closeAll('loading');
+					return false;
+				}
+				
+				{if condition="session('useraccount.account') eq null"}
+				if(lianxi != '' && !checkMobile(lianxi)) {
+
+					layer.alert("手机号输入不正确", {
+						skin: 'layui-layer-lan',
+						closeBtn: 0,
+						anim: 0 //动画类型
+					});
+					layer.closeAll('loading');
+					return false;
+
+				}
+				if(email != '' && !email.match(/^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((\.[a-zA-Z0-9_-]{2,3}){1,2})$/g)) {
+
+					layer.alert("邮箱输入不正确", {
+						skin: 'layui-layer-lan',
+						closeBtn: 0,
+						anim: 0 //动画类型
+					});
+					layer.closeAll('loading');
+					return false;
+				}
+				if(lianxi == '' && lianxi_mobile == '1') {
+
+					layer.alert("请填写正确的联系手机(必填项)", {
+						skin: 'layui-layer-lan',
+						closeBtn: 0,
+						anim: 0 //动画类型
+					});
+					layer.closeAll('loading');
+					return false;
+				}
+				if(email == '' && lianxi_email == '1') {
+
+					layer.alert("请填写接收邮箱(必填项)", {
+						skin: 'layui-layer-lan',
+						closeBtn: 0,
+						anim: 0 //动画类型
+					});
+					layer.closeAll('loading');
+					return false;
+				}
+				{/if}
+				if(money<0.01) {
+
+					layer.alert("购买金额必须大于0.01，请修改购买数量", {
+						skin: 'layui-layer-lan',
+						closeBtn: 0,
+						anim: 0 //动画类型
+					});
+					layer.closeAll('loading');
+					return false;
+
+				}
+				
+				if(biaoshi == 1) {
+					var orderno=$("#p2_Order").val();
+					var result="0";
+					 //*******************上传附加信息头
+					 {if condition="$param['isattach'] eq 1"}
+						var i=0;
+						var attachcount="{:count($attach)}";
+						{foreach name="$attach" item="vo"}
+						$.when(AddOrderAttach(orderno,{$vo.id},$.trim($("#attach{$vo.id}").val()))).done(function (res) {
+							if(res.code!=1){
+								layer.alert('异常错误，请重新提交attach', {
+												skin: 'layui-layer-lan',
+												closeBtn: 0,
+												anim: 0 //动画类型
+											});
+								layer.closeAll('loading');
+								return false;		
+							}else{
+								i++;
+								console.log("i:"+i+" attachcount:"+attachcount);
+								if(i>=attachcount){
+									//********************上传订单头部
+								
+										var maddtype=5;
+										if(pd_FrpId=='alipay'){
+											maddtype=2;
+										}else if(pd_FrpId=='wxpay'){
+											maddtype=3;	
+										}else if(pd_FrpId=='unionPay'){
+											maddtype=4;			
+										}else if(pd_FrpId=='qqpay'){
+											maddtype=6;	
+										}else if(pd_FrpId=='tenpay'){
+											maddtype=7;			
+										}else if(pd_FrpId=='usdtpay'){
+										    maddtype=8;
+										}else{ 			
+											maddtype=5;	      			
+										}	
+									
+									$.when(AddOrder(orderno,lianxi,email,mpid,buynum,maddtype,money)).done(function(res){
+										if(res.code!=1){
+											layer.alert('异常错误，请重新提交order', {
+															skin: 'layui-layer-lan',
+															closeBtn: 0,
+															anim: 0 //动画类型
+														});
+											layer.closeAll('loading');
+											return false;		
+										}else{
+											{if condition="session('useraccount.account') eq null"}
+												document.getElementById("formid").action = "{:url('pay/index/reqPay')}";	
+											{else/}
+												if({$param['useraccount']['money']}>money){
+												 	document.getElementById("formid").action = "{:url('jingdian/user/Paybalance')}";
+												 }else{
+												 	document.getElementById("formid").action = "{:url('pay/index/reqPay')}";	
+												 	
+												 }
+												
+											{/if}	
+											
+											
+						
+											document.getElementById("formid").submit();
+											var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+											parent.layer.close(index);
+										}
+										
+									});
+																	
+									//********************上传订单尾部	
+									
+								}
+								
+										
+							}
+						});
+						
+						{/foreach}	
+						//*******************上传附加信息尾
+					{else/}
+								//********************上传订单头部
+									
+									var maddtype=5;
+									if(pd_FrpId=='alipay'){
+										maddtype=2;
+									}else if(pd_FrpId=='wxpay'){
+										maddtype=3;	
+									}else if(pd_FrpId=='unionPay'){
+										maddtype=4;			
+									}else if(pd_FrpId=='qqpay'){
+										maddtype=6;	
+									}else if(pd_FrpId=='tenpay'){
+										maddtype=7;		
+									}else if(pd_FrpId=='usdtpay'){
+										maddtype=8;	
+									}else{ 			
+										maddtype=5;	      			
+									}	
+									
+									$.when(AddOrder(orderno,lianxi,email,mpid,buynum,maddtype,money)).done(function(res){
+										if(res.code!=1){
+											layer.alert('异常错误，请重新提交order', {
+															skin: 'layui-layer-lan',
+															closeBtn: 0,
+															anim: 0 //动画类型
+														});
+											layer.closeAll('loading');
+											return false;		
+										}else{
+											{if condition="session('useraccount.account') eq null"}
+													document.getElementById("formid").action = "{:url('pay/index/reqPay')}";	
+											{else/}
+												if({$param['useraccount']['money']}>money){
+												 	document.getElementById("formid").action = "{:url('jingdian/user/Paybalance')}";
+												 }else{
+													document.getElementById("formid").action = "{:url('pay/index/reqPay')}";	
+												 }
+												
+											{/if}	
+											
+											
+						
+											document.getElementById("formid").submit();
+										}
+										
+									});
+																	
+									//********************上传订单尾部	
+					{/if}				
+					
+	
+
+				} else {
+					layer.alert("未知错误", {
+						skin: 'layui-layer-lan',
+						closeBtn: 0,
+						anim: 0 //动画类型
+					});
+					layer.closeAll('loading');
+					return false;
+				}
+			}
+		
+		//上传订单
+			function AddOrder(orderno,contact,email,goodid,buynum,maddtype,money){
+				var defer = $.Deferred();
+				//var date = new Date();
+				//var timer = date.getTime().toString();
+				$.getJSON("{:url('@jingdian/Api/AddOrder')}",
+							{'mcard':orderno,
+							'lianxi': contact,
+							'email':email,
+							'mflid':goodid,
+							'buynum':buynum,
+							'maddtype':maddtype,
+							'mamount':money		
+											}, 
+							function(data) {
+								if(data && data.code==-2 && data.url){ window.location.href=data.url; return; }
+								defer.resolve(data);		
+							});
+				return defer;
+			}
+			
+			//上传附加选项
+			function AddOrderAttach(orderno,attachid,text){
+				var defer = $.Deferred();
+				$.ajax({
+					url: "{:url('@jingdian/Api/AddOrderAttach')}",
+					type: 'post',
+					data: { 'orderno': orderno,
+							'attachid': attachid,
+							'text':text
+											},
+					async: true,
+					dataType: 'json',
+					success: function (data) {
+						if(data && data.code==-2 && data.url){ window.location.href=data.url; return; }
+						defer.resolve(data);
+					}
+				});
+				return defer;
+			}
+	</script>
+
+</body>
+
+</html>

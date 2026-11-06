@@ -1,0 +1,273 @@
+{include file="public/headerlayer" /}
+
+	<body ontouchstart>
+
+		<div class='fui-page-group '>
+			
+			<script src='__JS__/foxui.min.js'></script>
+			<script src='__JS__/init.js'></script>
+			<script language="javascript" src="https://unpkg.com/layui-src@2.5.4/dist/layui.js"></script>
+			<link href="__CSS__/style_1.css" rel="stylesheet" type="text/css" />
+			<!--6Z2S5bKb5piT6IGU5LqS5Yqo572R57uc56eR5oqA5pyJ6ZmQ5YWs5Y+454mI5p2D5omA5pyJ-->
+			<div class='fui-page fui-page-current'>
+				<div class="fui-header fui-header-success">
+					<div class="fui-header-left">
+						<a class="back"></a>
+					</div>
+					<div class="title">商品管理</div>
+					<div class="fui-header-right">
+						
+					</div>
+				</div>
+				<!-- 顶部tab -->
+				<!--<div id="tab" class="fui-tab fui-tab-success fixed">
+					<a class="active" data-status="sale">出售中</a>
+					<a data-status="out">已售罄</a>
+					<a data-status="stock">仓库中</a>
+					<a data-status="cycle">回收站</a>
+				</div>-->
+				<div class='fui-content navbar'>
+
+					<!-- 搜索框 -->
+					<form method="post" action="{:url('goods')}">
+					<div class="fui-searchbar bar">
+						<div class="searchbar center">
+							<input type="submit" class="searchbar-cancel searchbtn" value="搜索" />
+							<div class="search-input">
+								<i class="icon icon-search"></i>
+								<input type="search" placeholder="输入关键字..." class="search" id="keywords" name="key" value="{$val}" />
+							</div>
+						</div>
+					</div>
+					</form>
+					<!-- 商品列表 -->
+					<div class="fui-list-group nomargin container" id="list-content">
+						
+					</div>
+
+					<div class="fui-title center" id="AjaxPage"></div>
+					<div class="fui-title center hide" id="content-empty">没有数据</div>
+					
+				</div>
+
+				<!-- 伪功能（批量上下架/添加商品）已隐藏：无对应后端 -->
+				<div class="fui-title center" style="padding:0.4rem;">
+					<a class="external" href="{:url('kami/addlog')}" style="color:#44b549;">全站入库日志</a>
+				</div>
+
+				
+				<!--4000097827-->
+				
+				
+			</div>
+
+			{include file="public/navbar" /}
+
+			<!--NDAwMDA5NzgyNw==-->
+			<style>
+				.fui-list-inner .subtitle .total{
+					width:3.5rem;
+				}
+			</style>
+			<script type="text/html" id="list-template">	  
+ 			{{# for(var i=0;i<d.length;i++){  }}
+ 			<div class="fui-list" data-id="{{d[i].id}}">
+				
+				<div class="fui-list-media round">
+					<img src="{{d[i].imgurl}}" class="round" onerror="this.src='/static/admin/images/head_default.gif';">
+			
+				</div>
+				<div class="fui-list-inner">
+					<div class="title" >{{d[i].mnamebie}}</div>
+					<div class="subtitle">
+						<span class="price">￥{{toDecimal(d[i].mprice/100)}}</span>
+					</div>
+					
+					<div class="subtitle">						
+						<span class="total" {{# if(d[i].count==0){ }}style="color: red;"{{# } }}>剩余: {{d[i].count}}</span>
+						<span class="total">已用: {{d[i].yiyong}}</span>
+						<span class="total">总共: {{d[i].zongshu}}</span>
+					</div>
+				</div>
+				<div class="fui-list-angle fundot-parent batch-hide">
+					<div class="fundot"><i class="icon icon-more"></i></div>
+					<div class="funmenu out">
+						<a class="btn-goods" data-action="edit" onclick="addkami({{d[i].id}})"><i class="icon icon-edit"></i><span>补货</span></a>
+						<a class="btn-goods" onclick="addlog({{d[i].id}})"><i class="icon icon-list"></i><span>入库</span></a>
+						<a class="btn-goods" onclick="kamilist({{d[i].id}})"><i class="icon icon-goods"></i><span>卡密</span></a>
+					</div>
+				</div>
+			</div>
+ 			{{# } }}	
+ 			</script>
+
+			
+
+			
+	
+			
+
+			<a class="diy-gotop external" style=" position: fixed; overflow: hidden; z-index: 999; bottom: 136px; right: 10px; text-align: left; display:none;" id="gotop">
+				<div style="background: #000000; opacity: 0.5; line-height: 32px; text-align: center; border-radius: 30px; height: 30px; width: 30px;">
+					<i class="icon icon-top1" style="color: #ffffff; font-size: 20px;"></i>
+				</div>
+			</a>
+
+			<script>
+				$('#goods').addClass('active');
+				$(function() {
+					$(".fui-content").bind('scroll resize', function() {
+						var scrolltop = $(".fui-content").scrollTop();
+						if(scrolltop > "300") {
+							$("#gotop").fadeIn(100)
+						} else {
+							$("#gotop").fadeOut(100)
+						}
+					});
+					$("#gotop").unbind('click').click(function() {
+						$(".fui-content").animate({
+							scrollTop: "0px"
+						}, 1000)
+					});
+					$("#tab a").unbind('click').click(function () {
+			            var status = $(this).data('status');
+			            
+			            FoxUI.loader.hide();
+			            $(this).addClass('active').siblings().removeClass('active');
+			            FoxUI.loader.show('loading');
+			            $(".batch-item").hide();
+			            $(".batch-out").show();
+			            $(".batch-hide").show();
+			            $(".fui-navbar").show();
+			            
+			            $(".container").empty();
+			           
+			        });
+			        $(".batch-btn").unbind('click').click(function () {
+			            $(".head-menu-mask").fadeOut();
+			            $(".head-menu").fadeOut();
+			            $(".fundot").removeClass('active');
+			            $(".funmenu").addClass('out').removeClass('in');
+			            $(".fui-navbar").hide();
+			            $(".batch-out").hide();
+			            $(".batch-hide").hide();
+			            $(".batch-item").show();
+			            if (modal.status == 'sale' || modal.status == 'out') {
+			                $(".batch-putoff").show();
+			                $(".batch-delete").show()
+			            } else if (modal.status == 'stock') {
+			                $(".batch-puton").show();
+			                $(".batch-delete").show()
+			            } else if (modal.status == 'cycle') {
+			                $(".batch-restore").show()
+			            }
+			            modal.batch = true
+			        });
+			        $(".batch-cancel").unbind('click').click(function () {
+			            $(".batch-item").hide();
+			            $(".batch-out").show();
+			            $(".batch-hide").show();
+			            $(".fui-navbar").show();
+			            $(".fui-footer.batch-item .fui-list-angle").hide();
+			            modal.batch = false
+			        });
+			        $(".checkall").unbind('click').click(function () {
+			            var checked = $(this).find(':checkbox').prop('checked');
+			            $(".batch-item-check").prop('checked', checked)
+			        });
+			       
+			        
+				});
+				
+				var laytpl;
+				var laypage;
+				var layer;
+				layui.use(['laytpl','laypage','layer'], function(){
+				  laytpl = layui.laytpl;
+				  laypage = layui.laypage;
+				  layer = layui.layer;
+				  Ajaxpage();
+				});  
+				
+				var type;
+				
+			    function Ajaxpage(curr){			    	
+			        type=$('#type').val();
+			        var key=$('#keywords').val();      
+			        var mlm=$('#mlm').val();
+			        $.getJSON('{:url("goods")}', {page: curr || 1,key:key,type:type,mlm:mlm}, function(data){
+			            FoxUI.loader.hide(); //数据加载完关闭动画 
+			            if(data==''){
+			                $('#content-empty').show();
+			            }else{
+			                var tpl = document.getElementById('list-template').innerHTML;
+			                laytpl(tpl).render(data, function(html){
+			                    document.getElementById('list-content').innerHTML = html;
+			                });
+			                laypage.render({
+							    elem: 'AjaxPage'
+							    ,count: {$count}
+							    ,curr: curr || 1
+							    ,layout: ['count', 'prev', 'page', 'next', 'refresh', 'skip']
+							    ,jump: function(obj, first){
+							    	
+							    	if(!first){								    		
+							    		FoxUI.loader.show('loading'); //数据加载完关闭动画							    		
+			                            Ajaxpage(obj.curr)
+			                        }
+							      //console.log(obj)
+							    }
+							  });
+			                
+			            }
+			        });
+			    }
+				function toDecimal(x){
+			  		var f = parseFloat(x);
+					if(isNaN(f)) {
+						return false;
+					}
+					var f;
+					if(getFloor(x)<2){
+						f = Math.round(x * 100) / 100;
+					}else if(getFloor(x)>2){
+						f = Math.round(x * 10000) / 10000;
+					}	
+					var s = f.toString();
+					var rs = s.indexOf('.');
+					if(rs < 0) {
+						rs = s.length;
+						s += '.';
+					}
+					while(s.length <= rs + 2) {
+						s += '0';
+					}
+					return s;
+			  	}
+			  	
+				function getFloor(x){
+					var y = String(x).indexOf('.') + 1;
+					var count = String(x).length - y;
+					if(y <= 0) {
+						count=0;
+					}
+					return count;										
+				}
+				function addkami(goodid){
+					window.location.href="{:url('addkami')}"+"?goodid="+goodid;
+				}
+				function addlog(goodid){
+					window.location.href="{:url('kami/addlog')}"+"?goodid="+goodid;
+				}
+				function kamilist(goodid){
+					window.location.href="{:url('kami/index')}"+"?id="+goodid;
+				}
+			</script>
+
+			<span style="display:none"></span>
+			
+	</body>
+
+</html>
+
+<!--OTEzNzAyMDIzNTAzMjQyOTE0-->

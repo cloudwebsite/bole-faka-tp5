@@ -1,0 +1,76 @@
+{include file="public/headerlayer" /}
+<body ontouchstart>
+<div class='fui-page-group '>
+	<script src='__JS__/foxui.min.js'></script>
+	<script src='__JS__/init.js'></script>
+	<script language="javascript" src="https://unpkg.com/layui-src@2.5.4/dist/layui.js"></script>
+	<link href="__CSS__/style_1.css" rel="stylesheet" type="text/css" />
+	<div class='fui-page fui-page-current'>
+		<div class="fui-header fui-header-success">
+			<div class="fui-header-left"><a class="back external" href="{:url('index/index')}"></a></div>
+			<div class="title">销售统计</div>
+			<div class="fui-header-right"></div>
+		</div>
+		<div class='fui-content navbar'>
+			<form id="f" class="fui-cell-group">
+				<div class="fui-cell">
+					<div class="fui-cell-label">维度</div>
+					<div class="fui-cell-info">
+						<select name="type" id="type" class="fui-input">
+							{foreach name="types" item="tn" key="k"}
+							<option value="{$k}" {if condition="$type eq $k"}selected{/if}>{$tn}</option>
+							{/foreach}
+						</select>
+					</div>
+				</div>
+				<div class="fui-cell">
+					<div class="fui-cell-label">起</div>
+					<div class="fui-cell-info"><input type="date" class="fui-input" id="starttime" value="{$starttime}" /></div>
+				</div>
+				<div class="fui-cell">
+					<div class="fui-cell-label">止</div>
+					<div class="fui-cell-info"><input type="date" class="fui-input" id="endtime" value="{$endtime}" /></div>
+				</div>
+				<div class="fui-cell"><button type="button" class="btn btn-success block" style="width:100%;" id="btnQuery">查询</button></div>
+			</form>
+			<div class="fui-title" id="sumline">合计：—</div>
+			<div class="fui-list-group" id="list-content"></div>
+			<div class="fui-title center" id="AjaxPage"></div>
+			<div class="fui-title center"><a href="{:url('stats/keys')}">卡密统计 →</a></div>
+		</div>
+	</div>
+	{include file="public/navbar" /}
+</div>
+<script>
+layui.use(['laypage','layer'], function(){
+	var laypage = layui.laypage, layer = layui.layer, cur = 1;
+	function load(page){
+		cur = page || 1;
+		$.getJSON('{:url("stats/sales_data")}', {
+			page: cur,
+			type: $('#type').val(),
+			starttime: $('#starttime').val(),
+			endtime: $('#endtime').val()
+		}, function(res){
+			if(res.code != 1){ layer.msg(res.msg || '失败'); return; }
+			$('#sumline').text('合计订单 '+res.sum_count+' · 金额 '+res.sum_jine);
+			var html = '';
+			(res.data || []).forEach(function(r){
+				html += '<div class="fui-list"><div class="fui-list-inner"><div class="title">'+r.name+'</div><div class="subtitle">单量 '+r.count+' · 金额 '+r.jine+'</div></div></div>';
+			});
+			$('#list-content').html(html || '<div class="fui-title center">无数据</div>');
+			laypage.render({
+				elem: 'AjaxPage',
+				count: res.count || 0,
+				curr: res.page || 1,
+				limit: res.limit || 20,
+				jump: function(obj, first){ if(!first){ load(obj.curr); } }
+			});
+		});
+	}
+	$('#btnQuery').on('click', function(){ load(1); });
+	load(1);
+});
+</script>
+</body>
+</html>

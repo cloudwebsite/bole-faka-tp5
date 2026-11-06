@@ -1,0 +1,132 @@
+{include file="public/header" /}
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="ibox float-e-margins">
+        <div class="ibox-title">
+            <h5>卡密导出记录查询</h5>
+            <div class="ibox-tools">
+                <span class="label label-warning">maddtype=88（后台导出 / 历史 API 导卡）</span>
+            </div>
+        </div>
+        <div class="ibox-content">
+            <div class="row">
+                <div class="col-sm-12">
+                    <form name="admin_list_sea" class="form-search" method="get" action="{:url('export_log')}">
+                        <div class="col-sm-2">
+                            <div class="input-group">
+                                <input type="text" id="userip" class="form-control" name="userip" value="{$userip}" placeholder="操作 IP" />
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            <div class="input-group">
+                                <input type="text" id="mflid" class="form-control" name="mflid" value="{$mflid}" placeholder="商品ID" />
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="input-group">
+                                <input type="text" id="key" class="form-control" name="key" value="{$val}" placeholder="订单号" />
+                                <span class="input-group-btn">
+                                    <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i> 搜索</button>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-sm-5" style="padding-top:8px;color:#888;font-size:12px;">
+                            无筛选条件时默认只显示近 30 天；关联卡密=申请导出数量（不再扫 mail 表）
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="hr-line-dashed"></div>
+            <div class="example-wrap">
+                <div class="example">
+                    <table class="table table-bordered table-hover">
+                        <thead>
+                            <tr class="long-tr">
+                                <th width="6%">ID</th>
+                                <th width="18%">导出单号</th>
+                                <th>商品</th>
+                                <th width="8%">商品ID</th>
+                                <th width="8%">导出数量</th>
+                                <th width="8%">关联卡密</th>
+                                <th width="12%">操作IP</th>
+                                <th width="14%">时间</th>
+                            </tr>
+                        </thead>
+                        <tbody id="list-content">
+                        </tbody>
+                    </table>
+                    <div id="AjaxPage" style="text-align:right;"></div>
+                    <div style="text-align:right;">共<span id="total-count">0</span>条数据，<span id="allpage"></span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script id="list-template" type="text/html">
+{{# for(var i=0;i<d.length;i++){ }}
+<tr class="long-td">
+    <td>{{d[i].id}}</td>
+    <td style="text-align:left;">{{d[i].mcard}}</td>
+    <td>{{# if(d[i].mnamebie){ }}{{d[i].mnamebie}}{{# }else if(d[i].mname){ }}{{d[i].mname}}{{# }else{ }}未知{{# } }}</td>
+    <td>{{d[i].mflid}}</td>
+    <td>{{d[i].buynum}}</td>
+    <td>{{d[i].mail_count}}</td>
+    <td><span class="text-danger">{{d[i].userip}}</span></td>
+    <td>{{d[i].create_time_fmt}}</td>
+</tr>
+{{# } }}
+</script>
+
+<div class="spiner-example">
+    <div class="sk-spinner sk-spinner-three-bounce">
+        <div class="sk-bounce1"></div>
+        <div class="sk-bounce2"></div>
+        <div class="sk-bounce3"></div>
+    </div>
+</div>
+
+{include file="public/footer" /}
+<script type="text/javascript">
+Ajaxpage();
+function Ajaxpage(curr){
+    var key=$('#key').val();
+    var userip=$('#userip').val();
+    var mflid=$('#mflid').val();
+    $.getJSON('{:url("Kami/export_log")}', {
+        page: curr || 1,
+        key: key,
+        userip: userip,
+        mflid: mflid
+    }, function(res){
+        $(".spiner-example").css('display','none');
+        var data = (res && res.list) ? res.list : (res || []);
+        var allpage = (res && res.allpage) ? res.allpage : 1;
+        var count = (res && typeof res.count !== 'undefined') ? res.count : data.length;
+        $('#total-count').text(count);
+        if(!data || data.length===0){
+            $("#list-content").html('<td colspan="8" style="padding:10px;font-size:16px;text-align:center">暂无导出记录</td>');
+            $('#allpage').html('第0页，共0页');
+        }else{
+            var tpl = document.getElementById('list-template').innerHTML;
+            laytpl(tpl).render(data, function(html){
+                document.getElementById('list-content').innerHTML = html;
+            });
+            laypage({
+                cont: $('#AjaxPage'),
+                pages: allpage,
+                skip: true,
+                skin: '#1AB5B7',
+                curr: curr || 1,
+                groups: 3,
+                jump: function(obj, first){
+                    if(!first){ Ajaxpage(obj.curr); }
+                    $('#allpage').html('第'+ obj.curr +'页，共'+ obj.pages +'页');
+                }
+            });
+        }
+    });
+}
+</script>
+</body>
+</html>

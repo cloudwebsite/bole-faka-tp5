@@ -1,0 +1,307 @@
+{include file="public/imgpc2/head_title" /} 
+{if condition="$param['isMobilePc'] eq 1"} 
+{if condition="config('m_status') eq 0"}
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"> 
+{/if} 
+{/if}
+<script type="text/javascript" src="{:config('cdnpublic')}jquery/1.7.2/jquery.min.js"></script>
+<link rel="stylesheet" href="__IMGPC2__/css/iconfont.css" />
+<link rel="stylesheet" href="__IMGPC2__/css/common.css" />
+<link rel="stylesheet" href="__IMGPC2__/css/index.css" />
+</head>
+
+<body class="greybg" onload="Init();">
+	<div class="header">
+
+		{include file="public/imgpc2/header_top" /}
+		<div class="head-bot">
+			<div class="nb">
+				{include file="public/imgpc/header_search" /}
+				<div class="clearfix"></div>
+
+				<!--原位置-->
+			</div>
+		</div>
+		<!--自定义导航，移动了位置-->
+		{include file="public/imgpc2/nav" /}
+		<!--自定义导航，移动了位置-->
+	</div>
+	</div>
+	{if condition="count($pcbanner) gt 0"}
+	<div class="banner" style="margin-top: 0px;">
+		<div class="slidebanner">
+			<div class="hd">
+				<ul></ul>
+			</div>
+
+			<div class="bd">
+				<ul>
+				{foreach name="pcbanner" item="v"}
+					<li>
+						<a href="{$v['link_url']}" {if condition="$v['opentype'] eq 1"}target="_blank"{/if} style="background:url(/uploads/images/{$v['images']}) no-repeat center center;-webkit-background-size: cover;-moz-background-size: cover;-o-background-size: cover;background-size: cover;"></a>
+					</li>
+				{/foreach}				
+				</ul>
+			</div>
+
+		</div>
+		<div class="nb">
+
+		</div>
+	</div>
+	{/if}
+	<div class="content" {if condition="count($pcbanner) elt 0"}style="margin-top: 0px;"{/if}>
+		<div class="nb">
+			{if condition="count($pcallhot) gt 0"}
+			<div class="time-limit">
+				<div class="timeslimit-bar">
+					<span>爆款促销</span>
+
+				</div>
+				<div class="slide-timeslimit">
+					<div class="prev-next">
+						<a href="javascript:void(0);" class="prev"></a>
+						<a href="javascript:void(0);" class="next"></a>
+					</div>
+					<div class="bd">
+						<div class="tempWrap" style="overflow:hidden; position:relative; width:1170px">
+							<ul style="width: 1950px; left: 0px; position: relative; overflow: hidden; padding: 0px; margin: 0px;">
+							{volist name="pcallhot" id="v"}
+								<li style="float: left; width: 195px;">
+									<div class="nr">
+										<a class="picbox" href="{:url('jingdian/Index/goodsdetail',['mpid'=>$v['id']])}" target="_blank"><img src="{$v['imgurl']}" alt="" onerror="this.src='/static/admin/images/head_default.gif'"/></a>
+										<p class="word">
+											<a href="{:url('jingdian/Index/goodsdetail',['mpid'=>$v['id']])}">{:htmlspecialchars_decode($v['mname'])}</a>
+										</p>
+										<div class="pricebox">
+											<div class="price">￥<span>{if condition="$v.mprice lt 1"}{:number_format($v.mprice/100,4)}{else/}{:number_format($v.mprice/100,2)}{/if}</span></div>
+											<del>￥{if condition="$v.marketprice lt 1"}{:number_format($v.marketprice/100,4)}{else/}{:number_format($v.marketprice/100,2)}{/if}</del>
+										</div>
+									</div>
+								</li>
+							{/volist}
+								
+							</ul>
+						</div>
+					</div>
+					<div class="hd" style="display: none;">
+						<ul>
+							<li class="on">1</li>
+							<li class="">2</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+			{/if}
+			<div class="floor-fontainer">
+				<div class="leftgood-bar" style="overflow: hidden;white-space: nowrap">
+					{volist name="GoodsListAll" id="vo" key="keyfloor"}
+					{if condition="count($vo['hehe']) neq 0"}
+					<div class="lgb onlgb lgb{$keyfloor-1}" data="{$keyfloor-1}">
+						<a href="javascript:void(0)" name="#floor{$keyfloor-1}">
+							<span style="overflow: hidden;white-space: nowrap">{$vo['name']}</span>
+						</a>
+					</div>
+					{/if}
+					{/volist}	
+				</div>
+			</div>
+			{volist name="GoodsListAll" id="vo" key="keyright"}
+			{if condition="count($vo['hehe']) neq 0"}
+			<div class="rightgood-body">
+				<div class="floor floor{$keyright-1}" id="floor{$keyright-1}">
+					<div class="floor-title">
+						<h3><a href="{:url('jingdian/Index/goodscategory',['lmid'=>$vo['id']])}">{$vo['loucengname']}</a></h3>														
+					</div>							
+				</div>
+			</div>
+			<!--猜你喜欢-->
+
+			<div class="guesslike">
+
+				<ul class="yourlike indyourlike">
+					{volist name="vo['hehe']" id="f"}
+						<li>
+							<a href="{:url('jingdian/Index/goodsdetail',['mpid'=>$f['id']])}" class="picbox" target="_blank">
+								<img src="{$f['webimgurl']}" alt="" onerror="this.src='/static/admin/images/head_default.gif'"/>
+							</a>
+							<div class="elli">
+								<a href="{:url('jingdian/Index/goodsdetail',['mpid'=>$f['id']])}" target="_blank">{:htmlspecialchars_decode($f['mname'])}</a>
+							</div>
+							
+							<a href="{:url('jingdian/Index/goodsdetail',['mpid'=>$f['id']])}" class="price" target="_blank">
+								￥<span>{if condition="$f.mprice lt 1"}{:number_format($f.mprice/100,4)}{else/}{:number_format($f.mprice/100,2)}{/if}</span>
+							</a>
+							
+							<span style="color: #c0c0c0;float:right;font-size:13px;margin-right: 4px;margin-top: 2.5px;">已售{$f['sellercount']}件</span>
+							
+						</li>
+					{/volist}
+										
+				</ul>
+			</div>
+			{/if}
+			{/volist}						
+		</div>
+	</div>
+
+
+	{include file="public/imgpc2/footer" /}
+
+	<!--leftsead end-->
+	<script src="{:config('cdnpublic')}jquery/1.9.1/jquery.min.js" type="text/javascript"></script>
+	<script src="__IMGPC__/js/jquery.SuperSlide.2.1.1.js" type="text/javascript"></script>
+	<script src="__IMGPC__/js/main.js" type="text/javascript"></script>
+	<script src="{:config('cdnpublic')}layer/3.1.1/layer.js"></script>
+	{include file="public/order_disclaimer_boot" /}
+	<script language="javascript" src="https://www.layuicdn.com/layui-v2.5.4/layui.js"></script>
+	
+	
+
+	<script>
+		jQuery(".slidebanner").slide({
+			mainCell: ".bd ul",
+			titCell: ".hd ul",
+			autoPlay: true,
+			autoPage: true
+		});
+		jQuery(".slide-timeslimit").slide({
+			titCell: ".hd ul",
+			mainCell: ".bd ul",
+			autoPage: true,
+			effect: "left",
+			autoPlay: false,
+			scroll: 6,
+			vis: 6
+		});
+		//秒杀计时
+
+		//侧栏浮动定位显示隐藏
+		$(window).scroll(function() {
+			var topH = $(".header").height() + $(".banner").height();
+			var footH = $(document).height() - $(".footer").height() - 500;
+
+			if($(this).scrollTop() > topH - 250 && $(this).scrollTop() <= footH) {
+				$(".leftgood-bar").fadeIn(200);
+			} else {
+				$(".leftgood-bar").fadeOut(200);
+			}
+		});
+		setLeftBar();
+
+		function setLeftBar() {
+			if($(window).width() > 1800) {
+				$(".leftgood-bar").css("left", '200px');
+			}
+			if($(window).width() <= 1800) {
+				$(".leftgood-bar").css("left", '120px');
+			}
+			if($(window).width() < 1600) {
+				$(".leftgood-bar").css("left", '0px');
+			}
+		}
+		$(window).resize(function() {
+			setLeftBar();
+		});
+		$(".leftgood-bar .lgb").each(function() {
+			$(this).click(function() {
+				$("body ,html").animate({
+					scrollTop: $($(this).find("a").attr("name")).offset().top
+				}, 500);
+
+			});
+		});
+		$(window).scroll(function() {
+			var scrollTop = $(window).scrollTop();
+			var len = $(".leftgood-bar").children().length;
+			for(var i = 0; i < len; i++) {
+				var floorid = $(".leftgood-bar").children().eq(i).attr("data");
+
+				if(scrollTop + 250 >= $("#floor" + floorid).offset().top) {
+					$(".lgb").eq(i).addClass("onlgb").siblings().removeClass("onlgb");
+				}
+			}
+		});
+		//ie hask
+		var DEFAULT_VERSION = "8.0";
+		var ua = navigator.userAgent.toLowerCase();
+		var isIE = ua.indexOf("msie") > -1;
+		var safariVersion;
+		if(isIE) {
+			safariVersion = ua.match(/msie ([\d.]+)/)[1];
+		}
+		if(safariVersion <= DEFAULT_VERSION) {
+			$(".indyourlike li:nth-child(5n)").css("margin-right", "0px");
+			$(".cont-item a:last-child").css("margin-right", "0px");
+			$(".time-limit .slide-timeslimit .bd li:nth-child(6n)").children(" .nr").css("border-right", "none");
+		}
+
+		function Init() {
+				// 首页公告由 order_disclaimer_boot 自动弹出
+				var m = {$param['isMobilePc']};
+				var mstatus = {:config('m_status')};
+				var weiyong={$param['count']};
+				//判断是否是手机
+				if(m == 1) {
+					if(mstatus == 0) {
+						layer.open({
+							type: 1,
+							title: false //不显示标题栏
+								,
+							closeBtn: false,
+							area: '300px;',
+							shade: 0.8,
+							id: 'LAY_layuipro' //设定一个id，防止重复弹出
+								,
+							resize: false,
+							btn: ['切换到手机', '不切换模板'],
+							btnAlign: 'c',
+							moveType: 1 //拖拽模式，0或者1
+								,
+							content: '<div style="padding: 50px; line-height: 22px; background-color: #393D49; color: #fff; font-weight: 300;">是否切换到手机模版？</div>',
+							success: function(layero) {
+								var btn = layero.find('.layui-layer-btn');
+								btn.find('.layui-layer-btn0').attr({
+									href: "{:config('is_https')}://" + window.location.host + '/mobile'
+								});
+								btn.find('.layui-layer-btn1').attr({
+									href: "{:config('is_https')}://" + window.location.host +"{url('Index/index')}"+"?device=pc"
+								});
+							}
+						});
+						return false;
+
+					} else if(mstatus == 1) {
+						window.location.href = "{:config('is_https')}://" + window.location.host + '/mobile';
+						return false;
+					}
+
+				}
+				//检查是否有未用订单
+				if(weiyong>0){
+					//window.location.href = "{:url('Index/selectorder')}";
+           
+          
+			           layer.msg('您有未提取订单，请点击右上角订单查询', {
+			            icon: 7,
+			            anim:6,
+			          }, function(){
+			              layer.msg('您有未提取订单，请点击右上角订单查询', {
+			                icon: 7,
+			                offset: 'lb',
+			                anim:6,
+			                time: 5 
+			              }, function(){
+			               
+			              }); 
+			          }); 
+			          
+          
+				}
+				
+			}
+	</script>
+  <div style=" position: fixed;left: 10px;bottom: 100px;z-index: 100; width: 110px;">{:config('web_music')}</div>
+</body>
+
+</html>

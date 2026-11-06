@@ -1,0 +1,83 @@
+ {include file="public/user/userheader" /}
+     <link href="__USCENTER__/css/basic.css" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" href="__USCENTER__/css/iconfont.css">
+    <script language="javascript" src="{:config('cdnpublic')}jquery/1.8.3/jquery.min.js"></script>
+    <script language="javascript" src="__USCENTER__/js/qiandao.js"></script>
+    <script src="__USCENTER__/js/wangeditor.min.js"></script>
+    <script src="__USCENTER__/js/plupload.full.min.js"></script>
+    <script src="{:config('cdnpublic')}layer/3.1.1/layer.js"></script>
+    <script language="javascript" src="https://www.layuicdn.com/layui-v2.5.4/layui.js"></script>
+    <script language="javascript" src="__USCENTER__/js/common.js"></script>
+    <script language="javascript" src="__USCENTER__/js/index.js"></script>
+    <script src="__USCENTER__/js/person_content.js"></script>
+    <link rel="stylesheet" href="__USCENTER__/css/index.css">
+    <link rel="stylesheet" href="__USCENTER__/css/person_content.css">
+    <link rel="stylesheet" href="__USCENTER__/css/publish_need.css">
+    <link rel="stylesheet" href="__USCENTER__/css/common.css" /></head>
+    <link href="__USCENTER__/css/style.min.css?v=4.1.0" rel="stylesheet">
+ <body>
+    <!--头部-->
+    {include file="public/user/usertop" /}
+    <!--头部-->
+    <!--个人中心-->
+    <div class="main">
+      <div class="clearfix person_conetent">﻿
+        <!--左侧菜单-->
+        {include file="public/user/userleft" /}
+        
+        <!--右侧展示-->
+        <div class="person_content_r right">
+        	<div class="need_admin">
+        		<div class="clearfix publish_need_tit">
+                    <h2 class="left">我的推广</h2>
+                </div>
+                
+                <div class="integral_detail_top clearfix">
+                        <div class="left clearfix">
+						<h4>我专属的推介地址</h4>
+						<input type="text" class="form-control" readonly="readonly" value="{:config('is_https')}://{$host}/?pid={:session('useraccount.id')}">
+						<p class="help-block">复制推介链接到各路社交媒体，包括QQ，微信群里等，通过此连接注册的用户可以直接成为您的下线会员</p>
+                        </div>
+                        
+                </div>
+                
+                <div class="integral_detail_top clearfix">
+                        <div class="left clearfix">
+						<h4>我专属推介二维码</h4>
+						<div id="wap-qrcode"></div>
+						<p class="help-block">复制推介二维码到各路社交媒体，包括QQ，微信群里等，通过扫描此二维码注册的用户可以直接成为您的下线会员</p>
+                        </div>
+                        
+                </div>
+                
+                <div class="integral_detail_top clearfix">
+                        <div class="left clearfix">
+						通过您专属推介链接或二维码新注册的用户，将自动成为您的下线会员，当您的下线会员支付购买商品后，您将享受到丰厚的佣金回报，赶快分享让您的好友们立即加入吧！
+						<br>
+						欢迎您把推介地址或二维码发送到朋友圈，QQ微信群里等各路社交媒体上
+                        </div>
+                        
+                </div>
+	        	
+			</div>
+
+            
+
+        </div>
+      </div>
+    </div>
+
+
+    <!--非商家提示去认证-->
+    {include file="public/imgpc/footer" /}
+    <script src="{:config('cdnpublic')}layer/3.1.1/layer.js"></script>	
+	<script src="/static/admin/js/laypage/laypage.js"></script>
+	<script src="/static/admin/js/laytpl/laytpl.js"></script>
+	<script type="text/javascript" src="/static/mobile/imgmobile/js/qrcode.min.js"></script>
+	<script type="application/javascript">
+		var qrcode = new QRCode(document.getElementById("wap-qrcode"),{width:200,height:200}).makeCode("{:config('is_https')}://{$host}/?pid={:session('useraccount.id')}");
+	</script>
+
+ </body>
+
+</html>

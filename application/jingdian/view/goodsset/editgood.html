@@ -1,0 +1,505 @@
+ {include file="public/user/userheader" /}
+    
+    <link rel="stylesheet" href="https://www.layuicdn.com/layui-v2.5.4/css/layui.css">
+    
+    
+    <link href="__USCENTER__/css/basic.css" rel="stylesheet" type="text/css"/>  
+    <link rel="stylesheet" href="__USCENTER__/css/iconfont.css">
+    <link rel="stylesheet" href="__USCENTER__/css/index.css">
+    <link rel="stylesheet" href="__USCENTER__/css/person_content.css">
+    <link rel="stylesheet" href="__USCENTER__/css/publish_need.css">
+    <link rel="stylesheet" href="__USCENTER__/css/common.css" /></head>
+    <link href="__USCENTER__/css/style.min.css?v=4.1.0" rel="stylesheet">
+    <script language="javascript" src="{:config('cdnpublic')}jquery/1.8.3/jquery.min.js"></script>
+    <script language="javascript" src="__USCENTER__/js/qiandao.js"></script>
+    <script src="__USCENTER__/js/wangeditor.min.js"></script>
+    <script src="__USCENTER__/js/plupload.full.min.js"></script>
+    <script language="javascript" src="https://www.layuicdn.com/layui-v2.5.4/layui.js"></script>
+    <script language="javascript" src="__USCENTER__/js/common.js"></script>
+    <script language="javascript" src="__USCENTER__/js/index.js"></script>
+    <script src="__USCENTER__/js/person_content.js"></script>
+    <style>
+    	body,div{
+    		margin: 0 auto;
+    	}
+    	
+    </style>
+ <body>
+    <!--头部-->
+    {include file="public/user/usertop" /}
+    <!--头部-->
+    <!--个人中心-->
+    <div class="main">
+      <div class="clearfix person_conetent">﻿
+        <!--左侧菜单-->
+        {include file="public/user/userleft" /}
+        
+        <!--右侧展示-->
+        <div class="person_content_r right">
+
+            <!--积分明细-->
+            <div class="need_admin">
+                <div class="clearfix publish_need_tit">
+                    <h2 class="left">编辑商品</h2>
+                </div>
+             <div class="layui-tab layui-tab-brief" lay-filter="tabData">
+			  
+			  <div class="layui-tab-content">
+			  	<div class="layui-tab-item layui-show">
+			  		<form class="layui-form" action="{:url('Goodsset/editGood')}" method="post" lay-filter="formfilter">
+			  			{:token()}
+					  <input type="hidden" name="goodid" value="{$goods.goodid}">
+					  <hr class="layui-bg-gray">
+					  <div class="layui-form-item">
+					    <label class="layui-form-label">商品名称：</label>
+					    <div class="layui-input-inline" style="width: 700px;">
+					      <input type="text" name="mname" {if condition="($goods.mname eq -1) or (session('child_useraccount.auth')['goodsname'] eq 0)"}disabled style="color: #c2c2c2;"{/if} required  lay-verify="required" placeholder="请输入商品名称" autocomplete="off" class="layui-input">
+					      
+					    </div>
+					    
+					    <div>
+					      <input type="checkbox" {if condition='$goods.mname eq -1'}checked{/if} {if condition="session('child_useraccount.auth')['goodsname'] eq 0"} disabled{/if}  name="jc_mname" lay-skin="switch" lay-text="继承|不继" lay-filter="jc_mname" title="开关">
+					    </div>
+					  </div>
+					  <div class="layui-form-item">
+					    <label class="layui-form-label">价格提示：</label>
+					    <div class="layui-input-inline" style="width: 700px;">
+					      <input type="text" name="mprice_bz" {if condition='$goods.mprice_bz eq -1'}disabled style="color: #c2c2c2;"{/if}  placeholder="请输入价格提示PC经典模版" autocomplete="off" class="layui-input">
+					    </div>
+					    <div>
+					      <input type="checkbox" {if condition='$goods.mprice_bz eq -1'}checked{/if}  name="jc_mprice_bz"  lay-skin="switch" lay-text="继承|不继" lay-filter="jc_mprice_bz" title="开关">
+					    </div>
+					  </div>
+					  <div class="layui-form-item">
+					    <label class="layui-form-label">商品简介：</label>
+					    <div class="layui-input-inline" style="width: 700px;">
+					      <input type="text" name="mnotice" {if condition='$goods.mnotice eq -1'}disabled style="color: #c2c2c2;"{/if}  placeholder="请输入商品简介" autocomplete="off" class="layui-input">
+					    </div>
+					    <div>
+					      <input type="checkbox" {if condition='$goods.mnotice eq -1'}checked{/if} name="jc_mnotice" lay-skin="switch" lay-text="继承|不继" lay-filter="jc_mnotice" title="开关">
+					    </div>
+					  </div>
+					  <div class="layui-form-item">
+					    <label class="layui-form-label">弹窗提示：</label>
+					    <div class="layui-input-inline" style="width: 700px;">
+					      <input type="text" name="msgboxtip" {if condition='$goods.msgboxtip eq -1'}disabled style="color: #c2c2c2;"{/if} placeholder="请输入商品买前弹窗提示" autocomplete="off" class="layui-input">
+					    </div>
+					    <div>
+					      <input type="checkbox" {if condition='$goods.msgboxtip eq -1'}checked{/if} name="jc_msgboxtip" lay-skin="switch" lay-text="继承|不继" lay-filter="jc_msgboxtip" title="开关">
+					    </div>
+					  </div>
+					  <hr class="layui-bg-gray">
+					  <div class="layui-form-item">
+					    <label class="layui-form-label">标题颜色：</label>
+					    <div class="layui-input-inline" style="width: 641px;">
+					      <input type="text" name="color" {if condition='$goods.color eq -1'}disabled style="color: #c2c2c2;"{/if} placeholder="请输入标题颜色" autocomplete="off" class="layui-input">
+					    </div>
+					    <div id="layui-word-auxID" class="layui-form-mid layui-word-aux" style="padding: 0px 0px !important;{if condition='$goods.color eq -1'}display: none;{/if}">
+					        <div id="test-form-color"></div>
+					    </div>
+					    <div>
+					      <input type="checkbox" {if condition='$goods.color eq -1'}checked{/if} name="jc_color" lay-skin="switch" lay-text="继承|不继" lay-filter="jc_color" title="开关">
+					    </div>
+					  </div>
+					  <hr class="layui-bg-gray">
+					  <div class="layui-form-item">
+					    <label class="layui-form-label">商品图片：</label>
+					    <div class="layui-input-inline">
+					      
+					      <button id="demoMoreID" type="button" class="layui-btn demoMore" {if condition="($goods.imgurl eq -1) or (session('child_useraccount.auth')['goodsimgurl'] eq 0)"} style="display: none;"{/if}><i class="layui-icon"></i>上传图片</button>
+					     
+					    
+					       <div class="layui-upload-list">
+						    {if condition="config('uploadtype') eq 0"}
+						    <input type="hidden" id="web_logo" name="imgurl" value="{$goods.imgurltempnodomain}">
+						    {else/}
+						    <input type="hidden" id="web_logo" name="yunimgurl" value="{$goods.imgurltempnodomain}">
+						    {/if}
+						    <img width="200" height="200" class="layui-upload-img" id="demo1" src="{$goods.imgurltemp}" onerror="this.src='/static/admin/images/noimg.png'">
+						    
+						  </div>
+					    </div>
+					    <div>
+					    	<button id="deleteID" class="layui-btn layui-btn-danger" {if condition='$goods.imgurl eq -1'}style="display: none;"{/if}>删除图片</button> 
+					      <input type="checkbox" {if condition='$goods.imgurl eq -1'}checked{/if} {if condition="session('child_useraccount.auth')['goodsimgurl'] eq 0"} disabled {/if} name="jc_imgurl" lay-skin="switch" lay-text="继承|不继" lay-filter="jc_imgurl" title="开关">
+					    </div>
+					  </div>
+					  
+					  <hr class="layui-bg-gray">
+					  <div class="layui-form-item">
+					    <label class="layui-form-label">商品详情：</label>
+					    <div>
+					      <input type="checkbox" {if condition='$goods.xqnotice eq -1'}checked{/if} {if condition="session('child_useraccount.auth')['goodsxqnotice'] eq 0"} disabled {/if} name="jc_xqnotice" lay-skin="switch" lay-text="继承|不继" lay-filter="jc_xqnotice" title="开关">
+					    </div>
+					    <div class="layui-input-block" style="margin-top: 15px;">
+					      <textarea id="demoEdit" style="display: none;"  name="xqnotice">{if condition='$goods.xqnotice eq -1'}{:htmlspecialchars_decode($goods.z_xqnotice)}{else/}{:htmlspecialchars_decode($goods.xqnotice)}{/if}</textarea>
+					    </div>
+					  </div>
+					  <hr class="layui-bg-gray">
+					  <div class="layui-form-item">
+					    <label class="layui-form-label" style="width: auto;">商户单价(元)：</label>
+					    <div class="layui-input-inline">
+					      <input type="text" name="mprice" {if condition='$goods.mprice eq -1'}disabled style="color: #c2c2c2;"{/if} {if condition="session('child_useraccount.auth')['goodsprice'] eq 0"} disabled {/if}  lay-verify="number" placeholder="请输入商户单价" autocomplete="off" class="layui-input">
+					    </div>
+					    <div>
+					      <input type="checkbox" {if condition='$goods.mprice eq -1'}checked{/if} {if condition="session('child_useraccount.auth')['goodsprice'] eq 0"} disabled {/if} name="jc_mprice" lay-skin="switch" lay-text="继承|不继" lay-filter="jc_mprice" title="开关">
+					    </div>
+					    
+					  </div>
+					  <hr class="layui-bg-gray">
+					  <div class="layui-form-item">
+					    <label class="layui-form-label" style="width: auto;">市场价格(元)：</label>
+					    <div class="layui-input-inline">
+					      <input type="text" name="marketprice" lay-verify="number" {if condition='$goods.marketprice eq -1'}disabled style="color: #c2c2c2;"{/if} placeholder="请输入市场价格" autocomplete="off" class="layui-input">
+					    </div>
+					    <div>
+					      <input type="checkbox" {if condition='$goods.marketprice eq -1'}checked{/if}   name="jc_marketprice" lay-skin="switch" lay-text="继承|不继" lay-filter="jc_marketprice" title="开关">
+					    </div>
+					  </div>
+					  <hr class="layui-bg-gray">
+					  <div class="layui-form-item">
+					    <label class="layui-form-label" style="width: auto;">商品排序：</label>
+					    <div class="layui-input-inline">
+					      <input type="text" name="sort" lay-verify="number"  placeholder="请输入商品排序" autocomplete="off" class="layui-input">
+					    </div>
+					    
+					  </div>
+					   <hr class="layui-bg-gray">
+					  <div class="layui-form-item">
+					    <label class="layui-form-label" style="width: auto;">卡密头部：</label>
+					    <div class="layui-input-inline" style="width: 700px;">
+					      
+					      <textarea id="demoEdittou" style="display: none;"  name="kamitou">{if condition='$goods.kamitou eq -1'}{$goods.z_kamitou}{else/}{$goods.kamitou}{/if}</textarea>	
+					    </div>
+					    <div>
+					      <input type="checkbox" {if condition='$goods.kamitou eq -1'}checked{/if} name="jc_kamitou" lay-skin="switch" lay-text="继承|不继" lay-filter="jc_kamitou" title="开关">
+					    </div>
+					  </div>
+					   <hr class="layui-bg-gray">
+					  <div class="layui-form-item">
+					    <label class="layui-form-label" style="width: auto;">卡密尾部：</label>
+					    <div class="layui-input-inline" style="width: 700px;">
+					      
+					      <textarea id="demoEditwei" style="display: none;"  name="kamiwei">{if condition='$goods.kamiwei eq -1'}{$goods.z_kamiwei}{else/}{$goods.kamiwei}{/if}</textarea>
+					    </div>
+					    <div>
+					      <input type="checkbox" {if condition='$goods.kamiwei eq -1'}checked{/if} name="jc_kamiwei" lay-skin="switch" lay-text="继承|不继" lay-filter="jc_kamiwei" title="开关">
+					    </div>
+					  </div>
+					  <hr class="layui-bg-gray">
+					  <div class="layui-form-item" pane>						   
+							<label class="layui-form-label">商品状态：</label>
+							<div class="layui-input-block">
+							    <input type="radio"  title="是" name='status' value="1" {if condition="$goods.status eq 1 "}checked{/if}/>
+							    <input type="radio"  title="否" name='status' value="0" {if condition="$goods.status eq 0 "}checked{/if}/>					     						    
+							    <input type="radio"  title="继承" name='status' value="-1" {if condition="$goods.status eq -1 "}checked{/if}/>
+							</div>
+						  
+						    
+						    
+						</div>
+						<hr class="layui-bg-gray">
+						<div class="layui-form-item" pane>						   
+							<label class="layui-form-label">推荐：</label>
+							<div class="layui-input-block">
+							    <input type="radio"  title="是" name='tuijian' value="1" {if condition="$goods.tuijian eq 1 "}checked{/if}/>
+							    <input type="radio"  title="否" name='tuijian' value="0" {if condition="$goods.tuijian eq 0 "}checked{/if}/>					     						    
+							    <input type="radio"  title="继承" name='tuijian' value="-1" {if condition="$goods.tuijian eq -1 "}checked{/if}/>					     						    
+							</div>
+						  
+						    
+						    
+						</div>
+						<hr class="layui-bg-gray">
+						<div class="layui-form-item" pane>						   
+							<label class="layui-form-label">爆款：</label>
+							<div class="layui-input-block">
+							    <input type="radio"  title="是" name='hot' value="1" {if condition="$goods.hot eq 1 "}checked{/if}/>
+							    <input type="radio"  title="否" name='hot' value="0" {if condition="$goods.hot eq 0 "}checked{/if}/>					     						    
+							    <input type="radio"  title="继承" name='hot' value="-1" {if condition="$goods.hot eq -1 "}checked{/if}/>					     						    
+							</div>
+						  
+						   
+						    
+						</div>
+						<hr class="layui-bg-gray">
+						<div class="layui-form-item" pane>						   
+							<label class="layui-form-label">左空格：</label>
+							<div class="layui-input-block">
+							    <input type="radio"  title="是" name='zkongge' value="1" {if condition="$goods.zkongge eq 1 "}checked{/if}/>
+							    <input type="radio"  title="否" name='zkongge' value="0" {if condition="$goods.zkongge eq 0 "}checked{/if}/>					     						    
+							    <input type="radio"  title="继承" name='zkongge' value="-1" {if condition="$goods.zkongge eq -1 "}checked{/if}/>					     						    
+							</div>
+						  
+						    
+						    
+						</div>
+						<hr class="layui-bg-gray">
+						<div class="layui-form-item" pane>						   
+							<label class="layui-form-label">右空格：</label>
+							<div class="layui-input-block">
+							   <input type="radio"  title="是" name='ykongge' value="1" {if condition="$goods.ykongge eq 1 "}checked{/if}/>
+							    <input type="radio"  title="否" name='ykongge' value="0" {if condition="$goods.ykongge eq 0 "}checked{/if}/>					     						    
+							    <input type="radio"  title="继承" name='ykongge' value="-1" {if condition="$goods.ykongge eq -1 "}checked{/if}/>					     						    
+							</div>
+						  
+						    
+						    
+						</div>
+					  <hr class="layui-bg-gray">
+					  
+					  <div class="layui-form-item">
+					    <div class="layui-input-block">
+					      <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+					      <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+					    </div>
+					  </div>
+					</form>	
+			  	</div>
+			  	
+			  	
+ 				
+ 				
+			  </div>
+			</div>
+			
+			
+            
+                 
+
+
+
+            </div>
+
+        </div>
+      </div>
+    </div>
+               
+  
+
+    <!--非商家提示去认证-->
+    {include file="public/imgpc/footer" /}
+		<script>
+					
+					
+					//color
+					
+					layui.use('colorpicker', function(){
+					  var colorpicker = layui.colorpicker;
+					  
+					  
+					  //热门
+					  colorpicker.render({
+					    elem: '#test-form-color'
+					    ,color:$("input[name='color']").val()
+					    ,done: function(color){				    	
+					      $("input[name='color']").val(color);
+					    }
+					  });
+					
+					
+					});
+					
+					//Demo
+					layui.use('form', function(){
+					  var form = layui.form;
+					  //初始化赋值
+					  form.val("formfilter", {
+						  "mname": "{if condition='$goods.mname eq -1'}{:htmlspecialchars_decode($goods.z_mname)}{else/}{:htmlspecialchars_decode($goods.mname)}{/if}"
+						 ,"mprice_bz": "{if condition='$goods.mprice_bz eq -1'}{:htmlspecialchars_decode($goods.z_mprice_bz)}{else/}{:htmlspecialchars_decode($goods.mprice_bz)}{/if}"
+						 ,"mnotice": "{if condition='$goods.mnotice eq -1'}{:htmlspecialchars_decode($goods.z_mnotice)}{else/}{:htmlspecialchars_decode($goods.mnotice)}{/if}"
+						 ,"msgboxtip": "{if condition='$goods.msgboxtip eq -1'}{:htmlspecialchars_decode($goods.z_msgboxtip)}{else/}{:htmlspecialchars_decode($goods.msgboxtip)}{/if}"
+						 ,"color": "{if condition='$goods.color eq -1'}{:htmlspecialchars_decode($goods.z_color)}{else/}{:htmlspecialchars_decode($goods.color)}{/if}"
+						 ,"mprice": "{if condition='$goods.mprice eq -1'}{$goods.z_mprice/100}{else/}{$goods.mprice/100}{/if}"
+						 ,"marketprice": "{if condition='$goods.marketprice eq -1'}{$goods.z_marketprice/100}{else/}{$goods.marketprice/100}{/if}"
+						 ,"kamitou": "{if condition='$goods.kamitou eq -1'}{$goods.z_kamitou}{else/}{$goods.kamitou}{/if}"
+						 ,"kamiwei": "{if condition='$goods.kamiwei eq -1'}{$goods.z_kamiwei}{else/}{$goods.kamiwei}{/if}"
+						 ,"sort": "{$goods.sort}"
+						 
+						});
+					  //基本配置表单提交
+					  form.on('submit(formDemo)', function(data){
+					    layer.load(0, {shade: [0.4,'#0f0e0e']});
+					    return true;
+					  });
+					  
+					  
+					 
+					 
+					  form.on('switch(jc_mname)', function(data){				  	
+						  
+						  if(data.elem.checked==false){
+						  	$('input[name=mname]').removeAttr("disabled");
+						    $('input[name=mname]').attr("style",""); 
+						  }else{
+						  	$('input[name=mname]').attr("disabled",true);
+						   $('input[name=mname]').attr("style","color: #c2c2c2;"); 
+						  }
+						  
+					  });
+					  form.on('switch(jc_mprice_bz)', function(data){				  	
+						  if(data.elem.checked==false){
+						  	$('input[name=mprice_bz]').removeAttr("disabled");
+						    $('input[name=mprice_bz]').attr("style",""); 
+						  }else{
+						  	$('input[name=mprice_bz]').attr("disabled",true);
+						   $('input[name=mprice_bz]').attr("style","color: #c2c2c2;"); 
+						  }
+						  
+					  }); 
+					  form.on('switch(jc_mnotice)', function(data){				  	
+						  if(data.elem.checked==false){
+						  	$('input[name=mnotice]').removeAttr("disabled");
+						    $('input[name=mnotice]').attr("style",""); 
+						  }else{
+						  	$('input[name=mnotice]').attr("disabled",true);
+						   $('input[name=mnotice]').attr("style","color: #c2c2c2;"); 
+						  }
+						  
+					  }); 
+					  form.on('switch(jc_msgboxtip)', function(data){				  	
+						  if(data.elem.checked==false){
+						  	$('input[name=msgboxtip]').removeAttr("disabled");
+						    $('input[name=msgboxtip]').attr("style",""); 
+						  }else{
+						  	$('input[name=msgboxtip]').attr("disabled",true);
+						   $('input[name=msgboxtip]').attr("style","color: #c2c2c2;"); 
+						  }
+						  
+					  }); 
+					  form.on('switch(jc_color)', function(data){				  	
+						  if(data.elem.checked==false){
+						  	$('input[name=color]').removeAttr("disabled");
+						    $('input[name=color]').attr("style","");
+						    $('#layui-word-auxID').show();
+						  }else{
+						  	$('input[name=color]').attr("disabled",true);
+						   $('input[name=color]').attr("style","color: #c2c2c2;"); 
+						   $('#layui-word-auxID').hide();
+						  }
+						  
+					  }); 
+					  form.on('switch(jc_imgurl)', function(data){				  	
+						  if(data.elem.checked==false){
+						  	$('#demoMoreID').show();
+						    $('#deleteID').show();
+						  }else{
+						  	$('#demoMoreID').hide();
+						    $('#deleteID').hide();
+						  }
+						  
+					  }); 
+					  form.on('switch(jc_mprice)', function(data){				  	
+						  if(data.elem.checked==false){
+						  	$('input[name=mprice]').removeAttr("disabled");
+						    $('input[name=mprice]').attr("style",""); 
+						  }else{
+						  	$('input[name=mprice]').attr("disabled",true);
+						   $('input[name=mprice]').attr("style","color: #c2c2c2;"); 
+						  }
+						  
+					  }); 
+					  form.on('switch(jc_marketprice)', function(data){				  	
+						  if(data.elem.checked==false){
+						  	$('input[name=marketprice]').removeAttr("disabled");
+						    $('input[name=marketprice]').attr("style",""); 
+						  }else{
+						  	$('input[name=marketprice]').attr("disabled",true);
+						   $('input[name=marketprice]').attr("style","color: #c2c2c2;"); 
+						  }
+						  
+					  }); 
+					  form.on('switch(jc_kamitou)', function(data){				  	
+						  if(data.elem.checked==false){
+						  	$('input[name=kamitou]').removeAttr("disabled");
+						    $('input[name=kamitou]').attr("style",""); 
+						  }else{
+						  	$('input[name=kamitou]').attr("disabled",true);
+						   $('input[name=kamitou]').attr("style","color: #c2c2c2;"); 
+						  }
+						  
+					  });
+					  form.on('switch(jc_kamiwei)', function(data){				  	
+						  if(data.elem.checked==false){
+						  	$('input[name=kamiwei]').removeAttr("disabled");
+						    $('input[name=kamiwei]').attr("style",""); 
+						  }else{
+						  	$('input[name=kamiwei]').attr("disabled",true);
+						   $('input[name=kamiwei]').attr("style","color: #c2c2c2;"); 
+						  }
+						  
+					  }); 
+					  
+					  
+					});
+					
+					layui.use('layedit', function(){
+					  var layedit = layui.layedit;
+					  layedit.set({
+						  uploadImage: {
+						    url: "{:url('@jingdian/Upload/uploadfz')}" //接口url
+						    ,type: 'post' //默认post
+						  }
+						});
+					  layedit.build('demoEdit'); //建立编辑器
+					  var layedittou = layui.layedit;
+					  layedittou.set({
+						  uploadImage: {
+						    url: "{:url('@jingdian/Upload/uploadfz')}" //接口url
+						    ,type: 'post' //默认post
+						  }
+						});
+					  layedittou.build('demoEdittou'); //建立编辑器
+					  var layeditwei = layui.layedit;
+					  layeditwei.set({
+						  uploadImage: {
+						    url: "{:url('@jingdian/Upload/uploadfz')}" //接口url
+						    ,type: 'post' //默认post
+						  }
+						});
+					  layeditwei.build('demoEditwei'); //建立编辑器
+					});
+					
+					layui.use('upload', function(){
+					  var upload = layui.upload;
+					   
+					  //logo
+					  var uploadInst_logo = upload.render({
+					    elem: '.demoMore' //绑定元素
+					    ,url:{if condition="config('uploadtype') eq 0"} "{:url('@jingdian/Upload/uploadface')}"{else/}"{:url('@jingdian/Upload/Qiniuupload')}"{/if}
+					    ,accept:'images'
+					    ,acceptMime:'image/*'
+					    ,exts:'jpg|png|gif|bmp|jpeg'
+					    ,size:10240
+					    ,before: function(obj){
+					      //预读本地文件示例，不支持ie8
+					      layer.load(0, {shade: [0.4,'#0f0e0e']});
+					      obj.preview(function(index, file, result){
+					        $('#demo1').attr('src', result); //图片链接（base64）
+					      });
+					    }
+					    ,done: function(res){
+					    	 layer.closeAll('loading'); //关闭loading
+					      //如果上传失败
+					      if(res.code > 0){
+					        return layer.msg('上传失败');
+					      }				      
+					      $('#web_logo').val(res.data.src);
+					      return layer.msg('上传成功');
+					      //上传成功
+					    }
+					    ,error: function(){
+					    	 layer.closeAll('loading'); //关闭loading	
+					      //演示失败状态，并实现重传
+					      var demoText = $('#demoText');
+					      demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-xs demo-reload">重试</a>');
+					      demoText.find('.demo-reload').on('click', function(){
+					        uploadInst_logo.upload();
+					      });
+					    }
+					  });		  
+					});
+		</script>
+ </body>
+
+</html>

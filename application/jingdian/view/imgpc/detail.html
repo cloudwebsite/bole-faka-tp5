@@ -1,0 +1,82 @@
+{include file="public/imgpc/head_title" /}
+		<link rel="stylesheet" href="__IMGPC__/css/common.css" />
+		<link rel="stylesheet" href="__IMGPC__/css/news.css" />
+		<style>
+			h3>ul {
+			    
+			    overflow: hidden;
+			    white-space:nowrap;
+			}
+			h3>ul>li{
+			    list-style: none;
+			    float: left; 
+			    margin-left: 0px;
+			    width: 500px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div class="header">
+			{include file="public/imgpc/header_top" /}
+			<div class="head-bot">
+				<div class="nb">
+					{include file="public/imgpc/header_search" /}
+					<div class="clearfix"></div>
+					{include file="public/imgpc/nav" /}
+				</div>
+			</div>
+		</div>
+		<div class="problem-body">
+			<div class="nb">
+				
+				<div class="problem-rside">
+					<div class="probar">
+					<a href="{:url('@jingdian/Detail/getAll')}">常见问题</a>&gt; <a href="{:url('@jingdian/Detail/index',['id'=>$detail.id])}">{$detail.title}</a>
+					</div>
+					<div class="problemcon">
+						<h3 class="title">{$detail.title}</h3>
+						<div class="pnr" style="border-bottom: 1px solid #EAEAEA;padding-bottom: 20px;">
+						{$detail.content}	
+						</div>
+						<h3  style="margin-top: 15px;">
+				            <ul>
+				              <li>
+				                {if condition="$down['id'] eq 0"}
+				                    
+				                {else /}
+				                   	 上一篇：<a title='{$down.title}' href="{:url('detail/index',['id'=>$down['id']])}" class="down_text">{$down.title}</a>
+				                {/if}
+				
+				              </li>
+				              <li>
+				                {if condition="$up['id'] eq 0"}
+				                  
+				                {else /}
+				                   下一篇： <a title='{$up.title}' href="{:url('detail/index',['id'=>$up['id']])}" class="down_text">{$up.title}</a>
+				                {/if}
+				              </li>
+				            </ul>      
+				    </h3>
+					</div>
+					
+				</div>
+				 
+			</div>
+		</div>
+		{include file="public/imgpc/footer" /}
+		<script src="{:config('cdnpublic')}jquery/1.9.1/jquery.min.js" type="text/javascript"></script>
+		<script src="__IMGPC__/js/main.js" type="text/javascript"></script>
+		<script type="text/javascript">
+			$(".problem-lside a.nli").each(function() {
+				$(this).click(function() {
+					$(this).next("ul.ulson").slideToggle(300);
+					$(this).children("b").toggleClass("arrow");
+				})
+			});
+			
+		</script>
+
+	</body>
+
+</html>

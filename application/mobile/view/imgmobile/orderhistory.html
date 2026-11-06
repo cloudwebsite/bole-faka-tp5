@@ -1,0 +1,180 @@
+<!doctype html>
+
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0 user-scalable=no">
+
+		<meta name="format-detection" content="telephone=no" />
+		<title>{:config('web_site_title')}</title>
+		<link rel="stylesheet" type="text/css" href="__IMGMOBILE__/css/foxui.min.css-v=0.2.css" />
+		<link rel="stylesheet" type="text/css" href="__IMGMOBILE__/css/style.css-v=3.0.0.css" />
+		<link rel="stylesheet" type="text/css" href="__IMGMOBILE__/css/iconfont.css-v=2017070719.css" />
+		<link rel="stylesheet" type="text/css" href="__IMGMOBILE__/css/orderdetail.css?v=2.0.0">
+		<link rel="stylesheet" href="{:config('cdnpublic')}Swiper/4.2.6/css/swiper.min.css" />
+		<script type="text/javascript" src="{:config('cdnpublic')}Swiper/4.2.6/js/swiper.min.js"></script>
+		<!--<link rel="stylesheet" href="//at.alicdn.com/t/font_82607_e93d131lklr6n7b9.css">-->
+
+
+		<style type="text/css">
+			body {
+				position: absolute;
+				;
+				max-width: 750px;
+				margin: auto;
+			}
+			
+			.fui-navbar {
+				max-width: 750px;
+			}
+			
+			.fui-navbar,
+			.fui-footer {
+				max-width: 750px;
+			}
+			
+			.fui-page.fui-page-from-center-to-left,
+			.fui-page-group.fui-page-from-center-to-left,
+			.fui-page.fui-page-from-center-to-right,
+			.fui-page-group.fui-page-from-center-to-right,
+			.fui-page.fui-page-from-right-to-center,
+			.fui-page-group.fui-page-from-right-to-center,
+			.fui-page.fui-page-from-left-to-center,
+			.fui-page-group.fui-page-from-left-to-center {
+				-webkit-animation: pageFromCenterToRight 0ms forwards;
+				animation: pageFromCenterToRight 0ms forwards;
+			}
+		</style>
+
+		<style>
+			.danmu {
+				display: none;
+				opacity: 0;
+			}
+		</style>
+	</head>
+
+	<body ontouchstart>
+
+		<div class="fui-page cav order_detail fui-page-current" id="fui-page-1523813864586">
+
+			<div class="fui-header">
+				<div class="fui-header-left">
+					<a class="back" id="btn-back" href="/"></a>
+				</div>
+				<div class="title">
+					订单快照
+				</div>
+				<div class="fui-header-right"></div>
+			</div>
+
+			<div class="fui-content navbar">
+
+				<!--状态-->
+				<div class="order_detail_header">
+					<div class="order_detail_ststus">
+						<div style="font-size: 0.85rem;">
+							交易快照
+
+						</div>
+						<div>订单金额： ¥ {$Order['money']}</div>
+					</div>
+				</div>
+
+				<!--商品信息-->
+				<div class="fui-list-group">
+					<div class="fui-list_title"><i class="icon icon-dianpu1" style="margin-right: 0.25rem;"></i>{:config('shop_name')}</div>
+
+					<a class="fui-list" >
+						<div class="fui-list-media">
+							<img {if condition="$Order['imgurl'] eq ''"}src="/static/admin/images/head_default.gif"{else/}src="{$Order['imgurl']}"{/if} onerror="this.src='/static/admin/images/head_default.gif'">
+						</div>
+						<div class="fui-list-inner">
+							<div class="title">{$Order['goodname']}</div>
+
+						</div>
+						<div class="fui-list-angle" style="margin-right: 0">
+							<div style="color: #000">￥{$Order['price']}</div>
+							<div class="num">x{$Order['buynum']}</div>
+						</div>
+					</a>
+
+				</div>
+				<!--门店-->
+				<div class="fui-cell-group noborder order-info">
+					<div class="fui-cell">
+						<div class="fui-cell-info">
+							<span style="margin-right: 0.7rem;">订单编号</span>{$Order['orderno']} </div>
+						<div class="fui-cell-remark noremark">
+
+						</div>
+					</div>
+					<div class="fui-cell">
+						<div class="fui-cell-info">
+							<span style="margin-right:0.7rem;">创建时间</span>{:date("Y-m-d H:i:s",$Order['create_time'])} </div>
+						<div class="fui-cell-remark noremark">
+
+						</div>
+					</div>
+				
+					
+
+					
+				</div>
+				<!--消费码-->
+				<!--发货信息-->
+				
+
+			</div>
+			
+
+		</div>
+    <script type="text/javascript">
+    
+    
+      function gohome()
+		{
+			location.href="{:config('is_https')}://"+window.location.host+'/mobile';
+		}
+		function downloadz(order)
+		{
+			location.href="{:url('Index/dc')}"+"?order="+order;
+		}
+		
+		function fenxiang(order)
+		{
+			top.location.href="{:url('Index/fenxiang')}"+"?order="+order.toString();
+		}
+		function timestampToTime(timestamp) {
+        var date = new Date(timestamp * 1000);//时间戳为10位需*1000，时间戳为13位的话不需乘1000
+        Y = date.getFullYear() + '-';
+        M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
+        D = date.getDate() + ' ';
+        h = date.getHours() + ':';
+        m = date.getMinutes() + ':';
+        s = date.getSeconds();
+        return Y+M+D+h+m+s;
+   }	
+</script>
+
+<script>        
+		  var mySwiper = new Swiper ('.swiper-container', {
+		    direction: 'horizontal',
+		    loop: false,
+		    autoplay:true,
+		    
+		    // 如果需要分页器
+		    pagination: {
+		      el: '.swiper-pagination',
+		      type: 'bullets',
+		    },
+		    
+		   
+		    
+		   
+		  })        
+		</script>
+	</body>
+
+</html>

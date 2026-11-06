@@ -1,0 +1,610 @@
+<!doctype html>
+
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0 user-scalable=no">
+
+		<meta name="format-detection" content="telephone=no" />
+		<title>{:config('web_site_title')}</title>
+		<link rel="stylesheet" type="text/css" href="__IMGMOBILE__/css/foxui.min.css-v=0.2.css">
+		<link rel="stylesheet" type="text/css" href="__IMGMOBILE__/css/style.css-v=3.0.0.css">
+
+		<link rel="stylesheet" type="text/css" href="__IMGMOBILE__/css/iconfont.css-v=2017070719.css">
+		<!--<link rel="stylesheet" href="//at.alicdn.com/t/font_82607_e93d131lklr6n7b9.css">-->
+		
+		<script type="text/javascript" src="{:config('cdnpublic')}jquery/1.8.2/jquery.min.js"></script>
+
+		<link rel="stylesheet" href="{:config('cdnpublic')}layer/3.1.1/mobile/need/layer.css" />
+		<script type="text/javascript" src="{:config('cdnpublic')}layer/3.1.1/mobile/layer.js"></script>
+		
+
+		<style type="text/css">
+			body {
+				position: absolute;
+				;
+				max-width: 750px;
+				margin: auto;
+			}
+			
+			.fui-navbar {
+				max-width: 750px;
+			}
+			
+			.fui-navbar,
+			.fui-footer {
+				max-width: 750px;
+			}
+			
+			.fui-page.fui-page-from-center-to-left,
+			.fui-page-group.fui-page-from-center-to-left,
+			.fui-page.fui-page-from-center-to-right,
+			.fui-page-group.fui-page-from-center-to-right,
+			.fui-page.fui-page-from-right-to-center,
+			.fui-page-group.fui-page-from-right-to-center,
+			.fui-page.fui-page-from-left-to-center,
+			.fui-page-group.fui-page-from-left-to-center {
+				-webkit-animation: pageFromCenterToRight 0ms forwards;
+				animation: pageFromCenterToRight 0ms forwards;
+			}
+		</style>
+
+		<style>
+			.danmu {
+				display: none;
+				opacity: 0;
+			}
+		</style>
+	</head>
+
+	<body ontouchstart>
+
+		<div class='fui-page-group '>
+			<style>
+				.page-goods-detail .basic-block {
+					background: #fafafa;
+				}
+				
+				.fui-cell-group {
+					width: 100%;
+				}
+				
+				.fui-header {
+					background: #f7f7f7;
+				}
+				
+				.fui-tab a {
+					color: #666666;
+				}
+				
+				.fui-tab.fui-tab-danger a.active {
+					color: #ef4f4f;
+					border-color: #ef4f4f;
+				}
+				
+				.page-goods-detail .fui-comment-group .fui-cell .comment .info .star .shine {
+					color: #fd5454;
+				}
+				
+				.fui-list-media.radius img {
+					border-radius: 0.3rem;
+				}
+				
+				.fui-list-media.circle img {
+					border-radius: 2.5rem;
+				}
+				
+				.btn-like {
+					color: #999999
+				}
+				
+				.btn-like.icon-likefill {
+					color: #f01
+				}
+				
+				.fui-cell-group {
+					width: 100%;
+				}
+				
+				.fullback-title {
+					color: #999999;
+					font-size: 0.7rem;
+					padding: 0.75rem 0 0.5rem 0;
+				}
+				
+				.fullback-info {}
+				
+				.fullback-info p {
+					height: 1rem;
+					line-height: 1rem;
+					font-size: 0.625rem;
+					color: #333;
+					display: inline-block;
+					padding: 0 0.5rem 0 0;
+				}
+				
+				.fullback-info p i {
+					border: none;
+					height: 0.75rem;
+					width: 0.75rem;
+					display: inline-block;
+					background: #ff4753;
+					color: #fff;
+					font-size: 0.4rem;
+					line-height: 0.8rem;
+					text-align: center;
+					font-style: normal;
+					border-radius: 0.75rem;
+					-webkit-border-radius: 0.75rem;
+					margin-right: 0.25rem;
+				}
+				
+				.fullback-remark {
+					line-height: 1rem;
+					font-size: 0.6rem;
+					color: #666;
+					padding: 0.2rem 0;
+				}
+			</style>
+
+			
+
+			<div class='fui-page fui-page-current  page-goods-detail' id='page-goods-detail-index'>
+
+				<div class="fui-header">
+					<div class="fui-header-left">
+						<a class="back" id="btn-back" onclick="back();"></a>
+					</div>
+					<div class="title">
+						商品详情 </div>
+					<div class="fui-header-right"></div>
+				</div>
+
+				<!--参数已完成-->
+				<!--评价-->
+
+				<div class='fui-content basic-block pulldown '>
+
+					<!-- diy元素 -->
+					<!-- 商品轮播图 -->
+					<style>
+						.fui-swipe-page {
+							text-align: left;
+							bottom: 5px;
+							height: 12px;
+							line-height: 12px;
+							padding: 0 5px;
+						}
+						
+						.fui-swipe-bullet {
+							background: #ffffff;
+							opacity: ;
+							height: 12px;
+							width: 12px;
+						}
+						
+						.fui-swipe-bullet.active {
+							background: #ffffff;
+							opacity: 1;
+						}
+						
+						.fui-swipe-page.square .fui-swipe-bullet {
+							height: 12px;
+							width: 12px;
+							border-radius: 0;
+						}
+						
+						.fui-swipe-page.rectangle .fui-swipe-bullet {
+							height: 12px;
+							width: 20px;
+							border-radius: 0;
+						}
+					</style>
+					<div class='fui-swipe goods-swipe'>
+
+						<div class='fui-swipe-wrapper'>
+							<div class='fui-swipe-item'><img {if condition="$param['imgurl'] eq ''"}src="/static/admin/images/head_default.gif"{else/}src="{$param['imgurl']}"{/if} onerror="this.src='/static/admin/images/head_default.gif'" /></div>
+						</div>
+						<div class="fui-swipe-page rectangle"></div>
+						{if condition="$param['count'] eq 0"}
+						<div class="salez">
+                <img src="__IMGMOBILE__/img/ysq.png">
+            </div>
+						{/if}
+					</div>
+					<!-- 商品信息块 -->
+					<div class="fui-cell-group fui-detail-group" style="margin-top: 0px; margin-bottom: 0px; background: #ffffff;">
+						<div class="fui-cell">
+							<div class="fui-cell-text name" style="color: #333333;">{:strip_tags(htmlspecialchars_decode($param['mname']))}</div>
+							
+						</div>
+						<div class="fui-cell goods-subtitle">
+							<span class='text-danger' style="color: #ef4f4f;">{:strip_tags(htmlspecialchars_decode($param['mnotice']))}</span>
+						</div>
+
+						<div class="fui-cell">
+							<div class="fui-cell-text price">
+
+								<span class="text-danger" style="vertical-align: middle; color: #ef4f4f; ">
+			
+				{if condition="$param['mprice'] lt 1"}
+				{:number_format($param['mprice']/100, 4)}
+				{else/}	
+				{:number_format($param['mprice']/100, 2)}
+				{/if}<span  class="mjf">积分</span> 		            						
+			<span  class="original">￥
+				{if condition="$param['marketprice'] lt 1"}
+				{:number_format($param['marketprice']/100, 4)}
+				{else/}	
+				{:number_format($param['marketprice']/100, 2)}
+				{/if}
+			</span> </span>
+							</div>
+						</div>
+
+						<div class="fui-cell">
+							<div class="fui-cell-text flex">
+								<span style="color: #c0c0c0;">库存:  {$param['count']}</span>
+								<span style="color: #c0c0c0;">销量:  {$param['sellercount']} 件</span>
+								
+							</div>
+						</div>
+
+					</div>
+					<div class="fui-cell-group">
+						<div class="fui-cell">
+							<div class="fui-cell-info">商品详情</div>
+						</div>
+					</div>
+
+					<div class="content-block content-images" style="margin: 0.4rem 0.4rem;">
+						<div class="fui-cell">
+							{if condition="$param['xqnotice'] eq ''"}
+								 暂无注意事项
+								 {else/} 
+							{:htmlspecialchars_decode($param['xqnotice'])}
+							{/if}
+						</div>
+					</div>
+				</div>
+
+				<div id='comments-container'></div>
+
+				<div class="fui-navbar bottom-buttons" style="background: #ffffff;">
+
+					<a class="nav-item favorite-item " data-isfavorite="0" onclick="home();">
+						<span class="icon btn-like icon-like"></span>
+						<span class="label" style="color: #999999">首页</span>
+					</a>
+					<a class="nav-item external" onclick="list();">
+						<span class="icon icon-shop" style="color: #999999"></span>
+						<span class="label" style="color: #999999">分类</span>
+					</a>
+					
+					{if condition="session('useraccount.account') eq null"}
+					<a class="nav-item external" onclick="selectorder();">
+					{else/}
+					<a class="nav-item external" href="{:url('user/usjforder')}">
+					{/if}
+						<span class="icon icon-cart" style="color: #999999"></span>
+						<span class="label" style="color: #999999">订单</span>
+					</a>
+					{if condition="$param['count'] eq 0"}
+					<a class="nav-item btn buybtn" style="background: #D1D1D1;" data-type="2">已售罄</a>
+					{else/}
+					<a class="nav-item btn buybtn" style="background: #fd5555;" data-type="2" onclick="aClick()">立刻兑换</a>
+					{/if}
+				</div>
+				<div style="display: none;" id='ceshi'>
+					<div class='fui-modal picker-modal in'>
+						<div class='option-picker '>
+							<div class='option-picker-inner'>
+								<div class='option-picker-cell goodinfo'>
+									
+									<div class='closebtn2' onclick="closebtn();"><i class='icon icon-guanbi1'></i></div>
+									<div class='img' style="z-index: 9999;"><img class='thumb' {if condition="$param['imgurl'] eq ''"}src="/static/admin/images/head_default.gif"{else/}src="{$param['imgurl']}"{/if} onerror="this.src='/static/admin/images/head_default.gif'"></div>
+									<div class='info info-price text-danger'>
+										<span>
+				
+				<span class='price'>
+				
+						{if condition="$param['mprice'] lt 1"}
+						{:number_format($param['mprice']/100, 4)}
+						{else/}	
+						{:number_format($param['mprice']/100, 2)}
+						{/if}
+					    	
+				    
+				
+						</span>积分
+										</span>
+
+									</div>
+									<div class='info info-total'>
+
+									</div>
+								 </div>
+								
+								<div class='option-picker-options'>
+								
+									
+									<div class="fui-cell-group diyform-container">
+									    
+									    <div class="fui-cell"  data-type="0" data-name="QQ账号" data-name2="" data-isdefault="0" data-itemid="field_data0" data-key="diyzhanghao">
+											
+										</div>
+	
+									    
+									</div>
+									
+									<div class='fui-cell-group' style='margin-top:0'>
+										<div class='fui-cell'>
+											<div class='fui-cell-label'>数量</div>
+											<div class='fui-cell-info'></div>
+											<div class='fui-cell-mask noremark'>
+												<div class='fui-number' style="width: 7rem;">
+													<div class='minus' id='minus' onclick="minus();">-</div>
+													<input class='num2' type='tel' name='buynum' value="{$param['mmin']}"  onkeyup="if(isNaN(value))execCommand('undo')" onafterpaste="if(isNaN(value))execCommand('undo')">
+													<div class='plus' id='add' onclick="add();">+</div>
+												</div>
+											</div>
+										</div>
+
+									</div>
+									
+													<!--支付参数-->
+									<input type="hidden" name="title2" value="{:strip_tags(htmlspecialchars_decode($param['mname']))}"/>				
+									<input type="hidden" name="p3_Amt2" value=""/>
+									<input type="hidden" name="p2_Order2" value=""/>
+									<input type="hidden" name="p5_Pid2" value="{$param['id']}"/>
+									<input type="hidden" name="pa_MP2" value=""/>
+									<input type="hidden" name="price2" value=""/>
+									<input type="hidden" name="sendbeishu2" value="{$param['sendbeishu']}"/>
+									
+									
+									<script type="text/javascript">
+										var flag=false;
+										function add(){
+											$('.num').val(parseInt($('.num').val())+1);
+											if($('.num').val()>{$param['mmin']}){
+												$('#minus').removeClass('disabled');
+											}
+										}
+										function minus(){
+											$('.num').val(parseInt($('.num').val())-1);
+											if($('.num').val()=={$param['mmin']}){
+												$('#minus').addClass('disabled');
+											}
+											if($('.num').val()<{$param['mmin']}){
+												$('.num').val("{$param['mmin']}");
+												
+											}
+											
+										}
+										
+										function checkform(){
+		
+												var mmin={$param['mmin']};
+												var mmax={$param['mmax']};
+												var countnum ={$param['count']};
+												var buynum=parseInt($('.num').val());												
+												var sendbeishu=parseInt($('[name=sendbeishu]').val());
+										
+											
+											if(countnum=='0'){
+										        	layer.open({
+														content: '库存为空，请联系客服补货',
+														btn: '我知道了',
+														time: 30 //2秒后自动关闭
+													});
+													return false;
+										    }
+											if(buynum*sendbeishu>countnum){
+										        	layer.open({
+														content: '库存不足，请修改购买数量',
+														btn: '我知道了',
+														time: 30 //2秒后自动关闭
+													});
+													$('.num').val(parseInt(countnum/sendbeishu));
+													return false;
+										    }
+											if(buynum<mmin || isNaN(buynum)){
+										        	layer.open({
+														content: '起购数量：'+mmin,
+														btn: '我知道了',
+														time: 30 //2秒后自动关闭
+													});
+													$('.num').val(parseInt(mmin));
+													return false;
+										    }
+											if(buynum>mmax){
+										        	layer.open({
+														content: '最大购买数量：'+mmax,
+														btn: '我知道了',
+														time: 30 //2秒后自动关闭
+													});
+													$('.num').val(parseInt(mmax));
+													return false;
+										        }
+										        return true;
+										}
+										function create(){
+											var index=layer.open({
+											    type: 2
+											    ,content: '加载中'
+											    ,shade: 'background-color: rgba(0,0,0,.2)'
+											    ,shadeClose:false
+											  });
+											checkform();  
+											var mpid={$param['id']};
+											var buynum=$('.num').val();
+											$.when(CreateOrder(mpid,buynum)).done(function (res) {
+												if(res.code!=1){
+													layer.close(index);
+													
+													layer.open({
+														content: res.msg,
+														btn: ['确定', '取消'],
+														time: 30, //2秒后自动关闭
+														yes: function(index){
+														      window.location.href=res.url;														      
+														    }
+													});
+												}else{
+													window.location.href=res.url;
+												}
+											});
+										}
+										
+										//上传订单
+										function CreateOrder(mpid,buynum){
+											var defer = $.Deferred();
+											$.getJSON("{:url('@jingdian/integral/createorder')}",
+														{'mpid':mpid,
+														'buynum': buynum,							
+										      			}, 
+														function(data) {
+															defer.resolve(data);		
+														});
+											return defer;
+										}
+									
+										function closebtn(){
+                      						layer.closeAll();
+										}
+									</script>
+
+								</div>
+								<div class='fui-navbar  ' style='display: block;'>
+									<a href='javascript:;' class='nav-item btn cartbtn' style='display:none'>加入购物车</a>
+									<a href='javascript:;' class='nav-item btn buybtn' style='display:none'>立刻兑换</a>
+									<a href='javascript:;' class='nav-item btn confirmbtn' style='' onclick="create();">确定</a>
+								</div>
+							</div>
+						</div>
+					</div>
+					
+				</div>
+
+				<script type="text/javascript">
+					function aClick() {
+						var html = $('#ceshi').html();
+						html=html.replace(/lianxi2/g, "lianxi");					
+						html=html.replace(/num2/g, "num");
+						html=html.replace(/p3_Amt2/g, "p3_Amt");
+						html=html.replace(/p2_Order2/g, "p2_Order");
+						html=html.replace(/p5_Pid2/g, "p5_Pid");
+						html=html.replace(/pa_MP2/g, "pa_MP");
+						html=html.replace(/frm2/g, "frm");
+						html=html.replace(/title2/g, "title");
+						html=html.replace(/price2/g, "price");
+						html=html.replace(/closebtn2/g, "closebtn");
+						html=html.replace(/sendbeishu2/g, "sendbeishu");
+						html=html.replace(/attachT/g, "attach");
+						
+						
+						layer.open({
+							type: 1,
+							content: html,
+							anim: 'up',
+							style: 'position:fixed; bottom:0; left:0; width: 100%; height: 200px; padding:10px 0; border:none;'
+						});
+						$('.num').val("{$param['mmin']}");
+					}
+					
+					
+					function toDecimal(x){
+				  		var f = parseFloat(x);
+						if(isNaN(f)) {
+							return false;
+						}
+						var f;
+						if(getFloor(x)<2){
+							f = Math.round(x * 100) / 100;
+						}else if(getFloor(x)>2){
+							f = Math.round(x * 10000) / 10000;
+						}	
+						var s = f.toString();
+						var rs = s.indexOf('.');
+						if(rs < 0) {
+							rs = s.length;
+							s += '.';
+						}
+						while(s.length <= rs + 2) {
+							s += '0';
+						}
+						return s;
+				  	}
+				  	
+					function getFloor(x){
+						var y = String(x).indexOf('.') + 1;
+						var count = String(x).length - y;
+						if(y <= 0) {
+							count=0;
+						}
+						return count;										
+					}
+					
+					function getOrder() {
+						//设定时间格式化函数
+						Date.prototype.format = function(format) {
+							var args = {
+								"M+": this.getMonth() + 1,
+								"d+": this.getDate(),
+								"h+": this.getHours(),
+								"m+": this.getMinutes(),
+								"s+": this.getSeconds(),
+							};
+							if(/(y+)/.test(format))
+								format = format.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+							for(var i in args) {
+								var n = args[i];
+								if(new RegExp("(" + i + ")").test(format))
+									format = format.replace(RegExp.$1, RegExp.$1.length == 1 ? n : ("00" + n).substr(("" + n).length));
+							}
+							return format;
+						};
+				
+						var order = new Date().format("yyyyMMddhhmmss") + randomNum(10);
+						return order;
+					}
+				
+					function randomNum(n) {
+						var t = '';
+						for(var i = 0; i < n; i++) {
+							t += Math.floor(Math.random() * 10);
+						}
+						return t;
+					}
+					{include file="public/mjfcommon" /}
+					msgboxtip();
+					
+					function msgboxtip(){
+						var msgboxtext="{$param['msgboxtip']}";
+						if(msgboxtext.replace(/\s+/g,"")!==""){
+							layer.open({
+							    content: msgboxtext
+							    ,btn: '我知道了'
+							  });
+						}
+					}
+					
+					
+					
+					
+				</script>
+				<!--配送区域弹层-->
+
+				<!--评论模版-->
+
+				<!--评价-->
+
+				<!--优惠券弹层完成-->
+
+			</div>
+
+		</div>
+	</body>
+
+</html>

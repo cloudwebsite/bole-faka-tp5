@@ -1,0 +1,32 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>404</title>
+<style type="text/css">
+img{border:none;}
+.content{width:1170px; margin:0 auto;}
+.p404{text-align:center;padding:100px 0 20px;}
+.p404 hr{background-color:#eaeaea;width:80%;height:2px;border:none;margin-top:50px;}
+.title{ background:url(../images/wenzi.png) center center no-repeat;height:120px;}
+ul{width:945px; margin:0 auto;}
+li{display:inline-block;float:left;width:180px;height:60px;margin:10px 28px 0;}
+li a{display:block;width:178px;height:58px;border:1px solid #a4a4a4; text-align:center; font:24px/58px Arial, Helvetica, sans-serif; color:#a4a4a4; text-decoration:none;}
+</style>
+</head>
+
+<body>
+<div class="content">
+	<div class="p404">
+    	<img src="p404.png" width="360" height="250" />
+        <hr/>
+    </div>
+    <div class="title"></div>
+    <ul>
+    	<li><a href="/">返回首页</a></li>
+        
+    </ul>
+</div>
+
+</body>
+</html>

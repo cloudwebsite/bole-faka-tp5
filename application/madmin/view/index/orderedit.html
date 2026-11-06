@@ -1,0 +1,126 @@
+{include file="public/header" /}
+
+	<body ontouchstart>
+
+		<div class='fui-page-group '>
+			
+			<script type="text/javascript" src="https://unpkg.com/jquery-form@3.50.0/jquery.form.js"></script>
+			<script type="text/javascript" src="/static/admin/js/lunhui.js"></script>
+			<link href="__CSS__/style20170419.css" rel="stylesheet" type="text/css" />
+			
+			<div class='fui-page fui-page-current'>
+				<form method="post" action="{:url('orderedit')}" id="addkamiform">
+				<input type="hidden" name='id' value="{$orderid}">
+				<div class="fui-header fui-header-success">
+					<div class="fui-header-left">
+						<a class="back"></a>
+					</div>
+					<div class="title">{$shopdetail['mnamebie']}</div>
+					<div class="fui-header-right"></div>
+				</div>
+				<div class='fui-content navbar'>
+
+				
+					<div class="fui-title">状态信息</div>
+					<div class="fui-cell-group">						
+						<div class="fui-cell fui-cell-textarea" style="height: 100%;">							
+							<div class="fui-cell-info">
+								<textarea rows="2" placeholder="手工类订单回执可见" id="statustext" name="statustext">{$info.statustext|default=''}</textarea>
+							</div>
+						</div>
+					</div>
+					<div class="fui-title">操作备注</div>
+					<div class="fui-cell-group">						
+						<div class="fui-cell fui-cell-textarea" style="height: 100%;">							
+							<div class="fui-cell-info">
+								<textarea rows="2" placeholder="操作备注" id="beizhu" name="beizhu">{$info.beizhu|default=''}</textarea>
+							</div>
+						</div>
+					</div>
+					
+                  <div class="fui-cell-group">
+					<div class="fui-cell applyradio " id="btn-alipay1" style="display: flex;">
+						<div class="fui-cell-info" style="height: 100%">
+							<div class="title">进行中</div>
+							<div class="subtitle" style="color: #999999;font-size: .65rem">仅限手工类商品</div>
+						</div>
+						<div class="fui-cell-remark noremark"><input name="mstatus" type="radio" class="fui-radio fui-radio-danger" value="3" ></div>
+					</div>
+					<div class="fui-cell applyradio " id="btn-wx" style="display: flex;">
+						<div class="fui-cell-info" style="height: 100%">
+							<div class="title">撤回</div>
+							<div class="subtitle" style="color: #999999;font-size: .65rem">手工卡密都可以</div>
+						</div>
+						<div class="fui-cell-remark noremark"><input name="mstatus" type="radio" class="fui-radio fui-radio-danger" value="4" ></div>
+					</div>	
+					<div class="fui-cell applyradio " id="btn-wx" style="display: flex;">
+						<div class="fui-cell-info" style="height: 100%">
+							<div class="title">完成</div>
+							<div class="subtitle" style="color: #999999;font-size: .65rem">仅限手工类商品</div>
+						</div>
+						<div class="fui-cell-remark noremark"><input name="mstatus" type="radio" class="fui-radio fui-radio-danger" value="5" ></div>
+					</div>	
+				</div>
+					<button class="btn btn-success block" type="submit" style="width: 95%;" >提交更改</button>
+				</div>
+				</form>
+				
+			</div>
+			{include file="public/navbar" /}
+
+			<a class="diy-gotop external" style=" position: fixed; overflow: hidden; z-index: 999; bottom: 136px; right: 10px; text-align: left; display:none;" id="gotop">
+				<div style="background: #000000; opacity: 0.5; line-height: 32px; text-align: center; border-radius: 30px; height: 30px; width: 30px;">
+					<i class="icon icon-top1" style="color: #ffffff; font-size: 20px;"></i>
+				</div>
+			</a>
+
+			<script>
+				$(function() {
+					$(".fui-content").bind('scroll resize', function() {
+						var scrolltop = $(".fui-content").scrollTop();
+						if(scrolltop > "300") {
+							$("#gotop").fadeIn(100)
+						} else {
+							$("#gotop").fadeOut(100)
+						}
+					});
+					$("#gotop").unbind('click').click(function() {
+						$(".fui-content").animate({
+							scrollTop: "0px"
+						}, 1000)
+					});
+                  
+					$('#addkamiform').ajaxForm({
+			            beforeSubmit: checkForm, // 此方法主要是提交前执行的方法，根据需要设置
+			            success: complete, // 这是提交后的方法
+			            dataType: 'json'
+			        });
+			        var loadindex;
+			        function checkForm(){
+			        	var kami=$("input[type='radio'][name='mstatus']:checked").val();     
+                  
+			        	if(!kami || typeof(kami)=="undefined" || kami==0){
+			        		 layer.open({
+							    content: '状态未选择'
+							    ,btn: '我知道了'
+							  });  
+						return false;
+			        	}			        	
+			        	
+			        }
+			        function complete(data){
+			        	layer.close(loadindex);
+			            if(data.code==1){
+			                lunhui.success_mobile('更改成功',"{:url('order')}");
+			            }else{ 
+			                lunhui.error_mobile(data.msg,"{:url('order')}");	                 
+			            }
+			        }
+				});
+			</script>
+
+			<span style="display:none"></span>
+			
+	</body>
+
+</html>

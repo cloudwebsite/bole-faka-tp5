@@ -1,0 +1,636 @@
+{include file="public/imgpc/head_title" /}
+		<link rel="stylesheet" href="__IMGPC__/css/common.css" />
+		<link rel="stylesheet" href="__IMGPC__/css/animate.min.css" />
+		<link rel="stylesheet" type="text/css" href="__IMGPC__/css/cart.css" />
+		<link rel="stylesheet" href="__IMGPC__/css/quan.css" />
+		<script src="{:config('cdnpublic')}jquery/1.9.1/jquery.min.js" type="text/javascript"></script>
+		<script src="__IMGPC__/js/main.js" type="text/javascript"></script>
+	</head>
+	<style>
+		/** Table 表格样式 **/
+		.qgg-table{
+		    border-collapse: collapse;
+		    width:100%;
+		    border:1px solid #c6c6c6 !important;
+		   
+		}
+		.qgg-table th{
+		    border-collapse: collapse;
+		    border-right:1px solid #c6c6c6 !important;
+		    border-bottom:1px solid #c6c6c6 !important;
+		    background-color:#ddeeff !important; 
+		   
+		    font-size:14px;
+		    font-weight:normal;
+		    text-align:center;
+		}
+		.qgg-table td{
+		    border-collapse: collapse;
+		    border-right:1px solid #c6c6c6 !important;
+		    border-bottom:1px solid #c6c6c6 !important; 
+		    padding:5px 9px;
+		    font-size:12px;
+		    font-weight:normal;
+		    text-align:center;
+		    word-break: break-all;
+		}
+		.qgg-table tr:nth-child(odd){
+		    background-color:#fff !important; 
+		}
+		.qgg-table tr:nth-child(even){
+		    background-color: #fff !important;
+		}
+	</style>
+
+	<body>
+		<div class="header">
+			
+			{include file="public/imgpc/header_top" /}
+			<div class="head-bot">
+				<div class="nb">
+					{include file="public/imgpc/header_search" /}
+					<div class="clearfix"></div>
+					{include file="public/imgpc/nav" /}
+					
+				</div>
+			</div>
+		</div>
+		<form method="post" action="" role="form" id="frm2">
+			
+			
+		
+		<div class="cart-box">
+			<div class="nb">
+				<div class="cart-step">
+					<ul>
+						<li class="cart1"><i></i>选择商品</li>
+						<li class="cart2 oncart2"><i></i>确认订单</li>
+						<li class="cart3"><i></i>付款</li>
+						<li class="cart4"><i></i>支付成功</li>
+					</ul>
+				</div>
+
+				<div class="goods-infor">
+					<div class="cart-title">
+						<h3><span>商品信息</span><a href="javascript :;" onClick="javascript :history.back(-1);" class="vivi-blue">返回上一步</a></h3>
+					</div>
+					<div class="goods-table">
+						<div class="goods-thead">
+							<div class="col col1">
+								商品
+							</div>
+							<div class="col col3">
+								单价
+							</div>
+							<div class="col col4">
+								数量
+							</div>
+							<div class="col col5">
+								小计
+							</div>
+						</div>
+						<div class="goods-tbody">
+							<div class="goodinfor" id="120">
+								<div class="col col1 goods-title-pic">
+									<a href="{:url('jingdian/Index/goodsdetail',['mpid'=>$param['data_fl'][0]['id']])}"><img src="{$param['data_fl'][0]['imgurl']}"  onerror="this.src='/static/admin/images/head_default.gif'" width="60" height="60" /></a>
+									<div class="goods-describ elli">
+										<p>
+											<a href="{:url('jingdian/Index/goodsdetail',['mpid'=>$param['data_fl'][0]['id']])}">{:htmlspecialchars_decode($param['data_fl'][0]['mname'])}</a>
+										</p>
+										<p><span class="color"></span>
+
+										</p>
+									</div>
+								</div>
+								<div class="col col3 goods-price"> ￥{$param['data_shop']['mdj']/100} </div>
+								<div class="col col4 good-num"> {$param['buynum']} </div>
+								<div class="col col5 orange-bold xiaoji"> ￥{$param['data_shop']['money']} </div>
+							</div>
+
+						</div>
+					</div>
+				</div>
+				
+				
+				{if condition="session('useraccount.account') eq null"}
+				<div class="anonlogin">
+					
+					<div class="cart-title">
+						<h3><span>联系方式</span></h3>
+					</div>
+					<div class="input-box zhifu-box">
+						<label class="icon-phone" for="loginmobile"></label>
+						<input type="text" id="loginmobile" value="" placeholder="手机号码" maxlength="11" autocomplete="off">
+					</div>
+					
+					<span class="formtip"><i></i><label></label></span>
+				</div>
+				{/if}
+				
+				
+				{if condition="$param['isattach'] eq 1"}
+				<div class="anonlogin">
+					
+					<div class="cart-title">
+						<h3><span>附加选项</span></h3>
+					</div>
+					<div class="input">
+							<table class="qgg-table">
+							   
+							    <thead>
+								    <tr>
+								      <th width="25%"></th>
+								      <th width="40%"></th>
+								      <th width="35%"></th>	
+								    </tr> 
+								</thead>
+							    <tbody>
+							      {foreach name="$attach" item="vo"}
+							      <tr>
+							        <td style="text-align: right;"><span class="slivergrey">{$vo.title}：</span></td>
+							        <td><input type="text" style="border: 1px solid #dedede;width: 100%;height: 35px;padding-left: 15px;" id="attach{$vo.id}" name="attach[{$vo.id}]" value="" placeholder="{$vo['tip']}"></td>
+							        <td style="text-align: left;">{$vo.tip}</td>
+							        
+							      </tr>
+							       {/foreach}
+							    </tbody>
+							  </table>
+							 
+							
+					</div>
+					
+					<span class="formtip"><i></i><label></label></span>
+				</div>
+					
+				{/if}
+
+				<div class="style-zhifu">
+					<div class="cart-title">
+						<h3><span>支付方式</span></h3>
+					</div>
+					{if condition="session('useraccount.account') neq null"}
+						{if condition="$param['useraccount']['money'] egt $param['data_shop']['money']"}
+						<div class="zhifu-box">
+							<div class="yue">
+								<span><input type="checkbox" id="userbalance" checked="checked" disabled="disabled">&nbsp;使用余额</span><span class="yeuse">（我的余额：<b class="orange-bold">{$param['useraccount']['money']}</b>元）</span>。						
+							</div>						
+						</div>
+						{else/}
+							<div class="zhifu-box">
+								{if condition="config('balance_pay_only') eq 1 || config('balance_pay_only') eq '1'"}
+								<p style="color:#c00;padding:10px 0;">余额不足，请先到会员中心使用卡密或在线充值后再购买。</p>
+								{else/}
+								<ul class="zfb" id="paylist">
+									{if condition="config('balance_pay_only') neq 1 && config('balance_pay_only') neq '1' && config('blfk_pay_alipay') neq '0'"}
+									<li>
+										<i class="icon-check-zf"></i>
+										<a href="javascript:void(0);" id="alipay"><img src="__IMGPC__/images/alipay.png" />支付宝</a>
+									</li>
+									{/if} 
+									{if condition="config('balance_pay_only') neq 1 && config('balance_pay_only') neq '1' && config('blfk_pay_wxpay') neq '0'"}
+									<li>
+										<i class="icon-check-zf"></i>
+										<a href="javascript:void(0);" id="wxpay"><img src="__IMGPC__/images/wxpay_native.png" />微信支付</a>
+									</li>
+									{/if} 
+									{if condition="config('balance_pay_only') neq 1 && config('balance_pay_only') neq '1' && config('blfk_pay_qqpay') neq '0'"}
+									<li>
+										<i class="icon-check-zf"></i>
+										<a href="javascript:void(0);" id="qqpay"><img src="__IMGPC__/images/qqpay.png" />QQ钱包</a>
+									</li>
+									{/if}
+									{if condition="config('balance_pay_only') neq 1 && config('balance_pay_only') neq '1' && config('blfk_pay_usdtpay') neq '0'"}
+									<li>
+										<i class="icon-check-zf"></i>
+										<a href="javascript:void(0);" id="usdtpay"><img src="__IMG__/newusdt.png" />USDT</a>
+									</li>
+									{/if} 
+									{if condition="config('balance_pay_only') neq 1 && config('balance_pay_only') neq '1' && config('blfk_pay_unionPay') neq '0'"}
+									<li>
+										<i class="icon-check-zf"></i>
+										<a href="javascript:void(0);" id="unionPay"><img src="__IMGPC__/images/unionPay.png" />聚合支付</a>
+									</li>
+									{/if}
+									{if condition="config('balance_pay_only') neq 1 && config('balance_pay_only') neq '1' && config('blfk_pay_tenpay') neq '0'"}
+									<li>
+										<i class="icon-check-zf"></i>
+										<a href="javascript:void(0);" id="tenpay"><img src="__IMGPC__/images/tenpay.png" />财付通</a>
+									</li>
+									{/if}
+								</ul>
+								{/if}
+							</div>
+						{/if}
+						
+					{else/}
+						<div class="zhifu-box">
+							{if condition="config('balance_pay_only') eq 1 || config('balance_pay_only') eq '1'"}
+							<p style="color:#c00;padding:10px 0;">当前仅支持余额支付，请先登录会员账号。</p>
+							{else/}
+							<ul class="zfb" id="paylist">
+								{if condition="config('balance_pay_only') neq 1 && config('balance_pay_only') neq '1' && config('blfk_pay_alipay') neq '0'"}
+									<li>
+										<i class="icon-check-zf"></i>
+										<a href="javascript:void(0);" id="alipay"><img src="__IMGPC__/images/alipay.png" />支付宝</a>
+									</li>
+									{/if} 
+									{if condition="config('balance_pay_only') neq 1 && config('balance_pay_only') neq '1' && config('blfk_pay_wxpay') neq '0'"}
+									<li>
+										<i class="icon-check-zf"></i>
+										<a href="javascript:void(0);" id="wxpay"><img src="__IMGPC__/images/wxpay_native.png" />微信支付</a>
+									</li>
+									{/if} 
+									{if condition="config('balance_pay_only') neq 1 && config('balance_pay_only') neq '1' && config('blfk_pay_qqpay') neq '0'"}
+									<li>
+										<i class="icon-check-zf"></i>
+										<a href="javascript:void(0);" id="qqpay"><img src="__IMGPC__/images/qqpay.png" />QQ钱包</a>
+									</li>
+									{/if}
+									{if condition="config('balance_pay_only') neq 1 && config('balance_pay_only') neq '1' && config('blfk_pay_unionPay') neq '0'"}
+									<li>
+										<i class="icon-check-zf"></i>
+										<a href="javascript:void(0);" id="unionPay"><img src="__IMGPC__/images/unionPay.png" />聚合支付</a>
+									</li>
+									{/if}
+									{if condition="config('balance_pay_only') neq 1 && config('balance_pay_only') neq '1' && config('blfk_pay_usdtpay') neq '0'"}
+									<li>
+										<i class="icon-check-zf"></i>
+										<a href="javascript:void(0);" id="usdtpay"><img src="__IMG__/newusdt.png" />USDT</a>
+									</li>
+									{/if} 
+									{if condition="config('balance_pay_only') neq 1 && config('balance_pay_only') neq '1' && config('blfk_pay_tenpay') neq '0'"}
+									<li>
+										<i class="icon-check-zf"></i>
+										<a href="javascript:void(0);" id="tenpay"><img src="__IMGPC__/images/tenpay.png" />财付通</a>
+									</li>
+									{/if} 
+	
+							</ul>
+							{/if}
+						</div>
+					
+					{/if}
+
+					
+				</div>
+
+				<div class="fare-result">
+					<div class="cart-title">
+						<h3><span>结算信息</span></h3></div>
+					<div class="result-box">
+						<ul>
+
+							<li>
+
+								<div class="lside">
+									<p class="save-passw"><span class="slivergrey">输入支付密码：</span><input type="password" id="cbkpaypwd" /></p>
+								</div>
+								<div class="rside">
+									<div class="lside">
+										<p><span class="slivergrey">应付金额：</span><span class="orange-bold big">￥<b id="payAmount">{$param['data_shop']['money']}</b></span></p>
+										<p class="vivi-blue">提交订单后尽快支付，商品才不会被人抢走哦！</p>
+									</div>
+									<a href="javascript:void(0);" onclick="jiesuan();" id="jiesuan"class="btn-jiesuan">提交订单</a>
+								</div>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+						<!--支付参数-->
+												
+									<input type="hidden" name="p3_Amt" value="{$param['data_shop']['money']}"/>
+									<input type="hidden" name="p2_Order" value=""/>
+									<input type="hidden" name="p5_Pid" value="{$param['data_fl'][0]['id']}"/>
+									<input type="hidden" name="pa_MP" value=""/>
+									<input type="hidden" name="buynum" value="{$param['buynum']}"/>
+									<input type="hidden" name="pd_FrpId" value=""/>
+							    	</form>
+		
+		
+		
+		
+		
+		
+
+		
+		{include file="public/imgpc/footer" /}
+		
+		
+		
+		
+		<link rel="stylesheet" href="__IMGPC__/css/location.css" />
+
+		<script src="__IMGPC__/js/jquery.SuperSlide.2.1.1.js" type="text/javascript"></script>
+
+		<script src="__IMGPC__/js/cart.js" type="text/javascript"></script>
+		<script src="__IMGPC__/js/location.js" type="text/javascript"></script>
+		<script src="{:config('cdnpublic')}layer/2.2/layer.js"></script>
+		{include file="public/order_disclaimer_boot" /}
+
+		<script type="text/javascript">
+		
+		
+			$(document).ready(function () {
+				$('#paylist li a:first').attr('class', 'selected');
+			});
+			
+			function msg(tip, t) {
+				t = t || 3000;
+				top.layer.msg(tip, {
+					opacity: 0.4,
+					time: t,
+					skin: 'layer-msg'
+				});
+			}
+		
+			$(function() {
+				var order=getOrder();
+				$('.color').html("订单号："+order);
+				$('[name=p2_Order]').val(order);
+			});
+			var index;
+			function jiesuan(){
+				runWithOrderDisclaimer(__ORDER_DISCLAIMER__, __ORDER_DISCLAIMER_WAIT__, function () {
+				jiesuanDo();
+				});
+			}
+			function jiesuanDo(){
+				
+				$("#jiesuan").css("background-color","#A4A7A8");
+				index=layer.load(0, {shade: [0.5,'#fff']});
+				
+				var contact=$('#loginmobile').val();
+				var buynum=$('[name=buynum]').val();
+				{if condition="session('useraccount.account') eq null"}
+					
+					if ($("#payAmount").html() !=0 && $("#paylist li a.selected").length==0) {
+							msg("请选择支付方式");
+							layer.close(index);
+							$("#jiesuan").css("background-color","#007cc3");
+							return;
+					}
+					$('[name=pd_FrpId]').val($("#paylist li a.selected").attr("id"));
+					
+				{else/}
+					{if condition="$param['useraccount']['money'] lt $param['data_shop']['money']"}
+						if ($("#payAmount").html() !=0 && $("#paylist li a.selected").length==0) {
+								msg("请选择支付方式");
+								layer.close(index);
+								$("#jiesuan").css("background-color","#007cc3");
+								return;
+						}
+						$('[name=pd_FrpId]').val($("#paylist li a.selected").attr("id"));	
+					{/if}
+				{/if}	
+				
+				{if condition="session('useraccount.account') eq null"}
+				var reg = /^(\d){11}$/;
+				if(!reg.test(contact)) {
+					msg("请填写正确的手机");							
+					layer.close(index);
+					$("#jiesuan").css("background-color","#007cc3");
+					return false;
+				}
+				{/if}
+				if({$param['data_shop']['money']}<0.01){
+					msg("购买金额不能低于0.01，请修改购买数量");							
+					layer.close(index);
+					$("#jiesuan").css("background-color","#007cc3");
+					return false;
+				}
+				
+				{if condition="$param['isattach'] eq 1"}		
+				{foreach name="$attach" item="vo"}	
+				if(''==$.trim($("#attach{$vo.id}").val())){
+					msg("{$vo.title}不能为空");
+					$("#attach{$vo.id}").focus();
+					layer.close(index);
+					$("#jiesuan").css("background-color","#007cc3");
+					return false;
+				}
+				{/foreach}		
+				{/if}
+				
+					
+					
+					var orderno=$("[name=p2_Order]").val();
+					var result="0";
+					 //*******************上传附加信息头
+					 {if condition="$param['isattach'] eq 1"}
+						var i=0;
+						var attachcount="{:count($attach)}";
+						{foreach name="$attach" item="vo"}
+						
+						$.when(AddOrderAttach(orderno,{$vo.id},$.trim($("#attach{$vo.id}").val()))).done(function (res) {
+							if(res.code!=1){
+								layer.alert('异常错误，请重新提交attach', {
+												skin: 'layui-layer-lan',
+												closeBtn: 0,
+												anim: 0 //动画类型
+											});
+								layer.closeAll('loading');
+								return false;		
+							}else{
+								i++;
+								console.log("i:"+i+" attachcount:"+attachcount);
+								if(i>=attachcount){
+									//********************上传订单头部
+									var pd_FrpId=$('[name=pd_FrpId]').val();
+									var lianxi=$('#loginmobile').val();
+									var email="";
+									var mpid=$('[name=p5_Pid]').val();
+									var buynum=$('[name=buynum]').val();;
+									var money={$param['data_shop']['money']};									
+									var maddtype=5;
+									if(pd_FrpId=='alipay'){
+										maddtype=2;
+									}else if(pd_FrpId=='wxpay'){
+										maddtype=3;	
+									}else if(pd_FrpId=='unionPay'){
+										maddtype=4;			
+									}else if(pd_FrpId=='qqpay'){
+										maddtype=6;	
+									}else if(pd_FrpId=='tenpay'){
+										maddtype=7;			
+									}else if(pd_FrpId=='usdtpay'){
+										maddtype=8;
+									}else{		      			
+										maddtype=5;	      			
+									}	
+									
+									$.when(AddOrder(orderno,lianxi,email,mpid,buynum,maddtype,money)).done(function(res){
+										if(res.code!=1){
+											layer.alert('异常错误，请重新提交order', {
+															skin: 'layui-layer-lan',
+															closeBtn: 0,
+															anim: 0 //动画类型
+														});
+											layer.closeAll('loading');
+											return false;		
+										}else{
+										{if condition="session('useraccount.account') eq null"}																	
+													document.getElementById("frm2").action = "{:url('pay/index/reqPay')}";
+											{else/}
+												if({$param['useraccount']['money']}>money){
+												 	document.getElementById("frm2").action = "{:url('jingdian/user/Paybalance')}";
+												 }else{												
+													document.getElementById("frm2").action = "{:url('pay/index/reqPay')}";	
+												 }
+												
+											{/if}
+											$("#frm2").submit();
+										}
+										
+									});
+																	
+									//********************上传订单尾部	
+									
+								}
+								
+										
+							}
+						});
+						
+						{/foreach}		
+					
+					//*******************上传附加信息尾
+					{else/}
+					
+					//********************上传订单头部
+									var pd_FrpId=$('[name=pd_FrpId]').val();
+									var lianxi=$('#loginmobile').val();
+									var email="";
+									var mpid=$('[name=p5_Pid]').val();
+									var buynum=$('[name=buynum]').val();;
+									var money={$param['data_shop']['money']};
+									var maddtype=5;
+									if(pd_FrpId=='alipay'){
+										maddtype=2;
+									}else if(pd_FrpId=='wxpay'){
+										maddtype=3;	
+									}else if(pd_FrpId=='unionPay'){
+										maddtype=4;			
+									}else if(pd_FrpId=='qqpay'){
+										maddtype=6;	
+									}else if(pd_FrpId=='tenpay'){
+										maddtype=7;			
+									}else if(pd_FrpId=='usdtpay'){
+										maddtype=8;
+									}else{		      			
+										maddtype=5;	      			
+									}
+									
+									$.when(AddOrder(orderno,lianxi,email,mpid,buynum,maddtype,money)).done(function(res){
+										if(res.code!=1){
+											layer.alert('异常错误，请重新提交order2', {
+															skin: 'layui-layer-lan',
+															closeBtn: 0,
+															anim: 0 //动画类型
+														});
+											layer.closeAll('loading');
+											return false;		
+										}else{
+										{if condition="session('useraccount.account') eq null"}												
+													document.getElementById("frm2").action = "{:url('pay/index/reqPay')}";
+											{else/}
+												if({$param['useraccount']['money']}>money){
+												 	document.getElementById("frm2").action = "{:url('jingdian/user/Paybalance')}";
+												 }else{												
+													document.getElementById("frm2").action = "{:url('pay/index/reqPay')}";							 	
+												 }
+												
+											{/if}
+											$("#frm2").submit();
+										}
+										
+									});
+																	
+									//********************上传订单尾部	
+					{/if}
+					
+						
+				
+			}
+			
+			
+			function getOrder() {
+						//设定时间格式化函数
+						Date.prototype.format = function(format) {
+							var args = {
+								"M+": this.getMonth() + 1,
+								"d+": this.getDate(),
+								"h+": this.getHours(),
+								"m+": this.getMinutes(),
+								"s+": this.getSeconds(),
+							};
+							if(/(y+)/.test(format))
+								format = format.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+							for(var i in args) {
+								var n = args[i];
+								if(new RegExp("(" + i + ")").test(format))
+									format = format.replace(RegExp.$1, RegExp.$1.length == 1 ? n : ("00" + n).substr(("" + n).length));
+							}
+							return format;
+						};
+				
+						var order = new Date().format("yyyyMMddhhmmss") + randomNum(10);
+						return order;
+			}
+				
+			function randomNum(n) {
+						var t = '';
+						for(var i = 0; i < n; i++) {
+							t += Math.floor(Math.random() * 10);
+						}
+						return t;
+			}
+			
+			//上传订单
+			function AddOrder(orderno,contact,email,goodid,buynum,maddtype,money){
+				var defer = $.Deferred();
+				//var date = new Date();
+				//var timer = date.getTime().toString();
+				$.getJSON("{:url('@jingdian/Api/AddOrder')}",
+							{'mcard':orderno,
+							'lianxi': contact,
+							'email':email,
+							'mflid':goodid,
+							'buynum':buynum,
+							'maddtype':maddtype,
+							'mamount':money		
+											}, 
+							function(data) {
+								if(data && data.code==-2 && data.url){ window.location.href=data.url; return; }
+								defer.resolve(data);		
+							});
+				return defer;
+			}
+			
+			//上传附加选项
+			function AddOrderAttach(orderno,attachid,text){
+				var defer = $.Deferred();
+				$.ajax({
+					url: "{:url('@jingdian/Api/AddOrderAttach')}",
+					type: 'post',
+					data: { 'orderno': orderno,
+							'attachid': attachid,
+							'text':text
+											},
+					async: true,
+					dataType: 'json',
+					success: function (data) {
+						if(data && data.code==-2 && data.url){ window.location.href=data.url; return; }
+						defer.resolve(data);
+					}
+				});
+				return defer;
+			}
+						
+			
+		
+		</script>
+	</body>
+
+</html>

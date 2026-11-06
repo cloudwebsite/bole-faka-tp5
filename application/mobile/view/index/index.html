@@ -1,0 +1,735 @@
+{include file="public/header" /}
+  
+  <body ontouchstart onload="Init();">
+    <header class='demos-header' style="padding: 30px 0;padding-bottom: 0px;">
+      <h1 class="demos-title">
+	  {:config('m_title')}<p style="font-size: 16px;color: #a18a8a;">QQ:{:config('WEB_QQ')}</p>
+	  </h1>
+    </header>
+    <div class="weui-flex" style="text-align:center">
+    	{if condition="config('web_reg_type') neq 0"}
+    	{if condition="session('useraccount.account') eq null"}
+    	<div class="weui-flex__item"><a href="{:url('mobile/user/index')}" class="weui-btn weui-btn_primary" style="border-radius:0px">登录/注册</a></div>
+    	{else/}
+    	<div class="weui-flex__item"><a href="{:url('mobile/user/uscenter')}" class="weui-btn weui-btn_primary" style="border-radius:0px">会员中心</a></div>
+    	{/if}
+			{/if}
+      
+      {if condition="session('useraccount.account') eq null"}
+			<div class="weui-flex__item"><a onclick="orderid_or_contact()" class="weui-btn weui-btn_primary" style="border-radius:0px">我的订单</a></div>
+			{else/}
+			
+			<div class="weui-flex__item"><a href="{:url('mobile/user/usorder')}" class="weui-btn weui-btn_primary" style="border-radius:0px">我的订单</a></div>
+			{/if}
+      
+      <div class="weui-flex__item"><a href="{:url('Index/kefu')}" class="weui-btn weui-btn_primary" style="border-radius:0px">联系客服</a></div>
+    </div>
+	<form id="frm" role="form" method="post"  action="{:url('Index/zywlpay')}">
+	<div class="weui-cells weui-cells_form">
+		<div class="weui-cell weui-cell_select">
+			<div class="weui-cell__hd" style="padding-left:15px"><label class="weui-label">商品分类</label></div>
+			<div class="weui-cell__bd">
+				<select class="weui-select" id="fenlei" name="fenlei" style="padding-left:0px">
+					<option value=''>请选择分类</option>
+					{volist name="GoodsListAll" id="vo"}
+					     <option value='{$vo[\'id\']}'>{$vo['name']}</option>	
+					      
+					    {/volist} 
+					
+					
+					
+					
+								</select>
+			</div>
+		</div>
+		
+		<div class="weui-cell weui-cell_select">
+			<div class="weui-cell__hd" style="padding-left:15px"><label class="weui-label">商品名称</label></div>
+			<div class="weui-cell__bd">
+				<select class="weui-select" id="goods" name="goods" style="padding-left:0px">
+					<option value=''>请选择商品</option>
+					</select>
+			</div>
+		</div>
+		
+		<div class="weui-cell">
+			<div class="weui-cell__hd"><label class="weui-label">商品单价</label></div>
+			<div class="weui-cell__bd">
+			<div class="weui-cells__tips" style="padding-left: 0px;color:red;"><span id="price">0.00</span>元</div>
+
+				
+			</div>
+		<div class="weui-cell__ft">
+			  <a class="price" id="alert-price" href="javascript:;">查看批发价</a>
+			</div>
+
+		</div>
+		
+			
+		
+		
+		
+		
+		<div class="weui-cell">
+			<div class="weui-cell__hd"><label class="weui-label">商品库存</label></div>
+			<div class="weui-cell__bd">
+			<div class="weui-cells__tips" style="padding-left: 0px;"><span style="color:green" id="count">x</span>&nbsp;个</div>
+			</div>
+		</div>	
+		<div class="weui-cell" style="text-align: center;color: #f60404;; display: block;background: rgba(230, 227, 227, 0.59);">
+			
+			<div class="weui-weui-cells__tips" style="text-align: center; display: block;" id="content">商品提示</div>
+			
+		</div>
+		
+		
+		
+		<div class="weui-cell">
+			<div class="weui-cell__hd"><label class="weui-label">购买数量</label></div>
+			<div class="weui-cell__bd"><input class="weui-input" value="" name="buynum" id="buynum" type="tel" placeholder="请输入购买数量"></div>
+			
+			<div class="weui-cell__bd">
+			<div class="weui-cells__tips" style="padding-left: 0px;color:red;" id="numtip"></div>
+			</div>
+		</div>
+		<div class="weui-cell weui-cell_vcode">
+		
+		<input type="hidden"  name="p5_Pid" id="mpid" value="">
+		<input type="hidden"  name="p2_Order" id="p2_Order" value="">
+		<input type="hidden"  name="mmin" id="mmin" value="">
+		<input type="hidden"  name="mmax" id="mmax" value="">
+		<input type="hidden"  name="title" id="title" value="">
+	    <input type="hidden" name="p3_Amt" id="p3_Amt" value="">
+	    <input type="hidden" name="countnum" id="countnum" value="" /> 
+	    <input type="hidden" name="sendbeishu" id="sendbeishu" value="" /> 
+	    <input type="hidden" name="attachgroupid"  id="attachgroupid" value=""/>      
+		<input type="hidden"  name="pd_FrpId" id="pd_FrpId" value="wxpay">
+		<input type="hidden"  name="pa_MP" id="pa_MP" value="wxpay">
+
+		
+		
+		
+			
+		</div>
+		{if condition="session('useraccount.account') eq null"}
+		<div class="weui-cell">
+			<div class="weui-cell__hd"><label class="weui-label">联系方式</label></div>
+			{if condition="config('lianxi_mobile') eq 1"}
+			 <div class="weui-cell__bd"><input class="weui-input" name="lianxi" id="lianxi" type="tel" placeholder="请输入手机号方便查询订单"></div>
+			 {else/}
+				 <div class="weui-cell__bd"><input class="weui-input" name="lianxi" value="" id="lianxi" type="tel" placeholder="选填 请输入手机号"></div>
+			{/if}	
+		</div>
+    	
+    	
+   
+    	<div class="weui-cell">
+			<div class="weui-cell__hd"><label class="weui-label">联系邮箱</label></div>
+			 {if condition="config('lianxi_email') eq 1"}	
+					 <div class="weui-cell__bd"><input class="weui-input" name="email" id="email" type="text" placeholder="可用来接收卡密"></div>
+					 {else/}   	
+					  <div class="weui-cell__bd"><input class="weui-input" name="email" id="email" type="text" placeholder="选填 可用来接收卡密"></div> 
+					{/if}
+		</div>
+		{/if}
+		
+		<div id="Attach" style="display: none;">
+			<h4 style="margin-left: 15px;">附加选项(必填)</h4>
+			<div id="AttachText"></div>
+		</div>
+		
+		
+		<div class="weui-cell weui-cells_radio">
+			
+			<div class="weui-cell__bd" style="">
+						{if condition="config('balance_pay_only') neq 1 && config('balance_pay_only') neq '1' && config('blfk_pay_wxpay')  neq '0'"}
+						   <label class="weui-cell weui-check__label" for="x11" style="padding-left:0px">
+							<div class="weui-cell__bd">
+								<img src="__IMG__/newwx.png" style="width: 70px;"> 
+							</div>
+							<div class="weui-cell__ft">
+										<input type="radio" class="weui-check" name="access" value="wxpay" checked="checked" id="x11">
+								<span class="weui-icon-checked"></span>
+							</div>
+								</label>
+						{/if}
+						{if condition="config('balance_pay_only') neq 1 && config('balance_pay_only') neq '1' && config('blfk_pay_alipay')  neq '0'"}
+						  <label class="weui-cell weui-check__label" for="x12" style="padding-left:0px">
+							<div class="weui-cell__bd">
+								<img src="__IMG__/newali.png" style="width: 70px;"> 
+							</div>
+							<div class="weui-cell__ft">
+										<input type="radio" class="weui-check" name="access" value="alipay"  id="x12">
+								<span class="weui-icon-checked"></span>
+							</div>
+							</label>
+						{/if}
+						{if condition="config('balance_pay_only') neq 1 && config('balance_pay_only') neq '1' && config('blfk_pay_usdtpay')  neq '0'"}
+						  <label class="weui-cell weui-check__label" for="x12" style="padding-left:0px">
+							<div class="weui-cell__bd">
+								<img src="__IMG__/newusdt.png" style="width: 70px;"> 
+							</div>
+							<div class="weui-cell__ft">
+										<input type="radio" class="weui-check" name="access" value="usdtpay"  id="x12">
+								<span class="weui-icon-checked"></span>
+							</div>
+							</label>
+						{/if}
+						{if condition="config('balance_pay_only') neq 1 && config('balance_pay_only') neq '1' && config('blfk_pay_unionpay')  neq '0'"}
+						  <label class="weui-cell weui-check__label" for="x14" style="padding-left:0px">
+							<div class="weui-cell__bd">
+								<img src="__IMG__/newjuhe.png" style="width: 70px;"> 
+							</div>
+							<div class="weui-cell__ft">
+								<input type="radio" class="weui-check" name="access" value="unionPay"  id="x14">
+								<span class="weui-icon-checked"></span>
+							</div>
+							</label>
+						{/if}												
+				
+				{if condition="session('useraccount.account') neq null"}
+				<label class="weui-cell weui-check__label" for="x13" style="padding-left:0px;display: none;" id="yuepay">
+							<div class="weui-cell__bd">
+								<img src="__IMGMOBILE__/img/yue.png" style="width: 70px;" >
+							</div>
+							<div class="weui-cell__bd">
+								<div class="weui-cells__tips" style="padding-left: 0px;color:rgba(24, 14, 14, 0.61);">余额: <span id="price">￥{$param['useraccount']['money']}</span></div>		
+							</div>
+							<div class="weui-cell__ft">				
+										<input type="radio" class="weui-check" name="access" value="yue"  id="x13">									
+								<span class="weui-icon-checked"></span>
+							</div>
+				</label>
+				{/if}
+			</div>
+		</div>
+		<div class="weui-cell weui-cells_radio">	
+			<input type="hidden" id="maxnum" value="">
+			<div class="weui-cell__bd">
+				<input type="hidden" id="maxnum" value="">
+				<a class="weui-btn weui-btn_primary" href="javascript:" id="mysubmit">确定购买</a>
+			</div>
+		</div>
+	</div>
+	
+	</form>
+{include file="public/footer" /}
+  </body>
+<script src="{:config('cdnpublic')}layer/3.1.1/layer.js"></script>
+{include file="public/order_disclaimer_boot" /}
+<script type="text/javascript">
+	var lianxi_mobile={:config('lianxi_mobile')};
+	var lianxi_email={:config('lianxi_email')};
+	var goods= {:json_encode($GoodsListAll)};
+	var data =eval(goods);
+	var flag=false;
+  function gohome()
+		{
+			location.href="{:config('is_https')}://"+window.location.host;
+		}
+function randomNum(n){ 
+ var t=''; 
+ for(var i=0;i<n;i++){ 
+ t+=Math.floor(Math.random()*10); 
+ } 
+ return t; 
+}
+function orderid_or_contact() {
+   	window.location.href='{:url("Index/selectorder")}';     
+    }
+$(function(){
+	var rulehtml = '';
+  	var goods;
+  	goods=JSON.stringify({:json_encode($GoodsListAll)});
+   	var attachs={:json_encode($shopAllattach)};
+  
+
+ $("#fenlei option").each(function(){  
+        if($(this).text() == "请选择分类"){  
+            $(this).attr("selected","selected");  
+        }  
+    });  
+ jQuery("#goods").empty(); 
+ 	$("#goods").append("<option value=''>请选择商品</option>");
+   showinit();
+   	$("#fenlei").change(function(){
+		showinit();
+		if (!$(this).val()) {
+			
+
+		}else{
+			var data =eval(goods);
+			
+			for(var i = 0;i < data.length;i ++){
+				
+				if(data[i].id == $(this).val()){
+					 jQuery("#goods").empty();
+					 if(data[i].hehe.length==0){
+					 	$("#goods").append("<option value='0'>暂无商品</option>");
+					 }else{
+					 	
+					 	$("#goods").append("<option value=''>请选择商品</option>");
+					 	for(var j = 0;j < data[i].hehe.length;j ++){
+		            	
+			            	if(data[i].hehe[j].type==0){
+			            		
+			            			$("#goods").append("<option value='"+data[i].hehe[j].id+"'>〔自〕"+data[i].hehe[j].mname+"</option>");
+			            		}else if(data[i].hehe[j].type==1){
+			            			$("#goods").append("<option value='"+data[i].hehe[j].id+"'>〔手〕"+data[i].hehe[j].mname+"</option>");
+			            			
+			            		}
+		            	
+						}
+					 }
+					 
+		            
+		               								
+				}
+			}			
+			
+		}
+
+	});
+	
+ function showinit(){
+ 			$("#p3_Amt").val("");
+		  	$("#numtip").html("");
+ 			$("#mmin").val(0);
+			$("#mmax").val(0);
+			$("#content").html('暂无描述');
+			$("#count").html();
+			$("#price").html('0.00');
+			$("#numtip").html('');
+			$("#title").val("");
+			$("#buynum").val("");
+			$("#sendbeishu").val("1");
+			$('#attachgroupid').val('');
+ }
+    
+	$("#goods").change(function(){
+		showinit();
+		if (!$(this).val()) {
+			
+			
+		}else{
+			var data =eval(goods);
+			var shoptype=0;
+			var attachgroupid=0;
+			for(var i = 0;i < data.length;i ++){	
+					 	for(var j = 0;j < data[i].hehe.length;j ++){
+					 		if(data[i].hehe[j].id==$(this).val()){
+					 			$("#content").html(data[i].hehe[j].mnotice);
+					 			$("#count").html(data[i].hehe[j].count);
+					 			$("#countnum").val(data[i].hehe[j].count);
+					 			$("#price").html(data[i].hehe[j].mprice/100);
+					 			$("#mpid").val(data[i].hehe[j].id);
+					 			$("#mmax").val(data[i].hehe[j].mmax);
+					 			$("#mmin").val(data[i].hehe[j].mmin);
+					 			$("#title").val(data[i].hehe[j].mname);
+					 			$("#sendbeishu").val(data[i].hehe[j].sendbeishu);
+					 			
+					 			//判断手动发货自动发货
+					 			if(data[i].hehe[j].type==0){
+					 				//自动发货
+					 			}else if(data[i].hehe[j].type==1){
+					 				//手动发货
+					 				shoptype=1;
+					 				attachgroupid=data[i].hehe[j].attachgroupid;
+					 				$('#attachgroupid').val(attachgroupid);
+					 			
+					 			}
+					 		}
+		            	
+						}	
+			}
+			
+			 //附加选项
+		            if(shoptype==1){
+		            	var dataAttachs=eval(attachs);
+		            	if(dataAttachs.length>0){
+		            		var attachhtml="";
+		            		$("#Attach").show();
+			            	for(var i = 0;i < dataAttachs.length;i ++){
+			            		if(dataAttachs[i].attachgroupid==attachgroupid){
+			            			
+									attachhtml=attachhtml+"<div class='weui-cell'><div class='weui-cell__hd'><label class='weui-label'>"+dataAttachs[i].title+"</label></div><div class='weui-cell__bd'><input class='weui-input' name='attach["+dataAttachs[i].id+"]' id='attach"+dataAttachs[i].id+"' type='text' placeholder='"+dataAttachs[i].tip+"'></div></div>";
+			            		}
+			            	}
+			            	
+			            	if(attachhtml==""){
+			            		$("#Attach").hide();
+			            	}else{
+			            		$("#AttachText").html(attachhtml);
+			            	}
+			            	
+		            	
+		                }else{
+		                   	$("#Attach").hide();
+		                }
+		            	
+		            }
+			
+		}
+
+		
+		
+	});
+	
+$('#buynum').bind('input propertychange', function() { 
+	
+checkbuynum();
+
+ 
+});
+
+function checkbuynum(){
+	if(checkform()){
+			var buynum=parseInt($('#buynum').val());
+			var mpid=$('#mpid').val();
+			if(buynum!==0 &&!isNaN(buynum)){
+           
+			  	getmoney(buynum,mpid);
+			
+			}else{
+						$("#p3_Amt").val('0.00'); 					
+						$("#price").html('0.00');
+						$("#numtip").html("应付金额：0.00");
+						
+			}
+		}
+}
+
+
+
+
+	$('#alert-price').click(function(){
+		var mpid=$("#goods").val();
+		if(mpid==''){
+			$.alert('<font color=red>请先选择商品</font>');
+		}else{
+			$.getJSON("{:url('Index/shopxq')}"+"?mpid="+mpid,function(data){
+      if(jQuery.isEmptyObject(data.data_yh)){
+      	  $.alert('此商品无优惠');
+      }else{
+      	  var yh=eval(JSON.stringify(data.data_yh));
+   	  
+      	  var html= "";
+      	  	for(var i = 0;i <yh.length ;i++){
+      	  		var jine=yh[i].mdy;
+      	  		var danjia=yh[i].mdj/100;
+				html=html+"<span style='float:left;'>数量："+jine+"</span><span style='float:right;'>单价："+danjia+"</span><br>";
+			}
+     
+      	  	
+      	   $.alert(html);
+      }
+   
+      
+      
+    });
+		}
+		
+		
+	return false;	
+	});
+	
+	 $(":radio").click(function(){
+    var val=$(this).val();
+    
+    $("#pd_FrpId").val(val); 
+  	});
+  
+	$('#mysubmit').click(function(){
+			runWithOrderDisclaimer(__ORDER_DISCLAIMER__, __ORDER_DISCLAIMER_WAIT__, function () {
+				$.showLoading();
+				setTimeout("submitform()",200);
+			});
+	});
+		
+	
+
+});
+
+function submitform(){
+
+		var buynum=parseInt($('#buynum').val());
+		var lianxi=$("#lianxi").val();
+    var email=$("#email").val();
+    var pd_FrpId=$("#pd_FrpId").val(); 
+		var select_pid = false;
+	  $('[name=access]').each(function () {
+	    if ($(this).is(':checked')) {
+	      select_pid = true;
+	    }
+	  });
+	  if (select_pid == false) {
+	    msg = '请选择支付方式';
+	   $.alert(msg);
+	   $.hideLoading();
+	   return false;
+	  }
+		if(buynum <= 0 || !buynum) {
+				
+				$.alert('请输入正确的购买数量');
+				$.hideLoading();
+				return false;
+		}
+			var mpid=$('#mpid').val();
+			if(buynum!==0 &&!isNaN(buynum)){
+           
+			  		getmoney(buynum,mpid);
+			
+			}else{
+						$("#p3_Amt").val('0.00'); 					
+						$("#price").html('0.00');
+						$("#numtip").html("应付金额：0.00");
+						$.hideLoading();
+						return false;
+			}
+		
+		
+		if(checkform()==false){
+			$.hideLoading();
+			return false;
+		}
+		
+		
+		var out_trade_no = document.getElementById("p2_Order");
+		out_trade_no.value = getOrder();
+      var money=$("#p3_Amt").val();
+      var orderno=$("#p2_Order").val();
+			var result="0";
+		if(money<0.01){
+		$.alert("购买金额不能小于0.01");
+		$.hideLoading();
+		return false;
+		}	
+        //判断手动发货
+		  if($("#AttachText").html()!=""){
+		  	var attachs={:json_encode($shopAllattach)};
+		  	var dataAttachs=eval(attachs);
+		  	var attachgroupid=$('#attachgroupid').val();
+		  	for(var i = 0;i < dataAttachs.length;i ++){
+					if(dataAttachs[i].attachgroupid==attachgroupid){
+					 			if(''==$.trim($("#attach"+dataAttachs[i].id).val())){									
+									$.alert(dataAttachs[i].title+"不能为空");
+
+									$("#attach"+dataAttachs[i].attachgroupid).focus();
+									$.hideLoading();
+									return false;
+								}
+					}
+			}
+		  	
+		  	
+		  	for(var i = 0;i < dataAttachs.length;i ++){
+		  		if(dataAttachs[i].attachgroupid==attachgroupid){
+		  		$.ajaxSettings.async = false;
+								$.getJSON("{:url('@jingdian/Api/AddOrderAttach')}", {
+									'orderno': orderno,
+									'attachid': dataAttachs[i].id,
+									'text':$.trim($("#attach"+dataAttachs[i].id).val())
+								}, function(res) {						
+									if(res.code == 1) {
+										result="1";
+									} else {
+										result="0"
+										
+									}
+								});
+				$.ajaxSettings.async = true; 
+				}
+		  	
+		  	}
+		  	if(result=="0"){
+			
+				$.alert('异常错误，请重新提交');						
+				$.hideLoading();
+				return false;
+			}
+		  	
+		  }
+		  
+        
+        //********************上传订单头部
+					
+
+				var maddtype=5;
+					if(pd_FrpId=='alipay'){
+						maddtype=2;
+					}else if(pd_FrpId=='wxpay'){
+						maddtype=3;	
+					}else if(pd_FrpId=='unionPay'){
+						maddtype=4;			
+					}else if(pd_FrpId=='qqpay'){
+						maddtype=6;	
+					}else if(pd_FrpId=='tenpay'){
+						maddtype=7;			
+					}else if(pd_FrpId=='usdtpay'){
+					    maddtype = 8;
+					}else{ 			
+						maddtype=5;	      			
+					}					
+					$.ajaxSettings.async = false;
+					$.getJSON("{:url('@jingdian/Api/AddOrder')}", {
+							'mcard':orderno,
+							'lianxi': lianxi,
+							'email':email,
+							'mflid':mpid,
+							'buynum':buynum,
+							'maddtype':maddtype,
+							'mamount':money
+							
+						}, function(res) {						
+							if(res.code == 1) {
+								result="1";
+							} else if(res.code == -2 && res.url) {
+								window.location.href = res.url;
+								result="-2";
+							} else {
+								result="0"
+								
+							}
+						});
+					$.ajaxSettings.async = true; 
+						if(result=="-2"){
+							return false;
+						}
+						if(result=="0"){
+							$.alert('异常错误，请重新提交');	
+							$.hideLoading();
+							return false;	
+						}
+						
+					//********************上传订单尾部	
+    	
+ 		if(flag==false){
+           flag=true;
+           if(pd_FrpId=='yue'){
+           	document.forms[0].action="{:url('jingdian/user/Paybalance')}";
+           }
+           document.forms[0].submit();
+        }else{                                      	
+	        console.log("数据处理中");
+	        $.hideLoading();
+	        return false;
+        }	
+}
+function getmoney(buynum,mpid){
+	$.ajaxSettings.async = false;
+	$.getJSON("{:url('@jingdian/Index/getBuyMoney')}", {'buynum' : buynum,'mpid':mpid}, function(res){
+					if(res.code==1){
+						$("#p3_Amt").val(res.money); 					
+						$("#price").html(res.mdj/100);
+						$("#numtip").html("应付金额："+res.money);
+						$.toptip("单价："+res.mdj/100+"元  需要金额："+res.money, 'success');
+						{if condition="session('useraccount.account') neq null"}
+						 {if condition="config('balance_pay_only') eq 1 || config('balance_pay_only') eq '1'"}
+						 	$('#yuepay').show();
+						 {else/}
+						 if({$param['useraccount']['money']}>res.money){
+						 	$('#yuepay').show();
+						 }else{
+						 	$('#yuepay').hide();
+						 }
+						 {/if}
+						{/if}
+						
+					}else{
+						$("#p3_Amt").val('0'); 					
+						$("#price").html('0');
+						
+					}
+				});
+	$.ajaxSettings.async = true;			
+}
+function checkform(){
+		
+		var mmin=$('#mmin').val();
+		var mmax=$('#mmax').val();
+		var countnum =$('#count').html();
+		var buynum=parseInt($('#buynum').val());
+		var mpid=$('#mpid').val();
+		var lianxi=$("#lianxi").val();
+	 	var email=$("#email").val();
+	  	var sendbeishu=$("#sendbeishu").val();
+	 	var reg = /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/;
+		var money=0;
+        if(mpid==""){
+        	$.alert('请选择商品');
+				return false;
+        }else if(countnum=='0'){
+       
+			$.alert('库存为空，请联系客服补货');
+			return false;
+        }else if(buynum*sendbeishu>countnum){
+       
+			$.toptip("库存不足");
+			$('#buynum').val(parseInt(countnum/sendbeishu));
+			getmoney(countnum/sendbeishu,mpid);
+			return false;
+        }else if(buynum<mmin || isNaN(buynum)){
+        
+        	$.toptip('起购数量：'+mmin, 'success');
+        	
+					return false;
+        }else if(buynum>mmax){
+        	$.alert('最大购买数量：'+mmax);
+        	$('#buynum').val(parseInt(mmax));
+        	getmoney(mmax,mpid);
+					return false;
+        }
+        {if condition="session('useraccount.account') eq null"}
+        if(lianxi_mobile=="1" || $("#lianxi").val()!="" ){
+					if($("#lianxi").val().length < 11){
+						msg = '请填写手机号码';
+						$.alert(msg);
+						return false;
+					}
+			
+				}
+        if(lianxi_email=="1" || email!=""){
+					if(!email.match(/^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((\.[a-zA-Z0-9_-]{2,3}){1,2})$/g)){
+						msg = '请填写正确的邮箱格式';
+						$.alert(msg);
+						return false;
+					}
+				
+				}
+        {/if}
+	      return true;
+}
+
+function getOrder() {
+						//设定时间格式化函数
+						Date.prototype.format = function(format) {
+							var args = {
+								"M+": this.getMonth() + 1,
+								"d+": this.getDate(),
+								"h+": this.getHours(),
+								"m+": this.getMinutes(),
+								"s+": this.getSeconds(),
+							};
+							if(/(y+)/.test(format))
+								format = format.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+							for(var i in args) {
+								var n = args[i];
+								if(new RegExp("(" + i + ")").test(format))
+									format = format.replace(RegExp.$1, RegExp.$1.length == 1 ? n : ("00" + n).substr(("" + n).length));
+							}
+							return format;
+						};
+				
+						var order = new Date().format("yyyyMMddhhmmss") + randomNum(10);
+						return order;
+					}
+function Init() {
+				var weiyong={$param['count']};	
+				//检查是否有未用订单
+				if(weiyong>0){
+					window.location.href='{:url("Index/selectorder")}';
+				}
+				
+			}
+</script>	
+</html>

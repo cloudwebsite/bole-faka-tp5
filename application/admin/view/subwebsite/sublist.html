@@ -1,0 +1,476 @@
+{include file="public/header" /}
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated fadeInRight">
+    <!-- Panel Other -->
+    <div class="ibox float-e-margins">
+        <div class="ibox-title">
+            <h5>子站列表</h5>
+        </div>
+        <div class="ibox-content">
+            <!--搜索框开始-->           
+            <div class="row">
+                <div class="col-sm-12">   
+                <div  class="col-sm-2" style="width: 100px">
+                    <div class="input-group" >  
+                        <a href="{:url('add_submember')}"><button class="btn btn-outline btn-primary" type="button">添加子站</button></a> 
+                    </div>
+                </div>                                    
+                    <form name="admin_list_sea" class="form-search" method="get" action="{:url('sublist')}">
+                        <div class="col-sm-1">
+                            <div class="input-group">
+                                  <select class="form-control m-b chosen-select" name="group_id" id='group_id'>
+                                      <option value="999" {if condition="$group_id eq 999"}selected{/if}>全部分组</option>
+                                      <option value="0" {if condition="$group_id eq 0"}selected{/if}>注册会员</option>
+                                      {volist name="search_user" id="v"}
+                                          <option value="{$key}" {if condition="$group_id eq $key"}selected{/if}>{$v}</option>
+                                      {/volist}
+                                  </select>
+                               
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="input-group">                               
+                                <input type="text" id="key" class="form-control" name="key" value="{$val}" placeholder="输入需查询的子站域名/会员账号/昵称/手机号" />   
+                                <span class="input-group-btn"> 
+                                    <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i> 搜索</button> 
+                                </span>
+                            </div>
+                        </div>
+                    </form>
+                    
+                    <div style="font-size:15px;line-height:35px;">                                                                                   
+                                
+                                   	子站数量: <span style="color:red"> {$count}</span>&nbsp;&nbsp;&nbsp;&nbsp;
+                                 	总余额: <span style="color:red"> {$Zmoney[0]} 元</span>&nbsp;&nbsp;&nbsp;&nbsp;
+                                  	待提现佣金: <span style="color:red"> {$Ztgmoney[0]} 元</span>&nbsp;&nbsp;&nbsp;&nbsp;
+                                  	成功提现金额: <span style="color:red"> {$Ztxmoney[0]} 元</span>
+                               
+                    </div>
+                                           
+                </div>
+            </div>
+            <!--搜索框结束-->
+            <div class="hr-line-dashed"></div>
+            <div class="example-wrap">
+                <div class="example">
+                    <table class="table table-striped table-hover">
+                        <thead>
+                            <tr class="long-tr">
+                                <th width="4%">用户ID</th>
+                                <th width="9%">子站域名</th>
+                                <th width="9%">账号</th> 
+                                <th width="12%">到期时间</th>
+                                                                                            
+                                <th width="6%">所属组</th>                      
+                                <th width="8%">积分</th>
+                                <th width="8%">余额</th>
+                                <th width="8%">佣金</th>
+                                
+                                <th width="10%">联系方式</th>
+                                <th width="10%">最后登录IP</th>
+                                <th width="10%">登录/注册时间</th>
+                                <th width="5%">登录次数</th>
+                                <th width="6%">状态</th>
+                              
+                                <th width="6%">操作</th>
+                            </tr>
+                        </thead>
+                        <script type="application/javascript">
+                        	 var AddDays=function (dayStart,dayEnd) {
+								var date=new Date();
+								var myDate=new Date(dayStart*1000+dayEnd*24*60*60*1000);
+								
+								var year=myDate.getFullYear();
+								var month=myDate.getMonth()+1;
+								var day=myDate.getDate();
+								CurrentDate=year+"-";
+								if(month>=10)
+								{
+									CurrentDate=CurrentDate+month+"-";
+								}
+								else
+								{
+									CurrentDate=CurrentDate+"0"+month+"-";
+								}
+								if(day>=10)
+								{
+									CurrentDate=CurrentDate+day;
+								}
+								else
+								{
+									CurrentDate=CurrentDate+"0"+day;
+								}
+								return CurrentDate;
+							   };
+                        </script>
+                        <script id="list-template" type="text/html">
+                            	
+                            
+                            {{# for(var i=0;i<d.length;i++){  }}
+                            <tr class="long-td">                               
+                                <td><span class="label label-success">{{d[i].id}}</span></td>
+                                <td><span style="color: #0481f6;"><a href="{:config('is_https')}://{{d[i].fzhost}}" target="_blank">{{d[i].fzhost}}</a></span></td>
+                                <td><span style="color: #0481f6;">{{d[i].account}}</span></td>
+                                <td>                             
+                                    {{# if(d[i].endtime==0){ }}                                     
+                                     <span class="label label-danger">永久</span>                                        
+                                    {{# }else{ }}
+                                     <span style="color: #c51c95;">{{AddDays(d[i].starttime,d[i].endtime)}}</span>                                    
+                                    {{# } }}                               
+                                </td>                             
+                                <td><span style="color: #136c24;">{{d[i].group_name}}</span></td>
+                                
+                                <td><span class="label label-success">{{d[i].integral}}</span></td>                                  
+                                <td><span class="label label-primary">{{toDecimal(d[i].money)}}</span></td>
+                                <td><span class="label label-warning">{{toDecimal(d[i].tg_money)}}</span></td>
+                                
+                                <td style="text-align: left;"><div style="display: inline-flex;"><i class="fa fa-phone"></i>{{d[i].mobile}}</div><br><br><div style="display: inline-flex;"><i class="fa fa-envelope"></i>{{d[i].email}}</div><br><br><div style="display: inline-flex;"><i class="fa fa-qq"></i>{{d[i].qq}}</div></td>
+                                <td>{{d[i].ipaddr.country}}{{d[i].ipaddr.area}}<br>{{d[i].last_login_ip}}</td>
+                                <td><span>{{d[i].last_login_time}}</span><br><br>{{d[i].create_time}}</td>
+                                <td><span class="label label-warning">{{d[i].login_num}}</span></td>                                                                
+                                <td>                             
+                                    {{# if(d[i].fzstatus==1){ }}
+                                        <a class="red" href="javascript:;" onclick="submember_status({{d[i].id}});">
+                                            <div id="zt{{d[i].id}}"><span class="label label-info">开启</span></div>
+                                        </a>
+                                    {{# }else{ }}
+                                        <a class="red" href="javascript:;" onclick="submember_status({{d[i].id}});">
+                                            <div id="zt{{d[i].id}}"><span class="label label-danger">禁用</span></div>
+                                        </a>
+                                    {{# } }}                               
+                                </td>
+                               
+                                <td>                                  
+                                    <a target="_blank" href="{:url('login_member')}?id={{d[i].id}}"  class="btn btn-default btn-outline btn-xs">
+                                        <i class="fa fa-paste"></i>进入后台</a>
+                                    <a href="javascript:void(0);" onclick="edit_submember('{{d[i].id}}')" class="btn btn-primary btn-outline btn-xs">
+                                        <i class="fa fa-paste"></i>编辑子站</a>
+                                    <a href="javascript:void(0);"  onclick="edit_subtime('{{d[i].id}}','{{d[i].account}}','{{d[i].fzhost}}','{{AddDays(d[i].starttime,d[i].endtime)}}')" class="btn btn-success btn-outline btn-xs" data-toggle="modal" data-target="#myModalMoney">
+                                        <i class="fa fa-money"></i>子站续费</a>
+                                </td>
+                            </tr>
+                            {{# } }}
+                        </script>
+                        <tbody id="list-content"></tbody>
+                    </table>
+                    <div id="AjaxPage" style=" text-align: right;"></div>
+                    <div style="text-align: right;">
+					 共{$count}条数据，<span id="allpage"></span>
+					</div>
+                </div>
+            </div>
+            <!-- End Example Pagination -->
+        </div>
+    </div>
+</div>
+<!-- End Panel Other -->
+</div>
+
+<!-- 加载动画 -->
+<div class="spiner-example">
+    <div class="sk-spinner sk-spinner-three-bounce">
+        <div class="sk-bounce1"></div>
+        <div class="sk-bounce2"></div>
+        <div class="sk-bounce3"></div>
+    </div>
+</div>
+
+<!--修改金额-->
+<div class="modal  fade" id="myModalMoney" tabindex="-1" role="dialog"  aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h3 class="modal-title">子站续费</h3>                  
+                </div>
+                <form class="form-horizontal" name="form" id="formid" method="post" action="{:url('edit_submemberDo')}">
+                        {:token()}
+                    <div class="ibox-content">
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">子站ID</label>
+                                <div class="col-sm-8">
+                                	<input type="hidden" name="id" id="accountid" value="">
+                                    <input type="text" name="memberid" id="memberid" placeholder="会员ID" class="form-control" disabled="disabled" value=""/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">当前用户</label>
+                                <div class="col-sm-8">
+                                    <input type="text" name="member" id="member" placeholder="当前用户" disabled="disabled" class="form-control" value=""/>
+                                </div>
+                            </div> 
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">子站域名</label>
+                                <div class="col-sm-8">
+                                    <input type="text" name="fzhost" id="fzhost" placeholder="子站域名" disabled="disabled" class="form-control" value=""/>
+                                </div>
+                            </div> 
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">到期时间</label>
+                                <div class="col-sm-8">
+                                    <input type="text" name="dqtime" id="dqtime" placeholder="到期时间" disabled="disabled" class="form-control" value=""/>
+                                </div>
+                            </div> 
+                              
+                            <div class="form-group">
+                            <label class="col-sm-3 control-label">修改类型</label>
+	                            <div class="col-sm-6">
+	                                <div class="radio i-checks">
+	                                    <input type="radio" name='endtimetype' value="1" checked="checked"/>永久&nbsp;&nbsp;
+	                                    <input type="radio" name='endtimetype' value="0" />增加/减少时间
+	                                    <input type="text" name="endtime" id="endtime" placeholder="正数增加，负数减少，单位：天"  class="form-control" value=""/>
+	                                </div>
+	                            </div>
+	                        </div>
+	                        
+                            
+                        </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> 保存</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-close"></i> 关闭</button>                    
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <!--修改积分-->
+	<div class="modal  fade" id="myModalPoint" tabindex="-1" role="dialog"  aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h3 class="modal-title">修改积分</h3>                  
+                </div>
+                <form class="form-horizontal" name="form" id="formidpoint" method="post" action="{:url('edit_point')}">
+                        {:token()}
+                    <div class="ibox-content">
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">会员ID</label>
+                                <div class="col-sm-8">
+                                	<input type="hidden" name="id" id="accountidpoint" value="">
+                                    <input type="text" name="memberidpoint" id="memberidpoint" placeholder="会员ID" class="form-control" disabled="disabled" value=""/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">当前用户</label>
+                                <div class="col-sm-8">
+                                    <input type="text" name="memberpoint" id="memberpoint" placeholder="当前用户" disabled="disabled" class="form-control" value=""/>
+                                </div>
+                            </div> 
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">当前积分</label>
+                                <div class="col-sm-8">
+                                    <input type="text" name="point" id="point" placeholder="当前积分" disabled="disabled" class="form-control" value=""/>
+                                </div>
+                            </div> 
+                              
+                            <div class="form-group">
+                            <label class="col-sm-3 control-label">修改类型</label>
+	                            <div class="col-sm-6">
+	                                <div class="radio i-checks">
+	                                    <input type="radio" name='status' value="1" checked="checked"/>增加&nbsp;&nbsp;
+	                                    <input type="radio" name='status' value="0" />扣除
+	                                </div>
+	                            </div>
+	                        </div>
+	                        <div class="form-group">
+                                <label class="col-sm-3 control-label">变动积分</label>
+                                <div class="col-sm-8">
+                                    <input type="text" name="newpoint" id="newpoint" placeholder="变动积分" class="form-control" onkeyup="if(isNaN(value))execCommand('undo')" onafterpaste="if(isNaN(value))execCommand('undo')" value=""/>
+                                </div>
+                            </div> 
+                        </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> 保存</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-close"></i> 关闭</button>                    
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+	
+	
+
+
+
+{include file="public/footer" /}
+
+<script type="text/javascript">
+   
+    //laypage分页
+    Ajaxpage();
+    function Ajaxpage(curr){
+        var key=$('#key').val();
+        var group_id=$('#group_id').val();
+        $.getJSON('{:url("Subwebsite/sublist")}', {page: curr || 1,key:key,group_id:group_id}, function(data){
+            $(".spiner-example").css('display','none'); //数据加载完关闭动画 
+            if(data==''){
+                $("#list-content").html('<td colspan="20" style="padding-top:10px;padding-bottom:10px;font-size:16px;text-align:center">暂无数据</td>');
+            }else{
+                var tpl = document.getElementById('list-template').innerHTML;
+                laytpl(tpl).render(data, function(html){
+                    document.getElementById('list-content').innerHTML = html;
+                });
+                laypage({
+                    cont: $('#AjaxPage'),//容器。值支持id名、原生dom对象，jquery对象,
+                    pages:'{$allpage}',//总页数
+                    skip: true,//是否开启跳页
+                    skin: '#1AB5B7',//分页组件颜色
+                    curr: curr || 1,
+                    groups: 3,//连续显示分页数
+                    jump: function(obj, first){
+                        if(!first){
+                            Ajaxpage(obj.curr)
+                        }
+                        $('#allpage').html('第'+ obj.curr +'页，共'+ obj.pages +'页');
+                    }
+                });
+            }
+        });
+    }
+
+//编辑会员
+function edit_submember(id){
+    location.href = './edit_submember/id/'+id+'.html';
+}
+
+//删除会员
+function del_member(id){
+    lunhui.confirm(id,'{:url("del_member")}');
+}
+
+//用户会员
+function submember_status(id){
+    lunhui.status(id,'{:url("submember_status")}');
+}
+//分销商
+function member_distribut(id){
+	lunhui.distribut(id,'{:url("member_distribut")}');
+}
+function edit_subtime(id,account,fzhost,endtime){
+	$('#memberid').val(id);
+	$('#accountid').val(id);
+	$('#fzhost').val(fzhost);
+	$('#member').val(account);
+	$('#dqtime').val(endtime);
+	
+}
+function edit_point(id,account,point){
+	$('#memberidpoint').val(id);
+	$('#accountidpoint').val(id);
+	$('#memberpoint').val(account);
+	$('#point').val(point);
+}
+function updatePass(id,account){
+	layer.confirm('是否重置会员 ['+account+'] 的登录密码?', {
+										  btn: ['确定','取消'] //按钮
+										}, function(index){
+											$.ajax({ url: "./edit_pass/id/"+id+".html", success: function(res){
+										        if(res.code==1){
+										        	layer.alert("密码重置成功："+res.data);
+										        }else{
+										        	layer.alert("密码重置失败");
+										        }
+										        
+										      }});
+										  
+										  layer.close(index);
+										},function(index){
+										  layer.close(index);																  
+										});
+}
+
+$(function(){
+        $('#formid').ajaxForm({
+            beforeSubmit: checkForm, 
+            success: complete, 
+            dataType: 'json'
+        });
+        
+        function checkForm(){
+            
+            
+          
+        }
+
+
+        function complete(data){
+            if(data.code==1){
+                layer.msg(data.msg, {icon: 6,time:1500,shade: 0.1}, function(index){
+                    window.location.href="{:url('subwebsite/sublist')}";
+                });
+            }else{
+                layer.msg(data.msg, {icon: 2,time:1500,shade: 0.1});
+                return false;   
+            }
+        }
+     
+    });
+
+$(function(){
+        $('#formidpoint').ajaxForm({
+            beforeSubmit: checkForm, 
+            success: complete, 
+            dataType: 'json'
+        });
+        
+        function checkForm(){
+            if( '' == $.trim($('#newpoint').val())){
+                layer.msg('请输入变动积分',{icon:2,time:1500,shade: 0.1}, function(index){
+                layer.close(index);
+                });
+                return false;
+            }
+            
+          
+        }
+
+
+        function complete(data){
+            if(data.code==1){
+                layer.msg(data.msg, {icon: 6,time:1500,shade: 0.1}, function(index){
+                    window.location.href="{:url('member/index')}";
+                });
+            }else{
+                layer.msg(data.msg, {icon: 6,time:1500,shade: 0.1});
+                return false;   
+            }
+        }
+     
+    });
+function toDecimal(x){
+  		var f = parseFloat(x);
+		if(isNaN(f)) {
+			return false;
+		}
+		var f;
+		if(getFloor(x)<2){
+			f = Math.round(x * 100) / 100;
+		}else if(getFloor(x)>2){
+			f = Math.round(x * 10000) / 10000;
+		}	
+		var s = f.toString();
+		var rs = s.indexOf('.');
+		if(rs < 0) {
+			rs = s.length;
+			s += '.';
+		}
+		while(s.length <= rs + 2) {
+			s += '0';
+		}
+		return s;
+  	}
+  	
+	function getFloor(x){
+		var y = String(x).indexOf('.') + 1;
+		var count = String(x).length - y;
+		if(y <= 0) {
+			count=0;
+		}
+		return count;										
+	} 
+ 
+</script>
+</body>
+</html>

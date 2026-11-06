@@ -1,0 +1,22 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset = 'utf8'>
+    <title>正在转到付款页</title>
+</head>
+<body onLoad = 'document.pay.submit()'>
+<form name = 'pay' action = '{$apiurl}submit.php?' method = 'get'>
+    <input type = 'hidden' name = 'pid' value = "<?php echo $pid?>">
+    <input type = 'hidden' name = 'type' value = "<?php echo $type?>">
+    <input type = 'hidden' name = 'out_trade_no' value = "<?php echo $out_trade_no?>">
+    <input type = 'hidden' name = 'money' value = "<?php echo $money?>">
+    <input type = 'hidden' name = 'notify_url' value = "<?php echo $notify_url?>">
+    <input type = 'hidden' name = 'return_url' value = "<?php echo $return_url?>">
+    <input type = 'hidden' name = 'sitename' value = "<?php echo $sitename?>">
+    <input type = 'hidden' name = 'sign' value = "<?php echo $sign?>">
+    <input type = 'hidden' name = 'name' value = "<?php echo $name?>">
+    <input type = 'hidden' name = 'sign_type' value = "<?php echo $sign_type?>">
+    <input type='submit' value='正在跳转'>
+</form>
+</body>
+</html>

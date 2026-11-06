@@ -1,0 +1,58 @@
+{include file="public/imgpc2/head_title" /}
+		<link rel="stylesheet" href="__IMGPC2__/css/common.css" />
+		<link rel="stylesheet" href="__IMGPC__/css/news.css" />
+	</head>
+
+	<body>
+		<div class="header">
+			{include file="public/imgpc2/header_top" /}
+			<div class="head-bot">
+				<div class="nb">
+	
+					{include file="public/imgpc2/header_search" /}
+					<div class="clearfix"></div>
+					
+	
+				</div>
+			</div>
+		</div>
+		{include file="public/imgpc2/nav" /}
+		<div class="problem-body">
+			<div class="nb">
+				
+				<div class="problem-rside">
+					<div class="probar">
+						常见问题
+					</div>
+					<div class="problemcon problistpad">
+						<ul class="problem-list">
+							{foreach name="detail" item="v"}
+							<li>
+								<a href="{:url('@jingdian/Detail/index',['id'=>$v['id']])}">{$v['title']}<span style="float:right;">{$v['update_time']|date='Y/m/d',###}</span></a>
+								
+							</li>
+							{/foreach}
+							
+						</ul>
+						<div class="pages">
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		{include file="public/imgpc2/footer" /}
+		<script src="{:config('cdnpublic')}jquery/1.9.1/jquery.min.js" type="text/javascript"></script>
+		<script src="__IMGPC__/js/main.js" type="text/javascript"></script>
+		<script>
+			$(".problem-lside a.nli").each(function() {
+				$(this).click(function() {
+					$(this).next("ul.ulson").slideToggle(200);
+					$(this).children("b").toggleClass("arrow");
+				})
+			});
+            
+		</script>
+
+	</body>
+
+</html>

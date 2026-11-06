@@ -1,0 +1,111 @@
+{include file="public/headerlayer" /}
+<body ontouchstart>
+<div class='fui-page-group '>
+	<script src='__JS__/foxui.min.js'></script>
+	<script src='__JS__/init.js'></script>
+	<script language="javascript" src="https://unpkg.com/layui-src@2.5.4/dist/layui.js"></script>
+	<link href="__CSS__/style_1.css" rel="stylesheet" type="text/css" />
+	<div class='fui-page fui-page-current'>
+		<div class="fui-header fui-header-success">
+			<div class="fui-header-left"><a class="back external" href="{:url('index/goods')}"></a></div>
+			<div class="title">卡密 · {$goodsname}</div>
+			<div class="fui-header-right"></div>
+		</div>
+		<div class='fui-content navbar'>
+			{if condition="$addid"}
+			<div class="fui-title">批次 addid={$addid}
+				<a href="{:url('kami/addlog',['goodid'=>$goodsid])}" style="float:right;color:#44b549;">入库日志</a>
+			</div>
+			{/if}
+			<form method="get" action="{:url('kami/index')}">
+				<input type="hidden" name="id" value="{$goodsid}" />
+				{if condition="$addid"}<input type="hidden" name="addid" value="{$addid}" />{/if}
+				<div class="fui-cell-group">
+					<div class="fui-cell">
+						<div class="fui-cell-info">
+							<select name="misuse" class="fui-input">
+								<option value="99" {if condition="$misuse eq '99'"}selected{/if}>全部状态</option>
+								<option value="0" {if condition="$misuse eq '0'"}selected{/if}>未使用</option>
+								<option value="1" {if condition="$misuse eq '1'"}selected{/if}>已使用</option>
+							</select>
+						</div>
+					</div>
+				</div>
+				<div class="fui-searchbar bar">
+					<div class="searchbar center">
+						<input type="submit" class="searchbar-cancel searchbtn" value="搜索" />
+						<div class="search-input">
+							<i class="icon icon-search"></i>
+							<input type="search" placeholder="卡密关键词" class="search" name="key" value="{$val}" />
+						</div>
+					</div>
+				</div>
+			</form>
+			<div class="fui-list-group nomargin container" id="list-content"></div>
+			<div class="fui-title center" id="AjaxPage"></div>
+			<div class="fui-title center hide" id="content-empty">没有数据</div>
+		</div>
+	</div>
+	{include file="public/navbar" /}
+</div>
+<script type="text/html" id="list-template">
+{{# for(var i=0;i<d.length;i++){ }}
+<div class="fui-list">
+	<div class="fui-list-inner">
+		<div class="title" style="word-break:break-all;">{{d[i].musernm}}</div>
+		<div class="subtitle">{{# if(d[i].mis_use==0){ }}未用{{# }else{ }}已用{{# } }} · 批次{{d[i].addid}} · {{d[i].create_time_fmt}}</div>
+	</div>
+	{{# if(d[i].mis_use==0){ }}
+	<div class="fui-list-angle">
+		<a class="btn btn-sm btn-danger" href="javascript:;" onclick="delOne({{d[i].id}})">删</a>
+	</div>
+	{{# } }}
+</div>
+{{# } }}
+</script>
+<script>
+layui.use(['laytpl','laypage','layer'], function(){
+	var laytpl = layui.laytpl, laypage = layui.laypage, layer = layui.layer;
+	function Ajaxpage(curr){
+		$.getJSON('{:url("kami/index")}', {
+			page: curr || 1,
+			id: {$goodsid},
+			addid: '{$addid}',
+			key: '{$val}',
+			misuse: '{$misuse}'
+		}, function(data){
+			var list = data.list || [];
+			if(!list.length){
+				$('#content-empty').show();
+				$('#list-content').html('');
+			}else{
+				$('#content-empty').hide();
+				laytpl(document.getElementById('list-template').innerHTML).render(list, function(html){
+					document.getElementById('list-content').innerHTML = html;
+				});
+			}
+			laypage.render({
+				elem: 'AjaxPage',
+				count: data.count || 0,
+				curr: curr || 1,
+				limit: 15,
+				jump: function(obj, first){
+					if(!first){ Ajaxpage(obj.curr); }
+				}
+			});
+		});
+	}
+	window.delOne = function(id){
+		layer.confirm('删除该条卡密？', function(idx){
+			$.post('{:url("kami/del_kami")}', {id: id}, function(res){
+				layer.msg(res.msg || '');
+				if(res.code == 1){ Ajaxpage(1); }
+			}, 'json');
+			layer.close(idx);
+		});
+	};
+	Ajaxpage();
+});
+</script>
+</body>
+</html>

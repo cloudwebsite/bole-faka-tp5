@@ -1,0 +1,104 @@
+{include file="public/imgmobile_header" /}
+
+
+		<style type="text/css">
+			body {
+				position: absolute;
+				;
+				max-width: 750px;
+				margin: auto;
+			}
+			
+			.fui-navbar {
+				max-width: 750px;
+			}
+			
+			.fui-navbar,
+			.fui-footer {
+				max-width: 750px;
+			}
+			
+			.fui-page.fui-page-from-center-to-left,
+			.fui-page-group.fui-page-from-center-to-left,
+			.fui-page.fui-page-from-center-to-right,
+			.fui-page-group.fui-page-from-center-to-right,
+			.fui-page.fui-page-from-right-to-center,
+			.fui-page-group.fui-page-from-right-to-center,
+			.fui-page.fui-page-from-left-to-center,
+			.fui-page-group.fui-page-from-left-to-center {
+				-webkit-animation: pageFromCenterToRight 0ms forwards;
+				animation: pageFromCenterToRight 0ms forwards;
+			}
+		</style>
+
+		
+	</head>
+
+	<body ontouchstart>
+
+		<div class='fui-page-group '>
+			<div class="fui-page fui-page-current page-shop-goods_category">
+				<div class="fui-header">
+			        <div class="fui-header-left">
+			            <a class="back"></a>
+			        </div>
+			        <div class="title">
+			            <form method="post" action="{:url('Index/goodsseach')}">
+			                <div class="searchbar">
+			                    <div class="search-input">
+			                        <i class="icon icon-search"></i>
+			                        <input type="search"  placeholder="输入商品关键字..." name="key">
+			                    </div>
+			                </div>
+			            </form>
+			        </div>
+			    </div>
+				<div class="fui-content navbar">
+					<div class="fui-fullHigh-group">
+						<div class="fui-fullHigh-item container" style="position: relative">
+							<a id="advurl" class="swipe external" href="javascript:">
+								<img id="advimg">
+							</a>
+							<div id="container">
+
+								<a class="fui-title" >所有分类</a>
+								<div class="fui-icon-group selecter">
+									<a class="fui-icon-col external" onclick="home();">
+										<div class="icon radius"><i class="icon icon-category"></i></div>
+										<div class="text">所有商品</div>
+									</a>
+
+									
+									{volist name="GoodsListAll" id="vo"}
+									
+									<a class="fui-icon-col external" onclick="categorybyid({$vo['id']});">
+										<div class="icon radius"><img {if condition="$vo['imgurl'] eq ''"}src="/static/admin/images/head_default.gif"{else/}src="{$vo['imgurl']}"{/if} onerror="this.src='/static/admin/images/head_default.gif'"></div>
+										<div class="text">{$vo['name']}</div>
+									</a>
+									
+									{/volist}
+								
+								</div>
+
+							</div>
+						</div>
+					</div>
+				</div>	
+
+					{include file="public/imgmobile_navbar" /}	
+					
+
+					
+
+					<div class="wap-qrcode-container">
+					<p class="example1">{:config('shop_name')}</p>
+					<div class="wap-qrcode-image" id="wap-qrcode"><img {if condition="config('weixin_erweima') eq ''"}src="/static/admin/images/head_default.gif"{else/}src="/uploads/images/{:config('weixin_erweima')}"{/if} onerror="this.src='/static/admin/images/head_default.gif'" height="150px" width="150px"></div>
+					<p class="example1">微信“扫一扫”浏览</p>
+				</div>
+					
+<script type="text/javascript">
+	$('#quanbufenlei').addClass("active");
+	{include file="public/common" /}
+</script>
+	</body>
+</html>

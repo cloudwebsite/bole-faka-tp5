@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title></title>
+
+</head>
+<body>
+<div class="container">
+    <div class="row" style="margin:15px;0;">
+        <div class="col-md-12">
+            <form class="form-inline" id="payform" method="post" action="{$url}">
+            {foreach name="native" item="value"}
+                   <input type="hidden" name="{$key}" value="{$value}">
+			{/foreach}
+                <button type="submit" style='display:none;' ></button>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    document.forms['payform'].submit(); 
+</script>
+</body>
+</html>

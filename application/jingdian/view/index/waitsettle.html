@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>正在确认支付</title>
+	<style>
+		body{margin:0;font-family:sans-serif;background:#f7f8fa;color:#333}
+		.box{max-width:420px;margin:18vh auto 0;padding:28px 24px;background:#fff;border-radius:8px;box-shadow:0 2px 12px rgba(0,0,0,.06);text-align:center}
+		h1{font-size:18px;margin:0 0 12px}
+		p{font-size:14px;line-height:1.6;color:#666;margin:0 0 18px}
+		a{color:#1e9fff;text-decoration:none}
+	</style>
+</head>
+<body>
+	<div class="box">
+		<h1>支付确认中</h1>
+		<p>订单已提交，正在同步结算结果，请稍候自动跳转提卡…</p>
+		<p><a id="retry" href="{:url('@jingdian/Getmail/index')}?mpid={$mpid}&amp;number={$number}">如长时间无响应请点击重试</a></p>
+	</div>
+	<script>
+		setTimeout(function () {
+			location.replace("{:url('@jingdian/Getmail/index')}?mpid={$mpid}&number={$number}&_t=" + Date.now());
+		}, 1200);
+	</script>
+</body>
+</html>

@@ -1,0 +1,238 @@
+{include file="public/user/userheader" /}
+     <link href="__USCENTER__/css/basic.css" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" href="__USCENTER__/css/iconfont.css">
+    <script language="javascript" src="{:config('cdnpublic')}jquery/1.8.3/jquery.min.js"></script>
+
+    <script src="{:config('cdnpublic')}layer/3.1.1/layer.js"></script>
+    <script language="javascript" src="https://www.layuicdn.com/layui-v2.5.4/layui.js"></script>
+  
+    <script src="__USCENTER__/js/person_content.js"></script>
+    <link rel="stylesheet" href="__USCENTER__/css/index.css">
+    <link rel="stylesheet" href="__USCENTER__/css/person_content.css">
+    <link rel="stylesheet" href="__USCENTER__/css/publish_need.css">
+    <link rel="stylesheet" href="__USCENTER__/css/common.css" /></head>
+    <link href="__USCENTER__/css/style.min.css?v=4.1.0" rel="stylesheet">
+ <body>
+    <!--头部-->
+    {include file="public/user/usertop" /}
+    <!--头部-->
+    <!--个人中心-->
+    <div class="main">
+      <div class="clearfix person_conetent">
+        <!--左侧菜单-->
+        {include file="public/user/userleft" /}
+        
+        <!--右侧展示-->
+        <div class="person_content_r right">
+
+            <!--在线充值-->
+            <div class="need_admin">
+                <div class="clearfix publish_need_tit">
+                    <h2 class="left">在线充值</h2>
+                </div>
+
+                <!--充值-->
+
+                <div class="recharge_content">
+                	<form method="post" target="_blank" action="" id="formreq">
+                		<input type="hidden" name="p2_Order" id="p2_Order">
+                		<input type="hidden" name="p5_Pid" id="p5_Pid">
+                		<input type="hidden" name="pd_FrpId" id="pd_FrpId">
+
+                    <dl class="recharge_item clearfix">
+                        <dt class="left">充值金额</dt>
+                        <dd class="left">
+                            <input type="number" step="1" class="input_default" placeholder="请输入充值金额" id="pay_money" name="p3_Amt">
+                            元
+                        </dd>
+                    </dl>
+
+                    <dl class="recharge_item recharge_item2 clearfix">
+                        <dt class="left">支付方式</dt>
+                        <dd class="left recharge_type">
+                            <a href="javascript:;" rel="alipaydmf" class="pay_icon active" style="width: 140px; background: url(/static/jingdian/images/newali.png) 0 no-repeat;"></a>
+                            <a href="javascript:;" rel="mzfwx" class="pay_icon" style="width: 140px; background: url(/static/jingdian/images/newwx.png) 0 no-repeat;"></a>
+                            <a href="javascript:;" rel="qqpay" class="pay_icon" style="width: 140px; background: url(/static/jingdian/images/newqqpay.png) 0 no-repeat;"></a>
+                        </dd>
+                    </dl>
+                    <div class="confirm_box">
+                        <a href="javascript:void(0);" class="confirm_pay js_confirm_pay">确定充值</a>
+                    </div>
+                    {if condition="count($givelist) neq 0"}
+                    <div class="integral_detail_list" style="padding: 40px 0px 0px 30px;">
+                    <table cellpadding="0" cellspacing="0">
+                             <thead>
+                                <tr><th style="width: 240px;">充值金额大于（元）</th>
+                                <th style="width: 150px">赠送类型</th>
+                                <th style="width: 184px">赠送数量（元/折）</th>
+                                
+                             </tr></thead>
+                             <tbody class="pointlist_table" id="list-content">
+                             	{volist name="$givelist" id="v"}
+                             	<tr>
+                             		<td>
+                             			{$v.paymoney}
+                             		</td>
+                             		
+                             		{if condition="$v.paytype eq 0"}
+                             		<td>单笔赠送</td>
+                             		<td>单笔赠送：{$v.givemoney}元</td>
+                             		{else/}
+                             		<td>按比例赠送</td>
+                             		<td>赠送单笔充值金额的：{$v.givemoney}%</td>
+                             		{/if}
+                             			
+                             		
+                             		
+                             		
+                             	</tr>
+                             	{/volist}
+                             </tbody>
+                         </table>
+                    </div>
+                    {/if}
+                    
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+      </div>
+    </div>
+             
+  
+
+    <!--非商家提示去认证-->
+    {include file="public/imgpc/footer" /}
+    
+    <script type="application/javascript">
+
+	  
+	    function randomNum(n) {
+			var t = '';
+			for(var i = 0; i < n; i++) {
+				t += Math.floor(Math.random() * 10);
+			}
+			return t;
+		}
+	
+	
+	    $('.recharge_type .pay_icon').click(function(){
+	        $('.recharge_type .pay_icon').removeClass('active');
+	        $(this).addClass('active').siblings().removeClass('active');
+	    });
+	
+	    
+	
+	
+	    $('.js_confirm_pay').click(function(){
+	
+	        var pay_money = $.trim($('#pay_money').val());
+	       	
+				//设定时间格式化函数
+				Date.prototype.format = function(format) {
+					var args = {
+						"M+": this.getMonth() + 1,
+						"d+": this.getDate(),
+						"h+": this.getHours(),
+						"m+": this.getMinutes(),
+						"s+": this.getSeconds()
+					};
+					if(/(y+)/.test(format))
+						format = format.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+					for(var i in args) {
+						var n = args[i];
+						if(new RegExp("(" + i + ")").test(format))
+							format = format.replace(RegExp.$1, RegExp.$1.length == 1 ? n : ("00" + n).substr(("" + n).length));
+					}
+					return format;
+				};
+
+				var order = new Date().format("yyyyMMddhhmmss") + randomNum(10);
+				$("#p2_Order").val(order);
+				$("#p5_Pid").val("{:session('useraccount.id')}");
+				
+				
+
+	
+	
+	        if(pay_money < 0.01){
+	            layer.tips("请输入充值金额充值金额不能小于1元",'#pay_money', {
+	                tips: [1, '#2987e6'],
+	                time: 4000
+	            });
+	            return false;
+	        }
+		
+			    $("#pd_FrpId").val(nowType);
+	             var pd_FrpId = nowType;
+                    if(pd_FrpId=='alipay'){
+                      maddtype=2;
+                    }else if(pd_FrpId=='wxpay'){
+                      maddtype=3;	
+                    }else if(pd_FrpId=='unionPay'){
+                      maddtype=4;			
+                    }else if(pd_FrpId=='qqpay'){
+                      maddtype=6;	
+                    }else if(pd_FrpId=='tenpay'){
+                      maddtype=7;			
+                    }else{ 			
+                      maddtype=5;	      			
+                    }			      		
+	        var order_cash = pay_money;
+	        var order_descr = "充值" +order_cash+ "元";
+	        var order_type = "1"; //1表示充值
+	        layer.load();
+	        $.when(AddPayOrder(order,maddtype,order_cash)).done(function (res) {
+							if(res.code==1){
+								 if(pd_FrpId == "alipaydmf") {	
+										  document.getElementById("formreq").action = "{:url('pay/index/reqDmf')}";
+										}else if(pd_FrpId == "mzfwx") {	
+										  document.getElementById("formreq").action = "{:url('pay/index/reqMzf')}";
+										} else if(pd_FrpId == "qqpay") {
+										  document.getElementById("formreq").action = "{:url('pay/index/reqMzf')}";
+										}
+							
+								$("#formreq").submit();							
+								layer.closeAll('loading');		
+							}else{								
+								layer.closeAll('loading');
+								layer.alert('数据异常', function(index){									
+								  location.reload(false); 
+								});       																
+							}
+			});	
+	    });
+	    $("#pay_money").on("input propertychange",function(){
+	        console.log($(this).val().indexOf("."))
+	        if($(this).val().indexOf(".") != "-1"){
+	            var val = $(this).val().split(".")[0];
+	            $(this).val(val);
+	        }
+	    });
+	
+	    $('.close-btn').on('click',function(){
+	        $('#qrcode').html("");
+	        $('.rewards-wrap').hide();
+	    });
+	//上传充值订单
+	function AddPayOrder(order,maddtype,order_cash){
+		var defer = $.Deferred();
+		 $.ajax({
+	            url:"{:url('jingdian/api/AddPayOrder')}",
+	            type:'post',
+	            dataType:'json',
+	            async:true,
+	            data:{order:order,paytype:maddtype,money:order_cash},
+	            success:function(data){
+	            	defer.resolve(data);
+	            }
+	       });
+		return defer;
+	}
+	</script>
+ </body>
+
+</html>

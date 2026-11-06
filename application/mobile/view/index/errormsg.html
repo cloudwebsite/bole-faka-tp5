@@ -1,0 +1,34 @@
+{include file="public/header" /}
+  <body>
+<div class="weui-msg">
+  <div class="weui-msg__icon-area"><i class="weui-icon-info weui-icon_msg"></i></div>
+  <div class="weui-msg__text-area">
+    <h2 class="weui-msg__title"></h2>
+    
+  </div>
+  <div class="weui-msg__opr-area">
+    <p class="weui-btn-area">
+      <a href="javascript:void(0);" class="weui-btn weui-btn_primary" onclick="gohome();">返回首页</a>
+    </p>
+  </div>
+  <div class="weui-msg__extra-area">
+    
+  </div>
+</div>
+	
+	
+		
+{include file="public/footer" /}   
+
+  </body>
+<script type="text/javascript">
+var code = '{$Order["code"]}';
+var msg = '{$Order["msg"]}';
+$(".weui-msg__title").html(msg);  
+  
+function gohome()
+		{
+			location.href="{:config('is_https')}://"+window.location.host+"/mobile";
+		}
+</script>
+</html>

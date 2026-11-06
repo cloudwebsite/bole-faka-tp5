@@ -1,0 +1,82 @@
+<div class="footerBox">
+		
+	<p>
+     {foreach name="href" item="v"} 
+		<a href="{$v['link_url']}" style="text-decoration:none;" target="_blank"><font color="#000000"><font style="text-decoration: none">{$v['title']}</font></font></a> ｜ 
+     {/foreach}
+		<a href="https://wpa.qq.com/msgrd?v=3&amp;uin={:config('WEB_QQ')}&amp;site=qq&amp;menu=yes" target="_blank" class="im-qq qq-a" style="text-decoration:none;" ><font color="#000000"><font style="text-decoration: none">友情连接</font></font></a>
+	</p>
+</div>
+<div id="footer" {if condition="config('pc_jd_footer_color') neq ''"} style="background: {:config('pc_jd_footer_color')};"{/if}>
+	<p>
+		<a href="https://beian.miit.gov.cn/"><font color="#FFFFFF">{:config('web_site_icp')}</font></a> {:config('web_site_copy')} {:config('web_site_cnzz')}
+	</p>
+
+</div>
+</div>
+<div class="main-im">
+<div id="open_im" class="open-im" style='display: none;'>
+    &nbsp;
+</div>
+<div class="im_main" id="im_main" style="display: block;">
+	<div id="close_im" class="close-im">
+		<a href="javascript:void(0);" title="点击关闭">&nbsp;</a>
+	</div>
+	<a href="https://wpa.qq.com/msgrd?v=3&amp;uin={:config('WEB_QQ')}&amp;site=qq&amp;menu=yes" target="_blank" class="im-qq qq-a" title="在线QQ客服">
+	<div class="qq-container">
+	</div>
+	<div class="qq-hover-c">
+		<img class="img-qq" src="__IMG__/qq.png"/>
+	</div>
+	<span> QQ在线咨询</span></a>
+	<div class="im-tel">
+		{if condition="config('WEB_QQ') neq ''"}
+		<div>
+      QQ在线咨询
+		</div>
+		<div>
+			<a target="_blank" href="https://wpa.qq.com/msgrd?v=3&amp;uin={:config('WEB_QQ')}&amp;site=qq&amp;menu=yes"><img border="0" src="https://wpa.qq.com/pa?p=2:{:config('WEB_QQ')}:41" alt="点击这里给我发消息" title="点击这里给我发消息"/></a>
+		</div>
+		{/if}
+		 {if condition="config('WEB_WANGWANG') neq ''"}
+		
+		<div>
+      旺旺咨询
+		</div>
+		<div>
+			<a target="_blank" href="http://www.taobao.com/webww/ww.php?ver=3&amp;touid={:config('WEB_WANGWANG')}&amp;siteid=cntaobao&amp;status=1&amp;charset=utf-8"><img border="0" src="http://amos.alicdn.com/online.aw?v=2&amp;uid={:config('WEB_WANGWANG')}&amp;site=cntaobao&amp;s=1&amp;charset=utf-8" alt="点这里给我发消息"/></a>
+		</div>
+		{/if}
+	</div>
+	<div class="im-footer" style="position:relative">
+	{if condition="config('weixin_erweima') neq ''"}
+	<div class="weixing-container">
+		<div class="weixing-show">
+			<div class="weixing-txt">
+				微信扫一扫<br>
+				添加我为好友
+			</div>
+			<img class="weixing-ma" src="/uploads/images/{:config('weixin_erweima')}" onerror="this.src='/static/admin/images/head_default.gif'" height="118px" width="118px">
+			<div class="weixing-sanjiao">
+			</div>
+			<div class="weixing-sanjiao-big">
+			</div>
+		</div>
+	</div>
+	{/if}
+	<div class="go-top">
+		<a href="javascript:;" title="返回顶部"></a>
+	</div>
+	<div style="clear:both">
+	</div>
+</div>
+</div>
+
+<script src="{:config('cdnpublic')}jquery/2.1.4/jquery.min.js"></script>
+<script src="__JS__/js.js"></script>
+<script src="__JS__/welcome.js"></script>
+<script src="{:config('cdnpublic')}layer/3.1.1/layer.js"></script>
+<script src="https://www.layuicdn.com/layui-v2.5.4/layui.js"></script>
+
+<script src="/static/admin/js/lunhui.js"></script>
+<script type="text/javascript" src="__JS__/ZeroClipboard.js"></script>

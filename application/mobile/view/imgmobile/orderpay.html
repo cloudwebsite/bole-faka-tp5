@@ -1,0 +1,414 @@
+{include file="public/imgmobile_header" /}	
+	</head>
+
+	<body ontouchstart="">
+
+		<div class="fui-page-group statusbar">
+			<style>
+
+			</style>
+			<div class="fui-page  fui-page-current order-pay-page" id="fui-page-1523806347935">
+				<div class="fui-header">
+					<div class="fui-header-left">
+						<a class="back" onclick="back();"></a>
+					</div>
+					<div class="title">收银台</div>
+					<div class="fui-header-right">
+						
+					</div>
+				</div>
+				<div class="fui-content ">
+					<div class="fui-cell-group" style="margin-top: 0">
+						<div class="fui-cell">
+							<div class="fui-cell-label">商品名称</div>
+							<div class="fui-cell-info"></div>
+							
+
+
+							<div class="fui-cell-remark noremark" style="overflow: hidden;text-overflow:ellipsis;white-space: nowrap;">{:htmlspecialchars_decode($param['title'])}
+							</div>
+						</div>
+						<div class="fui-cell">
+							<div class="fui-cell-label">订单编号</div>
+							<div class="fui-cell-info"></div>
+							<div class="fui-cell-remark noremark">{$param['p2_Order']}</div>
+						</div>
+          
+						<div class="fui-cell">
+							<div class="fui-cell-label">购买数量</div>
+							<div class="fui-cell-info"></div>
+							<div class="fui-cell-remark noremark">{$param['buynum']}
+							</div>
+						</div>
+            
+            <div class="fui-cell">
+							<div class="fui-cell-label">商品单价</div>
+							<div class="fui-cell-info"></div>
+							<div class="fui-cell-remark noremark"><span class="text-danger bigprice">￥{$param['price']}</span>
+							</div>
+						</div>
+						
+						<div class="fui-cell">
+							<div class="fui-cell-label">订单金额</div>
+							<div class="fui-cell-info"></div>
+							<div class="fui-cell-remark noremark"><span class="text-danger bigprice">￥{$param['p3_Amt']}</span>
+							</div>
+						</div>
+					</div>
+					<form id="frm" role="form" method="post"  action="">
+					<div class="fui-list-group" style="margin-top:10px;">
+
+						<!--支付参数-->
+						<input type="hidden" name="p3_Amt" value="{$param['p3_Amt']}"/>
+						<input type="hidden" name="p2_Order" value="{$param['p2_Order']}"/>
+						<input type="hidden" name="p5_Pid" value="{$param['p5_Pid']}"/>
+						<input type="hidden" name="lianxi" value="{$param['lianxi']}"/>
+						<input type="hidden" name="pa_MP" value=""/>
+						<input type="hidden" name="pd_FrpId" value=""/>
+						{if condition="config('balance_pay_only') neq 1 && config('balance_pay_only') neq '1' && config('blfk_pay_wxpay')  neq '0'"}
+						<div class="fui-list pay-btn" data-type="credit" id="wxpay" onclick="wxpay();">
+							<div class="fui-list-media">
+								<img src="__IMGMOBILE__/img/wx.png" alt="">
+							</div>
+							<div class="fui-list-inner">
+			                    <div class="title">
+			                        	微信支付
+			                    </div>
+			                    <div class="subtitle c999 f24">
+			                        <img src="__IMGMOBILE__/img/safe.png" alt="" style="height: .8rem;vertical-align: text-bottom">微信安全支付
+			                    </div>
+			                </div>
+							<div class="fui-list-angle"><span class="angle"></span></div>
+						</div>
+						{/if}
+						{if condition="config('balance_pay_only') neq 1 && config('balance_pay_only') neq '1' && config('blfk_pay_alipay')  neq '0'"}
+						<div class="fui-list pay-btn" data-type="peerpay" id="alipay" onclick="alipay();">
+							<div class="fui-list-media">
+
+								<img src="__IMGMOBILE__/img/zfb.png" alt="">
+							</div>
+							<div class="fui-list-inner">
+			                    <div class="title">
+			                        支付宝支付
+			                    </div>
+			                    <div class="subtitle c999 f24">
+			                        <img src="__IMGMOBILE__/img/safe.png" alt="" style="height: .8rem;vertical-align: text-bottom">支付宝安全支付
+			                    </div>
+			                </div>
+							<div class="fui-list-angle"><span class="angle"></span></div>
+						</div>
+						{/if}
+						{if condition="config('balance_pay_only') neq 1 && config('balance_pay_only') neq '1' && config('blfk_pay_qqpay') neq '0'"}
+						<div class="fui-list pay-btn" data-type="peerpay" id="qqpay" onclick="qqpay();">
+							<div class="fui-list-media">
+								<img src="__IMGMOBILE__/img/qqpay.png" alt="">
+							</div>
+							<div class="fui-list-inner">
+			                    <div class="title">
+			                        QQ钱包
+			                    </div>
+			                    <div class="subtitle c999 f24">
+			                        <img src="__IMGMOBILE__/img/safe.png" alt="" style="height: .8rem;vertical-align: text-bottom">QQ钱包扫码支付
+			                    </div>
+			                </div>
+							<div class="fui-list-angle"><span class="angle"></span></div>
+						</div>
+						{/if}
+						{if condition="config('balance_pay_only') neq 1 && config('balance_pay_only') neq '1' && config('blfk_pay_usdtpay') neq '0'"}
+						<div class="fui-list pay-btn" data-type="peerpay" id="usdtpay" onclick="usdtpay();">
+							<div class="fui-list-media">
+								<img src="__IMGMOBILE__/img/usdtpay.png" alt="">
+							</div>
+							<div class="fui-list-inner">
+			                    <div class="title">
+			                        USDT
+			                    </div>
+			                    <div class="subtitle c999 f24">
+			                        <img src="__IMGMOBILE__/img/safe.png" alt="" style="height: .8rem;vertical-align: text-bottom">TRC20USDT支付
+			                    </div>
+			                </div>
+							<div class="fui-list-angle"><span class="angle"></span></div>
+						</div>
+						{/if}
+						{if condition="config('balance_pay_only') neq 1 && config('balance_pay_only') neq '1' && config('blfk_pay_unionpay') neq '0'"}
+						<div class="fui-list pay-btn" data-type="peerpay" id="unionpay" onclick="unionpay();">
+							<div class="fui-list-media">
+								<img src="__IMGMOBILE__/img/unionPay.png" alt="">
+							</div>
+							<div class="fui-list-inner">
+			                    <div class="title">
+			                        聚合支付
+			                    </div>
+			                    <div class="subtitle c999 f24">
+			                        <img src="__IMGMOBILE__/img/safe.png" alt="" style="height: .8rem;vertical-align: text-bottom">微信&支付宝扫码支付
+			                    </div>
+			                </div>
+							<div class="fui-list-angle"><span class="angle"></span></div>
+						</div>
+						{/if}
+						{if condition="config('balance_pay_only') neq 1 && config('balance_pay_only') neq '1' && config('blfk_pay_tenpay') neq '0'"}
+						<div class="fui-list pay-btn" data-type="peerpay" id="tenpay" onclick="tenpay();">
+							<div class="fui-list-media">
+								<img src="__IMGMOBILE__/img/qqpay.png" alt="">
+							</div>
+							<div class="fui-list-inner">
+			                    <div class="title">
+			                        财付通
+			                    </div>
+			                    <div class="subtitle c999 f24">
+			                        <img src="__IMGMOBILE__/img/safe.png" alt="" style="height: .8rem;vertical-align: text-bottom">财付通支付
+			                    </div>
+			                </div>
+							<div class="fui-list-angle"><span class="angle"></span></div>
+						</div>
+						{/if}
+						
+						{if condition="session('useraccount.account') neq null"}
+						{if condition="$param['useraccount']['money'] egt 0"}
+						<div class="fui-list pay-btn" data-type="credit" onclick="yuepay();">
+			                <div class="fui-list-media">
+			                    <img src="__IMGMOBILE__/img/ye.png" alt="">
+			                </div>
+			                <div class="fui-list-inner">
+			                    <div class="title">余额支付</div>
+			                    <div class="subtitle c999 f24">当前余额: <span class="text-danger">￥{$param['useraccount']['money']}</span>
+			                    </div>
+			                </div>
+			                <div class="fui-list-angle">
+					    <span class="angle"></span>
+			                </div>
+			            </div>
+			            {elseif condition="config('balance_pay_only') eq 1 || config('balance_pay_only') eq '1'"/}
+			            <div class="fui-cell-group" style="margin:0;">
+			            	<div class="fui-cell"><div class="fui-cell-info" style="color:#c00;">余额不足，请先充值后再支付</div></div>
+			            </div>
+			            {/if}
+			            {elseif condition="config('balance_pay_only') eq 1 || config('balance_pay_only') eq '1'"/}
+			            <div class="fui-cell-group" style="margin:0;">
+			            	<div class="fui-cell"><div class="fui-cell-info" style="color:#c00;">当前仅支持余额支付，请先登录</div></div>
+			            </div>
+			            {/if}
+						
+					</div>
+				</form>	
+				</div>
+
+			</div>
+
+			
+		</div>
+		{include file="public/order_disclaimer_boot" /}
+		<script type="text/javascript">
+
+		$(document).ready(function () {
+   		 
+		});
+		var index;
+		var __odOrderPayOnce = false;
+		try {
+			if (sessionStorage.getItem('order_disclaimer_ok') === '1') {
+				__odOrderPayOnce = true;
+				sessionStorage.removeItem('order_disclaimer_ok');
+			}
+		} catch (e) {}
+			function wxpay(){
+				index=layer.open({
+							type: 2
+							,content: '加载中'
+							,shade: 'background-color: rgba(0,0,0,.2)'
+							,shadeClose:false
+						  });
+				setInterval('ajaxstatus()',2000); 
+				var lianxi="{$param['lianxi']}";    			
+    				$('[name=pd_FrpId]').val('wxpay');  
+					$("#frm").attr('action',"{:url('pay/index/reqPay')}");
+    				AddOrderCall("wxpay","{$param['p2_Order']}",lianxi,"","{$param['p5_Pid']}","{$param['buynum']}","{$param['p3_Amt']}")			
+    			
+			}
+			
+			function qqpay(){
+				index=layer.open({
+					type: 2
+					,content: '加载中'
+					,shade: 'background-color: rgba(0,0,0,.2)'
+					,shadeClose:false
+				  });
+				setInterval('ajaxstatus()',2000); 
+				var lianxi="{$param['lianxi']}";
+    				$('[name=pd_FrpId]').val('qqpay');  
+					$("#frm").attr('action',"{:url('pay/index/reqPay')}");
+    				AddOrderCall("qqpay","{$param['p2_Order']}",lianxi,"","{$param['p5_Pid']}","{$param['buynum']}","{$param['p3_Amt']}")			
+    			
+			}
+		    function usdtpay(){
+				index=layer.open({
+					type: 2
+					,content: '加载中'
+					,shade: 'background-color: rgba(0,0,0,.2)'
+					,shadeClose:false
+				  });
+				setInterval('ajaxstatus()',2000); 
+				var lianxi="{$param['lianxi']}";
+    				$('[name=pd_FrpId]').val('usdtpay');  
+					$("#frm").attr('action',"{:url('pay/index/reqPay')}");
+    				AddOrderCall("usdtpay","{$param['p2_Order']}",lianxi,"","{$param['p5_Pid']}","{$param['buynum']}","{$param['p3_Amt']}")
+			}
+			
+			function alipay(){
+				index=layer.open({
+							type: 2
+							,content: '加载中'
+							,shade: 'background-color: rgba(0,0,0,.2)'
+							,shadeClose:false
+						  });
+				var lianxi="{$param['lianxi']}";
+				$('[name=pd_FrpId]').val('alipay');
+				$("#frm").attr('action',"{:url('pay/index/reqPay')}");
+         		AddOrderCall("alipay","{$param['p2_Order']}",lianxi,"","{$param['p5_Pid']}","{$param['buynum']}","{$param['p3_Amt']}")	            
+			}
+			function unionpay(){
+				index=layer.open({
+							type: 2
+							,content: '加载中'
+							,shade: 'background-color: rgba(0,0,0,.2)'
+							,shadeClose:false
+						  });
+				var lianxi="{$param['lianxi']}";
+				$('[name=pd_FrpId]').val('unionPay');
+				$("#frm").attr('action',"{:url('pay/index/reqPay')}");
+         		AddOrderCall("unionPay","{$param['p2_Order']}",lianxi,"","{$param['p5_Pid']}","{$param['buynum']}","{$param['p3_Amt']}")	            
+			}
+			function tenpay(){
+				index=layer.open({
+							type: 2
+							,content: '加载中'
+							,shade: 'background-color: rgba(0,0,0,.2)'
+							,shadeClose:false
+						  });
+				var lianxi="{$param['lianxi']}";
+				$('[name=pd_FrpId]').val('tenpay');
+				$("#frm").attr('action',"{:url('pay/index/reqPay')}");
+         		AddOrderCall("tenpay","{$param['p2_Order']}",lianxi,"","{$param['p5_Pid']}","{$param['buynum']}","{$param['p3_Amt']}")	            
+			}
+			//余额支付
+			function yuepay(){
+				index=layer.open({
+							type: 2
+							,content: '加载中'
+							,shade: 'background-color: rgba(0,0,0,.2)'
+							,shadeClose:false
+						  });
+				var lianxi="{$param['lianxi']}";
+				$("#frm").attr('action',"{:url('jingdian/user/Paybalance')}");
+				AddOrderCall("yue","{$param['p2_Order']}",lianxi,"","{$param['p5_Pid']}","{$param['buynum']}","{$param['p3_Amt']}")
+	            
+				
+    			
+				
+			}
+			
+			function AddOrderCall(pd_FrpId,orderno,lianxi,email,mpid,buynum,money){
+				if (!__odOrderPayOnce && __ORDER_DISCLAIMER__) {
+					runWithOrderDisclaimer(__ORDER_DISCLAIMER__, __ORDER_DISCLAIMER_WAIT__, function () {
+						__odOrderPayOnce = true;
+						AddOrderCall(pd_FrpId, orderno, lianxi, email, mpid, buynum, money);
+					});
+					return;
+				}
+        //********************上传订单头部
+              
+					result="0";
+					var maddtype=5;
+					if(pd_FrpId=='alipay'){
+						maddtype=2;
+					}else if(pd_FrpId=='wxpay'){
+						maddtype=3;	
+					}else if(pd_FrpId=='unionPay'){
+						maddtype=4;			
+					}else if(pd_FrpId=='qqpay'){
+						maddtype=6;	
+					}else if(pd_FrpId=='tenpay'){
+						maddtype=7;
+		            }else if(pd_FrpId=='usdtpay'){
+						maddtype=8;
+					}else{ 			
+						maddtype=5;	      			
+					}				
+
+              
+              $.when(AddOrder(orderno,lianxi,email,mpid,buynum,maddtype,money)).done(function(res){
+              	if(res.code == 1) {
+                    $("#frm").submit();
+                    return true;
+                  } else {
+                  	layer.close(index);
+                    layer.open({
+								content: '异常错误，请重新提交',
+								btn: '我知道了',
+								time: 30 //2秒后自动关闭
+							});		
+                 
+                  	return false;	
+                    
+                  }
+              });
+             
+                
+              //********************上传订单尾部	
+      }
+			
+			
+			//上传订单
+			function AddOrder(orderno,contact,email,goodid,buynum,maddtype,money){
+				var defer = $.Deferred();
+				//var date = new Date();
+				//var timer = date.getTime().toString();
+				$.getJSON("{:url('@jingdian/Api/AddOrder')}",
+							{'mcard':orderno,
+							'lianxi': contact,
+							'email':email,
+							'mflid':goodid,
+							'buynum':buynum,
+							'maddtype':maddtype,
+							'mamount':money		
+											}, 
+							function(data) {
+								if(data && data.code==-2 && data.url){ window.location.href=data.url; return; }
+								defer.resolve(data);		
+							});
+				return defer;
+			}
+			 function ajaxstatus() {
+		        var p2_Order="{$param['p2_Order']}";
+		        var date = new Date();
+		        var timer = date.getTime().toString();
+                $.ajax({
+                    url:"{:url('pay/index/checkdingdan')}?mcard="+p2_Order+"&t=" + timer,
+                    type: 'GET',
+                    dataType:'text',
+                    success: function (res) {	                
+                        if (res==1) { //订单状态为1表示支付成功	              
+                       location.href = "{:url('@mobile/Getmail/index')}"+"?mpid={$param['p5_Pid']}&number={$param['p2_Order']}";
+                       setTimeout("documentwrite()", 20000);
+                        
+                        }else{
+                    
+                        }
+                    },
+                    error: function () {
+                        
+                    }
+                });
+            
+        
+        }
+        
+        function documentwrite() {
+
+                document.write("你的订单编号是：{$param['p2_Order']}<p><a href={:config('is_https')}://" + window.location.host + "/mobile/getmail/index.html?mpid={$param['p5_Pid']}&number={$param['p2_Order']}>支付成功，如5秒内没跳转请点击我</a>");
+              }
+			{include file="public/common" /}
+		</script>
+	</body>
+
+</html>

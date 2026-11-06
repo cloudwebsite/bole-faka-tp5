@@ -1,0 +1,64 @@
+# ---- 运行时 / 缓存 ----
+/runtime/*
+!/runtime/.gitkeep
+
+# ---- 本地敏感与安装态 ----
+.env
+.env.*
+!.env.example
+*.pem
+# 依赖自带 CA/支付证书需入库
+!vendor/**/*.pem
+*.key
+*.p12
+data/install.lock
+# 本机状态：有更新时写入，供下次增量 compare；是否有更新看根目录 version
+data/commit
+data/sql_applied.json
+data/uppack/
+data/upback/
+# 备份/导出 SQL 忽略；安装库脚本必须入库
+data/*.sql
+!data/fxfk.sql
+!data/git_update.php
+!data/install.php
+
+# ---- 上传目录（示例图等随仓库提供；runtime 仍忽略）----
+# /public/upload/ 与 /public/uploads/ 不再忽略
+
+# ---- 非发布目录（本地对照 / 工具 / 文档）----
+/docs/
+/单文件安装/
+/更新/
+/未修改前版本/
+/git在线升级/
+/.codegraph/
+/.cursor/
+/.agents/
+/tests/
+/feat/
+*.canvas.tsx
+
+# ---- IDE / 系统 ----
+.idea/
+.vscode/
+*.suo
+*.swp
+*~
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ---- 日志与临时 ----
+*.log
+*.tmp
+*.bak
+*.cache
+composer.phar
+
+# ---- 可选本地备份 / 无关二进制 ----
+*.zip
+*.tar.gz
+*.tgz
+!assets/**/*.zip
+linux-amd64-BEpusdt.tar.gz

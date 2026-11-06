@@ -1,0 +1,86 @@
+{include file="public/imgpc2/head_title" /}
+<script type="text/javascript" src="{:config('cdnpublic')}jquery/1.7.2/jquery.min.js"></script>
+		<link rel="stylesheet" href="__IMGPC2__/css/common.css" />
+		<link rel="stylesheet" href="__IMGPC__/css/news.css" />
+		<style>
+			h3>ul {
+			    
+			    overflow: hidden;
+			    white-space:nowrap;
+			}
+			h3>ul>li{
+			    list-style: none;
+			    float: left; 
+			    margin-left: 0px;
+			    width: 500px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div class="header">
+			{include file="public/imgpc2/header_top" /}
+			<div class="head-bot">
+				<div class="nb">
+	
+					{include file="public/imgpc2/header_search" /}
+					<div class="clearfix"></div>
+					
+	
+				</div>
+			</div>
+		</div>
+		{include file="public/imgpc2/nav" /}
+		<div class="problem-body">
+			<div class="nb">
+				
+				<div class="problem-rside">
+					<div class="probar">
+					<a href="{:url('@jingdian/Detail/getAll')}">常见问题</a>&gt; <a href="{:url('@jingdian/Detail/index',['id'=>$detail.id])}">{$detail.title}</a>
+					</div>
+					<div class="problemcon">
+						<h3 class="title">{$detail.title}</h3>
+						<div class="pnr" style="border-bottom: 1px solid #EAEAEA;padding-bottom: 20px;">
+						{$detail.content}	
+						</div>
+						<h3  style="margin-top: 15px;">
+				            <ul>
+				              <li>
+				                {if condition="$down['id'] eq 0"}
+				                    
+				                {else /}
+				                   	 上一篇：<a title='{$down.title}' href="{:url('detail/index',['id'=>$down['id']])}" class="down_text">{$down.title}</a>
+				                {/if}
+				
+				              </li>
+				              <li>
+				                {if condition="$up['id'] eq 0"}
+				                  
+				                {else /}
+				                   下一篇： <a title='{$up.title}' href="{:url('detail/index',['id'=>$up['id']])}" class="down_text">{$up.title}</a>
+				                {/if}
+				              </li>
+				            </ul>      
+				    </h3>
+					</div>
+					
+				</div>
+				 
+			</div>
+		</div>
+		{include file="public/imgpc2/footer" /}
+		
+		
+		<script type="text/javascript">
+			$(".problem-lside a.nli").each(function() {
+				$(this).click(function() {
+					$(this).next("ul.ulson").slideToggle(300);
+					$(this).children("b").toggleClass("arrow");
+				})
+			});
+			
+		</script>
+
+	</body>
+
+</html>

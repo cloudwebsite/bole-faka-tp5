@@ -1,0 +1,133 @@
+<!doctype html>
+
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0 user-scalable=no">
+
+		<meta name="format-detection" content="telephone=no" />
+		<title>{:config('web_site_title')}</title>
+		<link rel="stylesheet" type="text/css" href="__IMGMOBILE__/css/foxui.min.css-v=0.2.css">
+		<link rel="stylesheet" type="text/css" href="__IMGMOBILE__/css/style.css-v=3.0.0.css">
+		<link rel="stylesheet" href="{:config('cdnpublic')}Swiper/4.2.6/css/swiper.min.css" />
+		<script type="text/javascript" src="{:config('cdnpublic')}Swiper/4.2.6/js/swiper.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="__IMGMOBILE__/css/iconfont.css-v=2017070719.css">
+		<!--<link rel="stylesheet" href="//at.alicdn.com/t/font_82607_e93d131lklr6n7b9.css">-->
+
+		<script type="text/javascript" src="{:config('cdnpublic')}jquery/1.8.2/jquery.min.js"></script>
+
+		<link rel="stylesheet" href="{:config('cdnpublic')}layer/3.1.1/mobile/need/layer.css" />
+		<script type="text/javascript" src="{:config('cdnpublic')}layer/3.1.1/mobile/layer.js"></script>
+		<style>
+			.aligncenter {
+				clear: both;
+				display: block;
+				margin: auto;
+			}
+		</style>
+
+	</head>
+
+	<body ontouchstart>
+
+		<div class='fui-page-group '>
+
+			<div class='fui-page fui-page-current  page-goods-detail' id='page-goods-detail-index'>
+
+				<div class="fui-header">
+					<div class="fui-header-left">
+						<a class="back" id="btn-back" onclick="back();"></a>
+					</div>
+					<div class="title">
+						卡密详情 </div>
+					<div class="fui-header-right"></div>
+				</div>
+				<div class="fui-content navbar order-list" style="top:1.9rem;">
+					<div class="fui-content-inner">
+						<div class="container" id='list-content'>
+							
+						
+							<div class="fui-list-group order-item" data-orderid="5333" data-verifycode="">
+									<div class="fui-list-group-title lineblock2 ">
+										订单号:{$order}
+									</div>
+									{if condition="$tou neq ''"}
+									<div class="fui-list goods-list" style="white-space: normal;word-wrap: break-word;line-height: 1.5rem;">
+										<div class="fui-cell-info">
+											{$tou|htmlspecialchars_decode}
+										</div>
+									</div>
+									{/if}
+									
+
+									<div class="fui-list goods-list" style="white-space: normal;word-wrap: break-word;line-height: 1.5rem;">
+										<div class="fui-cell-info">
+											{$zhengwen|htmlspecialchars_decode}
+										</div>
+									</div>
+									
+									{if condition="$wei neq ''"}
+									<div class="fui-list goods-list" style="white-space: normal;word-wrap: break-word;line-height: 1.5rem;">
+										<div class="fui-cell-info">
+											{$wei|htmlspecialchars_decode}
+										</div>
+									</div>
+									{/if}
+							</div>
+							
+							<div class="swiper-container">
+					    		<div class="swiper-wrapper">
+							        {foreach name="kamibanner" item="v"}		
+									
+									<div class="swiper-slide"><a href="{$v['link_url']}" {if condition="$v['opentype'] eq 1"}target="_blank"{/if}><img src="/uploads/images/{$v['images']}" onerror="this.src='/static/admin/images/head_default.gif'" style="display: block; width: 100%; "></a></div>
+									{/foreach}
+									
+							        
+							    </div>
+							    <!-- 如果需要分页器 -->
+							    <div class="swiper-pagination"></div>
+							    
+							    
+							</div>
+						
+							
+						
+							
+							
+
+						</div>
+					</div>
+				</div>
+
+				<div id='comments-container'></div>
+
+				{include file="public/imgmobile_navbar" /}	
+
+			</div>
+
+		</div>
+		<script type="text/javascript">
+			//$('.fui-navbar').find('a').eq(2).addClass("active");
+			{include file="public/common" /}
+		</script>
+		<script>        
+		  var mySwiper = new Swiper ('.swiper-container', {
+		    direction: 'horizontal',
+		    loop: false,
+		    autoplay:true,
+		    
+		    // 如果需要分页器
+		    pagination: {
+		      el: '.swiper-pagination',
+		      type: 'bullets',
+		    },
+		    
+		   
+		    
+		   
+		  })        
+		</script>
+	</body>
+
+</html>
